@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0bc120d8-0b4c-41f4-99f5-e023aa4c16f2</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Dapper</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CommandDefinition.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CommandFlags.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CustomPropertyTypeMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DataTableHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DbString.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DefaultTypeMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DynamicParameters.CachedOutputSetters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DynamicParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DynamicParameters.ParamInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExplicitConstructorAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FeatureSupport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleMemberMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlDataRecordHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlDataRecordListTVPParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.Async.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.CacheInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.DapperRow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.DapperRowMetaObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.DapperTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.DeserializerState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.DontMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.GridReader.Async.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.GridReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.ICustomQueryParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.IDataReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.Identity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.IDynamicParameters.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.IMemberMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.IParameterCallbacks.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.IParameterLookup.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.ITypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.ITypeMap.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.Link.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.LiteralToken.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.TypeDeserializerCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.TypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SqlMapper.TypeHandlerCache.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TableValuedParameter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TypeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UdtTypeHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WrappedDataReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WrappedReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XmlHandlers.cs" />
+  </ItemGroup>
+</Project>
