@@ -1,5 +1,5 @@
 ﻿
-@model IEnumerable<BlueMine.Db.T_projects>
+@model BlueMine.Models.Project.ProjectModel
 
 @{
     Layout = null;
@@ -29,8 +29,8 @@
 
     <style type="text/css">
         html, body {
-            margin: 0px;
-            padding: 0px;
+            margin: 0;
+            padding: 0;
             width: 100%;
             height: 100%;
         }
@@ -43,15 +43,12 @@
 <body>
 
 
-    <!--
-    @Html.DisplayForModel()
+<ul id="projectTree">
+    @Html.DisplayFor(modell => modell.ProjectTree.RootNodes)    
+</ul>
 
-    @Html.DisplayFor(x => x.Where(y => y.parent_id == null))
-    -->
-
-    <!--
-    @Html.EditorForModel()
-    -->
+<!--
+-->
 
 
     <script type="text/javascript">

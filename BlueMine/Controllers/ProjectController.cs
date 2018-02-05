@@ -1,19 +1,19 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlueMine.Db;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-
-
 using Dapper;
 
 
 namespace BlueMine.Controllers
 {
-
+    
+    
     // template: "{controller=Home}/{action=Index}/{id?}");
     [Route("[controller]/[action]/{id?}")]
     public class ProjectController : Controller
@@ -31,22 +31,34 @@ namespace BlueMine.Controllers
                 projects = connection.Query<Db.T_projects>(sql).ToList();
             }
 
-            return View(projects);
-        }
 
-        public void demo()
+            // var x = (from proj in projects where proj.parent_id != null select proj);
+
+            // var y = projects.Where(u => u.parent_id != null).OrderBy(z => z.id).ToList();
+            // @Html.DisplayFor((from prop in Model where prop.parent_id != null select prop), "T_projects")
+            
+            // return View(projects);
+            return View(new Models.Project.ProjectModel()
+            {
+                ProjectTree = new Models.Project.ProjectRecursor(null, projects)
+            });
+        }
+        
+        
+        public void Demo()
         {
+            /*
             using (System.Data.Common.DbConnection connection = SqlFactory.GetConnection())
             {
                 string sqlInvoices = "SELECT * FROM projects ";
                 string sqlInvoice = "SELECT * FROM projects WHERE id = @projid";
-
+                
                 System.Collections.Generic.List<Db.T_projects> projects =
                     connection.Query<Db.T_projects>(sqlInvoices).ToList();
 
                 System.Console.WriteLine(projects);
 
-                var invoice = connection.QueryFirstOrDefault<Db.T_projects>(sqlInvoice, new { projid = 1 });
+                var invoice = connection.QueryFirstOrDefault<Db.T_projects>(sqlInvoice, new {projid = 1});
                 System.Console.WriteLine(invoice);
 
                 DynamicParameters parameter = new DynamicParameters();
@@ -63,7 +75,7 @@ namespace BlueMine.Controllers
                 using (var transaction = connection.BeginTransaction())
                 {
                     int affRows = connection.Execute("sql",
-                        new { Kind = 1, Code = "Single_Insert_1" },
+                        new {Kind = 1, Code = "Single_Insert_1"},
                         commandType: System.Data.CommandType.StoredProcedure,
                         transaction: transaction);
 
@@ -77,16 +89,16 @@ namespace BlueMine.Controllers
 
 
                 var affectedRows = connection.Execute(
-                      "sp_something"
-                    , new { Param1 = "Single_Insert_1" }
+                    "sp_something"
+                    , new {Param1 = "Single_Insert_1"}
                     , commandType: System.Data.CommandType.StoredProcedure
                 );
-
-
-                /*
+                
+                
+                
                 DynamicParameters parameter = new DynamicParameters();
 
-                parameter.Add("@Kind", InvoiceKind.WebInvoice
+                parameter.Add("@Kind", 123
                     , System.Data.DbType.Int32
                     , System.Data.ParameterDirection.Input);
 
@@ -99,11 +111,14 @@ namespace BlueMine.Controllers
                     , direction: System.Data.ParameterDirection.ReturnValue);
 
                 connection.Query<Db.T_projects>(sqlInvoices, parameter).ToList();
-                */
+                
             }
-
-        }
-
-
-    }
-}
+            */
+            
+        } // End Sub Demo 
+        
+        
+    } // End Class ProjectController 
+    
+    
+} // End Namespace BlueMine.Controllers 

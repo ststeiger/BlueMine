@@ -16,11 +16,8 @@ namespace TestPlotly
             if (ipos != -1)
             {
                 asmName = asmName.Substring(0, ipos);
-                System.Console.WriteLine(asmName);
             }
-
-
-
+            
             return GetSecret<T>(secretName, asmName);
         } // End Function GetSecret 
         
