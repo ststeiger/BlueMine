@@ -16,10 +16,14 @@ SELECT
 	,default_version_id
 FROM projects
 
+
+
 SELECT 
 	 project_id
 	,tracker_id
 FROM projects_trackers
+
+
 
 SELECT 
 	 projects_trackers.project_id

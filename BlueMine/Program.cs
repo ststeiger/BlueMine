@@ -18,7 +18,7 @@ namespace BlueMine
 
         public static void Main(string[] args)
         {
-            SchemaGenerator.GenerateSchema();
+            // SchemaGenerator.GenerateSchema();
             BuildWebHost(args).Run();
         }
 
