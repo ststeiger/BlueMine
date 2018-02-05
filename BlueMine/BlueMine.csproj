@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <Folder Include="Db\" />
+    <Folder Include="Views\Project\DisplayTemplates\" />
+    <Folder Include="Views\Project\EditorTemplates\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
