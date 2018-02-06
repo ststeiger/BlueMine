@@ -1,0 +1,22 @@
+﻿
+@model BlueMine.Models.Project.ProjectRecursor
+
+
+
+@if (Model.Level < 30000)
+{
+
+
+<ul>
+    <li>
+        <label>Level </label><span>@Model.Level</span>
+        @Html.DisplayFor(tree => tree.Me)
+    </li>
+    @if (true)
+    {
+        @Html.DisplayFor(tree => tree.ChildNodes)
+    }
+
+</ul>
+
+}
