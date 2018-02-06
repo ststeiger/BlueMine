@@ -1,14 +1,14 @@
 ﻿@model BlueMine.Db.T_projects
 
     <div id="display-@Model.id" >
-        @if (true)
-        {
+        
+        <a href="/projects/pid/items">
             <div style="border-bottom: 1px solid #CCC;">
                 <span>@Model.id</span>
                 <h1 id="title-@Model.identifier">@Model.name</h1>
+                <div style="clear: both;"></div>  
+                <span style="height: 0.25cm;">@Model.description</span>
             </div>
-            
-            <div style="height: 0.25cm;">@Model.description</div>
-            <div style="clear: both;"></div>        
-        }
+        </a>
+    
     </div>
