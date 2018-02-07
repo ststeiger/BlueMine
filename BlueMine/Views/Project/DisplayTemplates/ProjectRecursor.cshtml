@@ -1,13 +1,10 @@
 ﻿
 @model BlueMine.Models.Project.ProjectRecursor
 
-
-
 @if (Model.Level < 30000)
 {
 
-
-<ul>
+<ul style="border-left: 3px solid #e0e0e0;">
     <li>
         <label>Level </label><span>@Model.Level</span>
         @Html.DisplayFor(tree => tree.Me)
