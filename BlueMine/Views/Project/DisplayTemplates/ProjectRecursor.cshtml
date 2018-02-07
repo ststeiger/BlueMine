@@ -1,8 +1,11 @@
 ﻿
 @model BlueMine.Models.Project.ProjectRecursor
 
-@if (Model.Level < 30000)
+
+
+@if (Model.Level < 3)
 {
+
 
 <ul style="border-left: 3px solid #e0e0e0;">
     <li>
@@ -11,7 +14,7 @@
     </li>
     @if (true)
     {
-        @Html.DisplayFor(tree => tree.ChildNodes)
+    @Html.DisplayFor(tree => tree.ChildNodes)
     }
 
 </ul>
