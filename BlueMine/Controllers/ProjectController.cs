@@ -1,29 +1,36 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+
+// For more information on enabling MVC for empty projects, 
+// visit https://go.microsoft.com/fwlink/?LinkID=397860 
+
+using Dapper;
 using BlueMine.Db;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-using Dapper;
 
-
+// https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/
+// https://stackoverflow.com/questions/1263635/route-all-controller-actions-to-a-single-method-then-display-a-view-according-t
+// http://httpjunkie.com/2014/430/custom-routing-in-mvc5-with-attributes/
 namespace BlueMine.Controllers
 {
-    
-    
+
+
     // template: "{controller=Home}/{action=Index}/{id?}");
     //[Route("[controller]/[action]/{id?}")]
     //[Route("[controller]/{a?}/{id?}")]
-    [Route("[controller]/{*uri}")]
+    //[Route("[controller]/{*uri}")]
+
     public class ProjectController : Controller
     {
-        
-        
+
+
         // GET: /<controller>/
-        public IActionResult Index(string a, string id)
+        [Route("projects")]
+        public IActionResult Index()
         {
             System.Collections.Generic.List<Db.T_projects> projects = null;
             
@@ -55,8 +62,22 @@ namespace BlueMine.Controllers
                 }
             );
         } // End Action Index 
-        
-        
+
+
+        [Route("projects/{uri}")]
+        public IActionResult SpecificProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Project {uri}</h1></body></html>", "text/html");
+        }
+
+
+        [Route("projects/{uri}/issues")]
+        public IActionResult SpecificIssues(string uri)
+        {
+            return this.Content($"<html><body><h1>Issues for Project {uri}</h1></body></html>", "text/html");
+        }
+
+
         public void Demo()
         {
             /*
