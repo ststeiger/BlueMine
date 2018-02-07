@@ -15,34 +15,46 @@ namespace BlueMine.Controllers
     
     
     // template: "{controller=Home}/{action=Index}/{id?}");
-    [Route("[controller]/[action]/{id?}")]
+    //[Route("[controller]/[action]/{id?}")]
+    //[Route("[controller]/{a?}/{id?}")]
+    [Route("[controller]/{*uri}")]
     public class ProjectController : Controller
     {
+        
+        
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult Index(string a, string id)
         {
             System.Collections.Generic.List<Db.T_projects> projects = null;
-
+            
             string sql = "SELECT * FROM projects ";
             // string sql = "SELECT * FROM projects WHERE id = @projid";
-
+            
             using (System.Data.Common.DbConnection connection = SqlFactory.GetConnection())
             {
                 projects = connection.Query<Db.T_projects>(sql).ToList();
             }
-
-
+            
+            
             // var x = (from proj in projects where proj.parent_id != null select proj);
-
+            
             // var y = projects.Where(u => u.parent_id != null).OrderBy(z => z.id).ToList();
             // @Html.DisplayFor((from prop in Model where prop.parent_id != null select prop), "T_projects")
             
+            
+            // @Html.DisplayForModel()
+            // @Html.EditorForModel()
+            
+            
             // return View(projects);
-            return View(new Models.Project.ProjectModel()
-            {
-                ProjectTree = new Models.Project.ProjectRecursor(null, projects)
-            });
-        }
+            
+            return View(
+                new Models.Project.ProjectModel()
+                {
+                    ProjectTree = new Models.Project.ProjectRecursor(null, projects)
+                }
+            );
+        } // End Action Index 
         
         
         public void Demo()
