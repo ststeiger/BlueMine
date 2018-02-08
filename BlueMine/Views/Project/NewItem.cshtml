@@ -1,0 +1,395 @@
+﻿
+@model BlueMine.Models.Project.ProjectModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta charset="utf-8" />
+
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+    <meta http-equiv="pragma" content="no-cache" />
+
+    <title>Upload Indicator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00" />
+
+    <!--
+    <link rel="stylesheet" type="text/css" href="ruler.min.css">
+
+    <script src="ruler.js"></script>
+    -->
+
+    <style type="text/css">
+        html, body 
+        {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        
+        ul 
+        {
+            list-style-type: none;
+        }
+    </style>
+
+    <!--
+    <script src="@Url.Content("/GeneratedScripts/AsyncAjax.js")"></script>
+    -->
+</head>
+<body>
+<h1>Hello New Item</h1>
+
+
+    <div id="wrapper">
+
+        <div class="flyout-menu js-flyout-menu">
+
+
+            <div class="flyout-menu__search">
+                <form action="/Servicedesk/projects/schuleerleq/search" accept-charset="UTF-8" method="get">
+                    <input name="utf8" type="hidden" value="&#x2713;" />
+                    <input type="hidden" name="issues" value="1" />
+                    <label class="search-magnifier search-magnifier--flyout" for="flyout-search">&#9906;</label>
+                    <input type="text" name="q" id="flyout-search" class="small js-search-input" placeholder="Suche" />
+                </form>
+            </div>
+
+            <div class="flyout-menu__avatar flyout-menu__avatar--no-avatar">
+                <a class="user active" href="/Servicedesk/users/5">Thierry.Steiner</a>
+            </div>
+
+            <h3>Projekt</h3>
+            <span class="js-project-menu"></span>
+
+            <h3>Allgemein</h3>
+            <span class="js-general-menu"></span>
+
+            <span class="js-sidebar flyout-menu__sidebar"></span>
+
+            <h3>Profil</h3>
+            <span class="js-profile-menu"></span>
+
+        </div>
+
+        <div id="wrapper2">
+            <div id="wrapper3">
+                <div id="top-menu">
+                    <div id="account">
+                        <ul>
+                            <li><a class="my-account" href="/Servicedesk/my/account">Mein Konto</a></li>
+                            <li><a class="logout" rel="nofollow" data-method="post" href="/Servicedesk/logout">Abmelden</a></li>
+                        </ul>
+                    </div>
+                    <div id="loggedas">Angemeldet als <a class="user active" href="/Servicedesk/users/5">Thierry.Steiner</a></div>
+                    <ul>
+                        <li><a class="home" href="/Servicedesk/">Hauptseite</a></li>
+                        <li><a class="my-page" href="/Servicedesk/my/page">Meine Seite</a></li>
+                        <li><a class="projects" href="/Servicedesk/projects">Projekte</a></li>
+                        <li><a class="help" href="https://www.redmine.org/guide">Hilfe</a></li>
+                    </ul>
+                </div>
+
+                <div id="header">
+
+                    <a href="#" class="mobile-toggle-button js-flyout-menu-toggle-button"></a>
+
+                    <div id="quick-search">
+                        <form action="/Servicedesk/projects/schuleerleq/search" accept-charset="UTF-8" method="get">
+                            <input name="utf8" type="hidden" value="&#x2713;" />
+                            <input type="hidden" name="issues" value="1" />
+                            <label for='q'>
+                                <a accesskey="4" href="/Servicedesk/projects/schuleerleq/search">Suche</a>:
+                            </label>
+                            <input type="text" name="q" id="q" size="20" class="small" accesskey="f" />
+                        </form>        <span class="jump-box-arrow"></span><select name="project_quick_jump_box" id="project_quick_jump_box" onchange="if (this.value != &#39;&#39;) { window.location = this.value; }"><option value=''>Zu einem Projekt springen...</option><option value="" disabled="disabled">---</option><option value="/Servicedesk/projects/1-kundenprojekte?jump=new_issue">01-Kundenprojekte</option><option value="/Servicedesk/projects/bkb?jump=new_issue">&nbsp;&nbsp;&#187; BKB</option><option value="/Servicedesk/projects/v4vwsff?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; 2017_09_27 Update</option><option value="/Servicedesk/projects/schuleerleq?jump=new_issue" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Change Request 170724</option><option value="/Servicedesk/projects/schuleerlep?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Change Request 170824</option><option value="/Servicedesk/projects/v4vwsfg?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Change Request ab Sept 2017</option><option value="/Servicedesk/projects/helvetif?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Pendenzen</option><option value="/Servicedesk/projects/basic-sursee-mit-reinigung?jump=new_issue">&nbsp;&nbsp;&#187; Campus Sursee</option><option value="/Servicedesk/projects/migration-3-auf-4?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Migration V3 auf V4</option><option value="/Servicedesk/projects/modul-dokumanagement?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; NEU Mod. Dok-Management</option><option value="/Servicedesk/projects/modul-servicedesk?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; NEU Mod. Servicedesk</option><option value="/Servicedesk/projects/helvetia?jump=new_issue">&nbsp;&nbsp;&#187; Helvetia</option><option value="/Servicedesk/projects/bkc?jump=new_issue">&nbsp;&nbsp;&#187; Julius Bär</option><option value="/Servicedesk/projects/phonal?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; 2017_05_31 Geplantes Update</option><option value="/Servicedesk/projects/schuleerleo?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; 2017_09_22 Geplantes Update</option><option value="/Servicedesk/projects/post?jump=new_issue">&nbsp;&nbsp;&#187; Post</option><option value="/Servicedesk/projects/raiffeisen?jump=new_issue">&nbsp;&nbsp;&#187; Raiffeisen</option><option value="/Servicedesk/projects/rockwell?jump=new_issue">&nbsp;&nbsp;&#187; Rockwell</option><option value="/Servicedesk/projects/rsi?jump=new_issue">&nbsp;&nbsp;&#187; RSI</option><option value="/Servicedesk/projects/sauter?jump=new_issue">&nbsp;&nbsp;&#187; Sauter</option><option value="/Servicedesk/projects/snb?jump=new_issue">&nbsp;&nbsp;&#187; SNB</option><option value="/Servicedesk/projects/phonak?jump=new_issue">&nbsp;&nbsp;&#187; Sonova (Phonak)</option><option value="/Servicedesk/projects/srf?jump=new_issue">&nbsp;&nbsp;&#187; SRF</option><option value="/Servicedesk/projects/srg?jump=new_issue">&nbsp;&nbsp;&#187; SRG</option><option value="/Servicedesk/projects/stadtzuerich?jump=new_issue">&nbsp;&nbsp;&#187; Stadt Zürich</option><option value="/Servicedesk/projects/swisscom?jump=new_issue">&nbsp;&nbsp;&#187; Swisscom</option><option value="/Servicedesk/projects/swisslife?jump=new_issue">&nbsp;&nbsp;&#187; Swisslife</option><option value="/Servicedesk/projects/swissre?jump=new_issue">&nbsp;&nbsp;&#187; SwissRe</option><option value="/Servicedesk/projects/wincasa?jump=new_issue">&nbsp;&nbsp;&#187; Wincasa</option><option value="/Servicedesk/projects/basisv3?jump=new_issue">05-Basis-V3</option><option value="/Servicedesk/projects/basisv4?jump=new_issue">10-Basic-V3.5</option><option value="/Servicedesk/projects/anpassungen_erweiterungen?jump=new_issue">&nbsp;&nbsp;&#187; Anpassungen/Erweiterungen (Entscheid offen)</option><option value="/Servicedesk/projects/basic-v4?jump=new_issue">15-Basic-V4</option><option value="/Servicedesk/projects/anpassungen_erweiterungen2?jump=new_issue">&nbsp;&nbsp;&#187; Anpassungen/Erweiterungen (Entscheid offen)</option><option value="/Servicedesk/projects/cor-crm?jump=new_issue">&nbsp;&nbsp;&#187; Basic-V4 COR CRM</option><option value="/Servicedesk/projects/v4vws?jump=new_issue">&nbsp;&nbsp;&#187; Visualisierung</option><option value="/Servicedesk/projects/v4vwsfe?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Frontend</option><option value="/Servicedesk/projects/aperture?jump=new_issue">20-Aperture</option><option value="/Servicedesk/projects/reports?jump=new_issue">25-Reports</option><option value="/Servicedesk/projects/basic?jump=new_issue">30-Formulare</option><option value="/Servicedesk/projects/dms?jump=new_issue">35-DMS</option><option value="/Servicedesk/projects/schnittstellen?jump=new_issue">40-Schnittstellen</option><option value="/Servicedesk/projects/basic-schnittstellen?jump=new_issue">&nbsp;&nbsp;&#187; Basic Schnittstellen</option><option value="/Servicedesk/projects/vws-portal?jump=new_issue">45-VWS Portal</option><option value="/Servicedesk/projects/cor-intern?jump=new_issue">70-COR Intern</option><option value="/Servicedesk/projects/webseiteses?jump=new_issue">&nbsp;&nbsp;&#187; Interne Prozesse</option><option value="/Servicedesk/projects/webseiteset?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Outlook als Adress DB</option><option value="/Servicedesk/projects/redmine-tool?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Redmine Tool</option><option value="/Servicedesk/projects/marketing?jump=new_issue">&nbsp;&nbsp;&#187; Marketing</option><option value="/Servicedesk/projects/kundenevent?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Kundenevent (jährlich)</option><option value="/Servicedesk/projects/messen?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Suisse Public 13-16.Juni</option><option value="/Servicedesk/projects/webseitesev?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Verkaufsfördermittel</option><option value="/Servicedesk/projects/webseiteseo?jump=new_issue">&nbsp;&nbsp;&nbsp;&nbsp;&#187; Webseite SEO</option><option value="/Servicedesk/projects/helevtia-basel?jump=new_issue">&nbsp;&nbsp;&#187; Helvetia Basel</option><option value="/Servicedesk/projects/lidl?jump=new_issue">&nbsp;&nbsp;&#187; Lidl Schweiz</option></select>
+                    </div>
+
+                    <h1><a class="root" href="/Servicedesk/projects/1-kundenprojekte?jump=new_issue">01-Kundenprojekte</a> » <a class="ancestor" href="/Servicedesk/projects/bkb?jump=new_issue">BKB</a> » Change Request 170724</h1>
+
+                    <div id="main-menu">
+                        <ul>
+                            <li><a class="overview" href="/Servicedesk/projects/schuleerleq">Übersicht</a></li>
+                            <li><a class="activity" href="/Servicedesk/projects/schuleerleq/activity">Aktivität</a></li>
+                            <li><a class="issues" href="/Servicedesk/projects/schuleerleq/issues">Tickets</a></li>
+                            <li><a accesskey="7" class="new-issue selected" href="/Servicedesk/projects/schuleerleq/issues/new">Neues Ticket</a></li>
+                            <li><a class="gantt" href="/Servicedesk/projects/schuleerleq/issues/gantt">Gantt-Diagramm</a></li>
+                            <li><a class="calendar" href="/Servicedesk/projects/schuleerleq/issues/calendar">Kalender</a></li>
+                            <li><a class="files" href="/Servicedesk/projects/schuleerleq/files">Dateien</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="main" class="nosidebar">
+                    <div id="sidebar">
+
+
+                    </div>
+
+                    <div id="content">
+
+                        <h2>Neues Ticket</h2>
+
+
+
+                        <form id="issue-form" class="new_issue" enctype="multipart/form-data" action="/Servicedesk/projects/schuleerleq/issues" accept-charset="UTF-8" method="post">
+                            <input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="x7AwYhg/uE1XjMMD9QUH6jE9uFp7X8Q5jQsPnNNNVWtzNBJIMgRu6eHrs8C7FwjzQ+7D89OFnL9uf3E4LNz3Jw==" />
+
+
+                            <div class="box tabular">
+                                <div id="all_attributes">
+
+
+                                    <input type="hidden" name="form_update_triggered_by" id="form_update_triggered_by" value="" />
+
+                                    <p id="issue_is_private_wrap">
+                                        <input name="issue[is_private]" type="hidden" value="0" /><input type="checkbox" value="1" name="issue[is_private]" id="issue_is_private" /><label class="inline" for="issue_is_private" id="issue_is_private_label">Privat</label>
+                                    </p>
+
+
+                                    <p>
+                                        <label for="issue_tracker_id">Tracker<span class="required"> *</span></label><select onchange="updateIssueFrom(&#39;/Servicedesk/projects/schuleerleq/issues/new.js&#39;, this)" name="issue[tracker_id]" id="issue_tracker_id">
+                                            <option selected="selected" value="3">Kundenanfrage</option>
+                                            <option value="2">Anpassung</option>
+                                            <option value="1">Fehler</option>
+                                            <option value="4">Bedienung</option>
+                                            <option value="5">Internes</option>
+                                            <option value="6">Änderungswunsch</option>
+                                        </select>
+                                    </p>
+
+                                    <p><label for="issue_subject">Thema<span class="required"> *</span></label><input size="80" maxlength="255" type="text" value="" name="issue[subject]" id="issue_subject" /></p>
+
+                                    <p>
+                                        <label for="issue_description">Beschreibung</label>
+
+                                        <span id="issue_description_and_toolbar">
+                                            <textarea cols="60" rows="10" accesskey="e" class="wiki-edit" name="issue[description]" id="issue_description">
+</textarea>
+                                        </span>
+                                    </p>
+                                    <script>
+                                        //<![CDATA[
+                                        var wikiToolbar = new jsToolBar(document.getElementById('issue_description')); wikiToolbar.setHelpLink('/Servicedesk/help/de/wiki_syntax_textile.html'); wikiToolbar.draw();
+//]]>
+                                    </script>
+
+                                    <div id="attributes" class="attributes">
+
+
+                                        <div class="splitcontent">
+                                            <div class="splitcontentleft">
+                                                <p><label for="issue_status_id">Status<span class="required"> *</span></label><select onchange="updateIssueFrom(&#39;/Servicedesk/projects/schuleerleq/issues/new.js&#39;, this)" name="issue[status_id]" id="issue_status_id"><option selected="selected" value="1">Neu</option></select></p>
+                                                <input type="hidden" name="was_default_status" value="1" />
+
+                                                <p>
+                                                    <label for="issue_priority_id">Priorität<span class="required"> *</span></label><select name="issue[priority_id]" id="issue_priority_id">
+                                                        <option value="1">1-sehr hoch</option>
+                                                        <option value="2">2-hoch</option>
+                                                        <option selected="selected" value="3">3-mittel</option>
+                                                        <option value="4">4-niedrig</option>
+                                                    </select>
+                                                </p>
+
+                                                <p>
+                                                    <label for="issue_assigned_to_id">Zugewiesen an</label><select name="issue[assigned_to_id]" id="issue_assigned_to_id">
+                                                        <option value="">&nbsp;</option>
+                                                        <option value="5">&lt;&lt; ich &gt;&gt;</option>
+                                                        <option value="1">COR Administrator</option>
+                                                        <option value="13">Winston Valhalla</option>
+                                                        <option value="6">John Churchill</option>
+                                                        <option value="10">Julia Orenko</option>
+                                                        <option value="7">Ferdinand Müller</option>
+                                                        <option value="9">Patrick Eicher</option>
+                                                        <option value="8">Rico Montbatten</option>
+                                                        <option value="14">Service Desk</option>
+                                                        <option value="5">Thierry Steiner</option>
+                                                        <option value="12">Thomas Egger</option>
+                                                    </select>
+                                                </p>
+
+
+                                            </div>
+
+                                            <div class="splitcontentright">
+                                                <p id="parent_issue"><label for="issue_parent_issue_id">Übergeordnete Aufgabe</label><input size="10" type="text" name="issue[parent_issue_id]" id="issue_parent_issue_id" /></p>
+                                                <script>
+                                                    //<![CDATA[
+                                                    observeAutocompleteField('issue_parent_issue_id', '/Servicedesk/issues/auto_complete?project_id=schuleerleq&scope=system')
+//]]>
+                                                </script>
+
+                                                <p id="start_date_area">
+                                                    <label for="issue_start_date">Beginn</label><input size="10" type="text" name="issue[start_date]" id="issue_start_date" />
+                                                    <script>
+                                                        //<![CDATA[
+                                                        $(function () { $('#issue_start_date').addClass('date').datepicker(datepickerOptions); });
+//]]>
+                                                    </script>
+                                                </p>
+
+                                                <p id="due_date_area">
+                                                    <label for="issue_due_date">Abgabedatum</label><input size="10" type="text" name="issue[due_date]" id="issue_due_date" />
+                                                    <script>
+                                                        //<![CDATA[
+                                                        $(function () { $('#issue_due_date').addClass('date').datepicker(datepickerOptions); });
+//]]>
+                                                    </script>
+                                                </p>
+
+                                                <p><label for="issue_estimated_hours">Geschätzter Aufwand</label><input size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours" /> Stunden</p>
+
+                                                <p>
+                                                    <label for="issue_done_ratio">% erledigt</label><select name="issue[done_ratio]" id="issue_done_ratio">
+                                                        <option selected="selected" value="0">0 %</option>
+                                                        <option value="10">10 %</option>
+                                                        <option value="20">20 %</option>
+                                                        <option value="30">30 %</option>
+                                                        <option value="40">40 %</option>
+                                                        <option value="50">50 %</option>
+                                                        <option value="60">60 %</option>
+                                                        <option value="70">70 %</option>
+                                                        <option value="80">80 %</option>
+                                                        <option value="90">90 %</option>
+                                                        <option value="100">100 %</option>
+                                                    </select>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div class="splitcontent">
+                                            <div class="splitcontentleft">
+                                                <p>
+                                                    <label for="issue_custom_field_values_2">
+                                                    <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span></label><select name="issue[custom_field_values][2]" id="issue_custom_field_values_2" class="list_cf">
+                                                        <option value="">--- Bitte auswählen ---</option>
+                                                        <option value="Company1">Comany1</option>
+                                                        <option value="Company2">Comany2</option>
+                                                        <option value="Company3">Comany3</option>
+                                                        <option value="Company4">Comany4</option>
+                                                        <option value="Company5">Comany5</option>
+                                                        <option value="Company6">Comany6</option>
+                                                        <option value="Company7">Comany7</option>
+                                                        <option value="Company8">Comany8</option>
+                                                        <option value="Company9">Comany9</option>
+                                                    </select>
+                                                </p>
+                                                <p>
+                                                    <label for="issue_custom_field_values_5"><span title="Sollen Kunden über dieses Ticket beim nächsten Update informiert werden?" class="field-description">Kunden informieren</span></label><select name="issue[custom_field_values][5]" id="issue_custom_field_values_5" class="list_cf">
+                                                        <option value="">&nbsp;</option>
+                                                        <option selected="selected" value="--- Bitte auswählen ---">--- Bitte auswählen ---</option>
+                                                        <option value="Ja">Ja</option>
+                                                        <option value="Nein">Nein</option>
+                                                    </select>
+                                                </p>
+                                            </div><div class="splitcontentright">
+                                                <p><label for="issue_custom_field_values_3"><span title="verrechenbar Ja oder Nein" class="field-description">verrechenbar</span> <span class="required">*</span></label><span class="list_cf check_box_group"><label><input type="radio" name="issue[custom_field_values][3]" id="issue_custom_field_values_3" value="Ja" /> Ja</label><label><input type="radio" name="issue[custom_field_values][3]" value="Nein" checked="checked" /> Nein</label></span></p>
+                                                <p><label for="issue_custom_field_values_1"><span>gemeldet von</span></label><input type="text" name="issue[custom_field_values][1]" id="issue_custom_field_values_1" value="" class="string_cf" /></p>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+
+
+
+
+                                    <script>
+                                                        //<![CDATA[
+
+                                                        $(document).ready(function ()
+                                                        {
+                                                            $("#issue_tracker_id, #issue_status_id").each(function ()
+                                                            {
+                                                                $(this).val($(this).find("option[selected=selected]").val());
+                                                            });
+                                                        });
+
+//]]>
+                                    </script>
+                                </div>
+
+
+                                <p id="attachments_form">
+                                    <label>Dateien</label><span id="attachments_fields">
+                                    </span>
+                                    <span class="add_attachment">
+                                        <input type="file" name="attachments[dummy][file]" class="file_selector" multiple="multiple" onchange="addInputFiles(this);" data-max-file-size="25722880" data-max-file-size-message="Diese Datei kann nicht hochgeladen werden, da sie die maximale Dateigröße von (24,5 MB) überschreitet." data-max-concurrent-uploads="2" data-upload-path="/Servicedesk/uploads.js" data-description-placeholder="Beschreibung (optional)" />
+                                        (Maximale Größe: 24,5 MB)
+                                    </span>
+
+                                </p>
+
+                                <p id="watchers_form">
+                                    <label>Beobachter</label>
+                                    <span id="watchers_inputs">
+                                        <label id="issue_watcher_user_ids_1" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="1" /> COR Administrator</label><label id="issue_watcher_user_ids_13" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="13" /> Winston Valhalla</label><label id="issue_watcher_user_ids_6" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="6" /> John Churchill</label><label id="issue_watcher_user_ids_10" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="10" /> Julia Orenko</label><label id="issue_watcher_user_ids_7" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="7" /> Ferdinand Müller</label><label id="issue_watcher_user_ids_9" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="9" /> Patrick Eicher</label><label id="issue_watcher_user_ids_8" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="8" /> Rico Montbatten</label><label id="issue_watcher_user_ids_14" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="14" /> Service Desk</label><label id="issue_watcher_user_ids_5" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="5" /> Thierry Steiner</label><label id="issue_watcher_user_ids_12" class="floating"><input type="checkbox" name="issue[watcher_user_ids][]" value="12" /> Thomas Egger</label>
+                                    </span>
+                                    <span class="search_for_watchers">
+                                        <a data-remote="true" data-method="get" href="/Servicedesk/watchers/new?project_id=schuleerleq">Nach hinzufügbaren Beobachtern suchen</a>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <input type="submit" name="commit" value="Anlegen" />
+                            <input type="submit" name="continue" value="Anlegen und weiter" />
+                            <a href="#" onclick="submitPreview(&quot;/Servicedesk/issues/preview/new/schuleerleq&quot;, &quot;issue-form&quot;, &quot;preview&quot;); return false;" accesskey="r">Vorschau</a>
+                        </form>
+                        <div id="preview" class="wiki"></div>
+
+
+
+                        <div style="clear:both;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ajax-indicator" style="display:none;"><span>Lade...</span></div>
+            <div id="ajax-modal" style="display:none;"></div>
+
+            <div id="footer">
+                <div class="bgl">
+                    <div class="bgr">
+                        Powered by <a href="https://www.redmine.org/">Redmine</a> &copy; 2006-2016 Jean-Philippe Lang
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+
+        function onDomReady()
+        {
+            console.log("dom ready");
+        }
+
+        if (document.addEventListener) document.addEventListener("DOMContentLoaded", onDomReady, false);
+        else if (document.attachEvent) document.attachEvent("onreadystatechange", onDomReady);
+        else window.onload = onDomReady;
+
+        function onPageLoaded()
+        {
+            console.log("page loaded");
+        }
+
+        if (window.addEventListener) window.addEventListener("load", onPageLoaded, false);
+        else if (window.attachEvent) window.attachEvent("onload", onPageLoaded);
+        else window.onload = onPageLoaded;
+    </script>
+
+</body>
+</html>

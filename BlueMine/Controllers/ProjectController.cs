@@ -83,15 +83,28 @@ namespace BlueMine.Controllers
         {
             return this.Content($"<html><body><h1>Issue {id} for project {uri}</h1></body></html>", "text/html");
         }
-        
-        
+
+
         [Route("projects/{uri}/issues/new")]
         public IActionResult NewIssueForProject(string uri)
         {
-            return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
+            // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
+            return View("NewItem");
         }
+
+
+        // http://localhost:55337/projects/abc/issues/new
+        // http://localhost:55337/projects/abc/issues/new1
+
         
-        
+        [Route("projects/{uri}/issues/new1")]
+        public IActionResult NewIssue1ForProject(string uri)
+        {
+            // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
+            return View("NewItem1");
+        }
+
+
         [Route("projects/{uri}/issues/gantt")]
         public IActionResult GanttForProject(string uri)
         {
