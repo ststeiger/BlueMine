@@ -62,22 +62,106 @@ namespace BlueMine.Controllers
                 }
             );
         } // End Action Index 
-
-
+        
+        
         [Route("projects/{uri}")]
         public IActionResult SpecificProject(string uri)
         {
             return this.Content($"<html><body><h1>Project {uri}</h1></body></html>", "text/html");
         }
-
-
+        
+        
         [Route("projects/{uri}/issues")]
         public IActionResult SpecificIssues(string uri)
         {
-            return this.Content($"<html><body><h1>Issues for Project {uri}</h1></body></html>", "text/html");
+            return this.Content($"<html><body><h1>Issues for project {uri}</h1></body></html>", "text/html");
         }
-
-
+        
+        
+        [Route("projects/{uri}/issues/{id:int}")]
+        public IActionResult IssueForProject(string uri, int id)
+        {
+            return this.Content($"<html><body><h1>Issue {id} for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/issues/new")]
+        public IActionResult NewIssueForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/issues/gantt")]
+        public IActionResult GanttForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Gantt-Chart for issues in project {uri}</h1></body></html>", "text/html");
+        }
+        
+        [Route("projects/{uri}/issues/calendar")]
+        public IActionResult CalendarForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Calendar for issues in project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        
+        [Route("projects/{uri}/activity")]
+        public IActionResult IssuesActivityForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Activity for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/files")]
+        public IActionResult FilesForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Files for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/settings")]
+        public IActionResult SettingsForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Settings for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/news")]
+        public IActionResult NewsForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>News for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/wiki")]
+        public IActionResult WikiForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Wiki for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/boards")]
+        public IActionResult BoardsForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Boards for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/boards/{id:int}")]
+        public IActionResult SpecificBoardForProject(string uri, int id)
+        {
+            return this.Content($"<html><body><h1>Board {id} for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
+        [Route("projects/{uri}/documents")]
+        public IActionResult DocumentsForProject(string uri)
+        {
+            return this.Content($"<html><body><h1>Documents for project {uri}</h1></body></html>", "text/html");
+        }
+        
+        
         public void Demo()
         {
             /*

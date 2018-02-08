@@ -35,12 +35,16 @@
 -- https://localhost:3000/projects/v4vwsff
 -- https://localhost:3000/projects/v4vwsff/issues
 -- https://localhost:3000/projects/schuleerlep
--- https://localhost:3000/projects/schuleerlep/issues/new
--- https://localhost:3000/projects/schuleerlep/activity
--- https://localhost:3000/projects/schuleerlep/issues/gantt
--- https://localhost:3000/projects/schuleerlep/issues/calendar
+
+-- https://localhost:3000/projects/schuleerlep/
 -- https://localhost:3000/projects/schuleerlep/files
 -- https://localhost:3000/projects/schuleerlep/settings
+-- https://localhost:3000/projects/schuleerlep/activity
+-- https://localhost:3000/projects/schuleerlep/issues
+-- https://localhost:3000/projects/schuleerlep/issues/new
+-- https://localhost:3000/projects/schuleerlep/issues/gantt
+-- https://localhost:3000/projects/schuleerlep/issues/calendar
+
 
 -- https://localhost:3000/my/page
 -- https://localhost:3000/users/9
