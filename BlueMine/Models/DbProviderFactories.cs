@@ -4,6 +4,11 @@ namespace Mono.Sucks
     // https://github.com/npgsql/Npgsql.EntityFrameworkCore.PostgreSQL/issues/159
     // https://stackoverflow.com/questions/7005302/postgresql-how-to-make-case-insensitive-query
     // https://blogs.msdn.microsoft.com/dotnet/2017/08/14/announcing-entity-framework-core-2-0/
+
+
+    // https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet
+
+
     public static class DbProviderFactories
     {
 
