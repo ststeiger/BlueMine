@@ -10,6 +10,8 @@
 -- https://d2slcw3kip6qmk.cloudfront.net/marketing/blog/The-Ultimate-Guide-to-PM-Methodologies-flowchart.png
 
 
+-- System.Console.Clear();
+
 
 -- Collaborate
 -- Time shart, Gannt Chart
