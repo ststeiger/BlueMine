@@ -7,7 +7,7 @@ namespace Mono.Sucks
 
 
     // https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/dotnet
-
+    // https://stackoverflow.com/questions/45202713/how-to-update-version-of-microsoft-netcore-app-sdk-in-vs-2017
 
     public static class DbProviderFactories
     {
