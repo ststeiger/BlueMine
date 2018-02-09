@@ -20,6 +20,10 @@ namespace Mono.Sucks
     // 3. Manually restore packages
     // dotnet restore
     // 4. dotnet ef runs in same folder as csproj
+
+    // Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=IssueTracker;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+    // Scaffold-DbContext "Server=COR-W10-112\\SQLEXPRESS;Database=IssueTracker;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
     public static class DbProviderFactories
     {
 
