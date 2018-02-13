@@ -8,7 +8,8 @@ using System.Collections.Generic;
 // visit https://go.microsoft.com/fwlink/?LinkID=397860 
 
 using Dapper;
-using BlueMine.Db;
+using BlueMine.Models;
+using BlueMine.Redmine;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -27,7 +28,16 @@ namespace BlueMine.Controllers
     public class ProjectController : Controller
     {
 
-
+        private readonly RedmineContext _context;
+        
+        public ProjectController(RedmineContext context)
+        {
+            _context = context;
+        }
+        
+        
+        
+        
         // GET: /<controller>/
         [Route("projects")]
         public IActionResult Index()
@@ -62,6 +72,56 @@ namespace BlueMine.Controllers
                 }
             );
         } // End Action Index 
+        
+        
+        
+        [Route("lols")]
+        public IActionResult lolz(string uri)
+        {
+            var ls = _context.projects.ToList();
+
+            var lol = (
+                from projects in _context.projects
+                from issues in _context.issues
+                    .Where(issue => issue.ProjectId == projects.Id)
+                select issues
+            ).ToList();
+            
+            
+            
+            var lol2 = (
+                from project in _context.projects
+                join issue in _context.issues on project.Id equals issue.ProjectId into projectIssueJoin
+                
+                from projectIssue in projectIssueJoin.DefaultIfEmpty()
+                join tracker in _context.trackers on projectIssue.TrackerId equals tracker.Id into projectIssueTrackerJoin 
+                from projectIssueTracker in projectIssueTrackerJoin .DefaultIfEmpty()
+                
+                select project
+                
+                /*from mappings in tmpMapp.DefaultIfEmpty()
+                from groups in tmpGroups.DefaultIfEmpty()
+                select new
+                {
+                    UserId = users.BE_ID
+                    ,UserName = users.BE_User
+                    ,UserGroupId = mappings.BEBG_BG
+                    ,GroupName = groups.Name
+                }
+                */
+            );
+            ; //.ToList();
+            
+            // string sql = lol2.ToString();
+            // string sql = BlueMine.Models.IQueryableExtensions.ToSql(lol2);
+            // string sql = BlueMine.Models.IQueryableExtensions1.ToSql(lol2);
+            string sql = lol2.ToSql();
+            System.Console.WriteLine(sql);
+            
+            return this.Content($"<html><body><h1>lol {ls.Count}</h1></body></html>", "text/html");
+        }
+        
+        
         
         
         [Route("projects/{uri}")]

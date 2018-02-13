@@ -22,6 +22,13 @@ namespace BlueMine
             return new System.Data.SqlClient.SqlConnection(s_cs);
         }
 
+        
+        public static string ConnectionString
+        {
+            get { return GetConnectionString(); }
+        }
+
+
 
         public static string GetConnectionString()
         {

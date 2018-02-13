@@ -11,6 +11,7 @@ namespace BlueMine.Models.Project
     // Instead, use DisplayTemplates
     public class ProjectRecursor
     {
+        
         public Db.T_projects Me;
         protected List<Db.T_projects> m_list;
         public int Level;

@@ -18,7 +18,7 @@ namespace BlueMine
 
             foreach (string resName in asm.GetManifestResourceNames())
             {
-
+                
                 if (resName.EndsWith("classes.sql", System.StringComparison.OrdinalIgnoreCase))
                 {
                     using (var strm = asm.GetManifestResourceStream(resName))
@@ -94,8 +94,8 @@ foreach (ColumnDefinition cl in tableColumns)
                 sb.AppendLine(@"}");
 
                 string fileContents = sb.ToString();
-                string dir = @"D:\username\Documents\Visual Studio 2017\Projects\BlueMine\BlueMine\Db";
-                dir = System.IO.Path.Combine(dir, table + ".cs");
+
+                string dir = System.IO.Path.Combine("Db", "Redmine", "BlueMappings", table + ".cs");
                 System.IO.File.WriteAllText(dir, fileContents, System.Text.Encoding.UTF8);
             }
 
