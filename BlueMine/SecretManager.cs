@@ -217,10 +217,10 @@ namespace TestPlotly
             } // End Try
             catch (System.Exception ex)
             {
+                System.Console.WriteLine(ex.Message);
                 throw;
             } // End Catch
-
-            return InlineTypeAssignHelper<T>(null);
+            
         } // End Function ObjectToGeneric 
 
 

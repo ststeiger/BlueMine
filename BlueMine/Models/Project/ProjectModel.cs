@@ -17,6 +17,7 @@ ORDER BY [projects].[id] ASC
 OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY
 "; //, N'@0 nvarchar(4000)', @0 = N'v4vwsff'
             
+            System.Console.WriteLine(sql);
         }
         
         
@@ -28,6 +29,8 @@ OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY
             string sql = @"
 SELECT * FROM boards WHERE project_id = 64
 ";
+            
+            System.Console.WriteLine(sql);
         }
         
         
@@ -39,6 +42,7 @@ SELECT ""enabled_modules"".""name""
 FROM ""enabled_modules"" 
 WHERE ""enabled_modules"".""project_id"" = @0; 
 "; 
+            System.Console.WriteLine(sql);
             
                 //, N'@0 int', @0 = 153   
         }
