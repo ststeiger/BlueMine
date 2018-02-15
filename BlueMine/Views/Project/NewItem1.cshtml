@@ -1,5 +1,6 @@
 ﻿
-@model BlueMine.Models.Project.ProjectModel
+@model IEnumerable<SelectListItem>
+
 
 @{
     Layout = null;
@@ -48,20 +49,22 @@
     -->
 </head>
 <body>
-    <h1>Hello New Item</h1>
-    
-    <script type="text/javascript">
+<h1>Hello New Item</h1>
+<select id="lolz"></select>
+
+
+<script type="text/javascript">
         
         
         function onDomReady()
         {
             console.log("dom ready");
         }
-
+        
         if (document.addEventListener) document.addEventListener("DOMContentLoaded", onDomReady, false);
         else if (document.attachEvent) document.attachEvent("onreadystatechange", onDomReady);
         else window.onload = onDomReady;
-
+        
         function onPageLoaded()
         {
             console.log("page loaded");

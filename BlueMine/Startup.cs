@@ -39,6 +39,8 @@ namespace BlueMine
                 delegate(DbContextOptionsBuilder options)
             { 
                 // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                // options.UseNpgsql("");
+                // options.UseSqlite("");
                 
                 options.UseSqlServer(SqlFactory.ConnectionString);
             });
