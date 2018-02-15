@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>8116bb0c-aac0-48ba-859d-f768e139cb3a</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ImageSharp.Fonts</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BigEndianBitConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BinaryReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Bounds.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\FontException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\FontFamilyNotFoundException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidFontFileException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Exceptions\InvalidFontTableException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FileFontInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Font.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontDescription.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontFamily.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontFamilyCollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontReader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FontStyle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Glyph.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GlyphInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HashHelpers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HorizontalAlignment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IFontCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IFontInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IGlyphRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IGlyphRendererExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IO\ZlibInflateStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IReadonlyFontCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IReadonlyFontCollectionExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RendererOptions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SystemFontCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SystemFonts.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\CMapTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\CMap\CMapSubTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\CMap\EncodingRecord.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\CMap\Format0SubTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\CMap\Format4SubTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Glyphs\CompositeGlyphLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Glyphs\EmptyGlyphLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Glyphs\GlyphLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Glyphs\GlyphVector.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Glyphs\SimpleGlyphLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\GlyphTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\HeadTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\HoizontalHeadTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\HorizontalMetricsTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\IndexLocationTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\KerningTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Kern\Format0SubTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Kern\KearningPair.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Kern\KerningCoverage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Kern\KerningSubTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\MaximumProfileTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\NameTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\Name\NameRecord.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\General\OS2Table.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\Table.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\TableHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\TableLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\TableNameAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\UnknownTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tables\WoffTableHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TextLayout.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TextMeasurer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TextRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\EncodingIDExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utilities\StringLoader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)VerticalAlignment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WellKnownIds\EncodingIDs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WellKnownIds\NameIds.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WellKnownIds\PlatformIDs.cs" />
+  </ItemGroup>
+</Project>

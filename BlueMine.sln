@@ -3,13 +3,34 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueMine", "BlueMine\BlueMine.csproj", "{052D2D77-3470-4C79-8C15-7E135B6FB670}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlueMine", "BlueMine\BlueMine.csproj", "{052D2D77-3470-4C79-8C15-7E135B6FB670}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dapper", "Dapper\Dapper.shproj", "{0BC120D8-0B4C-41F4-99F5-E023AA4C16F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libExcelImport", "libExcelImport\libExcelImport.csproj", "{587C1EAB-A082-4808-A25E-1E2B128981A7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPPlus.NetStandard2", "EPPlus.NetStandard2\EPPlus.NetStandard2.csproj", "{A610A746-0015-448B-87C7-39972058F3D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageSharpPacked", "ImageSharpPacked\ImageSharpPacked.csproj", "{F84CE9A9-2CE6-4FD7-9694-8BB4EBB04E6B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageSharp", "ImageSharp\ImageSharp.shproj", "{E702870A-6D73-41AA-9294-36CDCA62AC9B}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageSharp.Drawing", "ImageSharp.Drawing\ImageSharp.Drawing.shproj", "{17CD41E9-7166-436D-9D4F-9E8BCF8AC8A6}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageSharp.Core", "ImageSharp.Core\ImageSharp.Core.shproj", "{5317F91F-0EB2-4CC4-938F-CBFBBC8DA430}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageSharp.Fonts", "ImageSharp.Fonts\ImageSharp.Fonts.shproj", "{8116BB0C-AAC0-48BA-859D-F768E139CB3A}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ImageSharp.Shapes", "ImageSharp.Shapes\ImageSharp.Shapes.shproj", "{50804626-6A55-40F1-9CC2-04B360F7B54B}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dapper\Dapper.projitems*{0bc120d8-0b4c-41f4-99f5-e023aa4c16f2}*SharedItemsImports = 13
+		ImageSharp.Drawing\ImageSharp.Drawing.projitems*{17cd41e9-7166-436d-9d4f-9e8bcf8ac8a6}*SharedItemsImports = 13
+		ImageSharp.Shapes\ImageSharp.Shapes.projitems*{50804626-6a55-40f1-9cc2-04b360f7b54b}*SharedItemsImports = 13
+		ImageSharp.Core\ImageSharp.Core.projitems*{5317f91f-0eb2-4cc4-938f-cbfbbc8da430}*SharedItemsImports = 13
+		ImageSharp.Fonts\ImageSharp.Fonts.projitems*{8116bb0c-aac0-48ba-859d-f768e139cb3a}*SharedItemsImports = 13
+		ImageSharp\ImageSharp.projitems*{e702870a-6d73-41aa-9294-36cdca62ac9b}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +41,18 @@ Global
 		{052D2D77-3470-4C79-8C15-7E135B6FB670}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{052D2D77-3470-4C79-8C15-7E135B6FB670}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{052D2D77-3470-4C79-8C15-7E135B6FB670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{587C1EAB-A082-4808-A25E-1E2B128981A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{587C1EAB-A082-4808-A25E-1E2B128981A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{587C1EAB-A082-4808-A25E-1E2B128981A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{587C1EAB-A082-4808-A25E-1E2B128981A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A610A746-0015-448B-87C7-39972058F3D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A610A746-0015-448B-87C7-39972058F3D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A610A746-0015-448B-87C7-39972058F3D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A610A746-0015-448B-87C7-39972058F3D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84CE9A9-2CE6-4FD7-9694-8BB4EBB04E6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84CE9A9-2CE6-4FD7-9694-8BB4EBB04E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84CE9A9-2CE6-4FD7-9694-8BB4EBB04E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84CE9A9-2CE6-4FD7-9694-8BB4EBB04E6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

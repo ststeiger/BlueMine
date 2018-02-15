@@ -1,5 +1,8 @@
 ﻿
-@model IEnumerable<SelectListItem>
+@model BlueMine.Models.Project.NewItemModel
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 
 
 @{
@@ -49,12 +52,14 @@
     -->
 </head>
 <body>
-<h1>Hello New Item</h1>
-<select id="lolz"></select>
+    <h1>Hello New Item</h1>
+
+    <select id="lolz" asp-items="Model.Trackers">
+        <option>--- Please select ---</option>
+    </select>
 
 
-<script type="text/javascript">
-        
+    <script type="text/javascript">
         
         function onDomReady()
         {
@@ -73,6 +78,7 @@
         if (window.addEventListener) window.addEventListener("load", onPageLoaded, false);
         else if (window.attachEvent) window.attachEvent("onload", onPageLoaded);
         else window.onload = onPageLoaded;
+
     </script>
 
 </body>

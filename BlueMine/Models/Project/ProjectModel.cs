@@ -3,6 +3,17 @@
 namespace BlueMine.Models.Project
 {
     
+    public class NewItemModel 
+    {
+
+        public System.Collections.Generic.List<
+       Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+       > Trackers;
+
+    }
+
+
+
     public class ProjectModel
     {
         public ProjectRecursor ProjectTree;

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>17cd41e9-7166-436d-9d4f-9e8bcf8ac8a6</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ImageSharp.Drawing</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\Brushes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\IBrush.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\ImageBrush{TPixel}.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\PatternBrush{TPixel}.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\Processors\BrushApplicator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\RecolorBrush{TPixel}.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Brushes\SolidBrush{TPixel}.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DrawImage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FillRegion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\DrawBeziers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\DrawLines.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\DrawPath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\DrawPathCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\DrawPolygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\DrawRectangle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\FillPathBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\FillPathCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\FillPaths.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\FillPolygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\FillRectangle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\ShapePath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Paths\ShapeRegion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pens\IPen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pens\Pens.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pens\Pen{TPixel}.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processors\DrawImageProcessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processors\FillProcessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Processors\FillRegionProcessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Region.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Text\DrawText.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Text\DrawText.Path.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Text\TextGraphicsOptions.cs" />
+  </ItemGroup>
+</Project>

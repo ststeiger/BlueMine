@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE;DEBUG;FILESYSTEM</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;FILESYSTEM</DefineConstants>
+  </PropertyGroup>
+
+  <Import Project="..\ImageSharp.Core\ImageSharp.Core.projitems" Label="Shared" />
+
+  <Import Project="..\ImageSharp\ImageSharp.projitems" Label="Shared" />
+
+  <Import Project="..\ImageSharp.Shapes\ImageSharp.Shapes.projitems" Label="Shared" />
+
+  <Import Project="..\ImageSharp.Fonts\ImageSharp.Fonts.projitems" Label="Shared" />
+
+  <Import Project="..\ImageSharp.Drawing\ImageSharp.Drawing.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <PackageReference Include="System.Buffers" Version="4.4.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+    <PackageReference Include="System.Memory" Version="4.4.0-preview1-25305-02" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.4.0" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\Formats\Jpeg\Common\Block8x8F.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Block8x8F.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\Generated\PixelOperations{TPixel}.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PixelOperations{TPixel}.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\Generated\Rgba32.PixelOperations.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Rgba32.PixelOperations.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\PixelBlenders\DefaultPixelBlenders.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>DefaultPixelBlenders.Generated.cs</LastGenOutput>
+    </None>
+    <None Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\PixelBlenders\PorterDuffFunctions.Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PorterDuffFunctions.Generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\Formats\Jpeg\Common\Block8x8F.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Block8x8F.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\Generated\PixelOperations{TPixel}.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PixelOperations{TPixel}.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\Generated\Rgba32.PixelOperations.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Rgba32.PixelOperations.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\PixelBlenders\DefaultPixelBlenders.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DefaultPixelBlenders.Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Update="D:\Stefan.Steiger\Documents\Visual Studio 2017\Projects\BlueMine\ImageSharp\PixelFormats\PixelBlenders\PorterDuffFunctions.Generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PorterDuffFunctions.Generated.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

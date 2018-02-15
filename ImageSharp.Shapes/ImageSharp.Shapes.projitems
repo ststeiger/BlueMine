@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>50804626-6a55-40f1-9cc2-04b360f7b54b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ImageSharp.Shapes</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes.Text\BaseGlyphBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes.Text\GlyphBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes.Text\PathGlyphBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes.Text\TextBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\ClipperExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Clipper\clipper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\ComplexPolygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\CubicBezierLineSegment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\EllipsePolygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Helpers\ArrayExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Helpers\Guard.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Helpers\VectorExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\ILineSegment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\InternalPath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\IPath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\IPathCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\ISimplePath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\LinearLineSegment.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Outliner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Path.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PathBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PathCollection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PathExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PathTypes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PointInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Polygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PolygonClipper\ClipablePath.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PolygonClipper\Clipper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PolygonClipper\ClipperException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\PolygonClipper\ClippingType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\RectangularPolygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\RegularPolygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\SegmentInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SixLabors.Shapes\Star.cs" />
+  </ItemGroup>
+</Project>

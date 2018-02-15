@@ -67,46 +67,8 @@ namespace BlueMine.Controllers
                 }
             );
         } // End Action Index 
-
-
-        [Route("dds")]
-        public IEnumerable<SelectListItem> getRegions(string uri)
-        {
-            var ls1 = _context.projects.ToList();
-
-            var trackerz = (
-                from tracker in _context.trackers
-                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                {
-                    Value = tracker.Id.ToString(),
-                    Text = tracker.Name
-                    //,Selected = tracker.DefaultStatusId.Value
-                }
-            ).ToList();
-            
-            /*
-            List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> regions =
-                new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>()
-                {
-                    new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                    {
-                        Value = null,
-                        Text = " ",
-                        Disabled = false,
-                        Selected = false,
-                        Group = new SelectListGroup()
-                        {
-                            Name = "foo",
-                            Disabled = false
-                        }
-                    }
-                };
-            */
-            
-            return trackerz;
-        }
         
-        
+
         [Route("lols")]
         public IActionResult lolz(string uri)
         {
@@ -191,15 +153,73 @@ namespace BlueMine.Controllers
             return View("NewItem");
         }
 
-// http://localhost:55337/projects/abc/issues/new
-// http://localhost:55337/projects/abc/issues/new1
+
+
+
+        [Route("dds")]
+        public List<SelectListItem> getTrackers(string uri)
+        {
+            var ls1 = _context.projects.ToList();
+
+            var trackerz = (
+                from tracker in _context.trackers
+                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = tracker.Id.ToString(),
+                    Text = tracker.Name
+                    //,Selected = tracker.DefaultStatusId.Value
+                }
+            ).ToList();
+
+            /*
+            List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> regions =
+                new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>()
+                {
+                    new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                    {
+                        Value = null,
+                        Text = " ",
+                        Disabled = false,
+                        Selected = false,
+                        Group = new SelectListGroup()
+                        {
+                            Name = "foo",
+                            Disabled = false
+                        }
+                    }
+                };
+            */
+
+            return trackerz;
+        }
+
+        // http://localhost:55337/projects/abc/issues/new
+        // http://localhost:55337/projects/abc/issues/new1
         [Route("projects/{uri}/issues/new1")]
         public IActionResult NewIssue1ForProject(string uri)
         {
-            var ls = getRegions("");
+            // https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro
+            // https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
+            // @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+            // @addTagHelper *, AuthoringTagHelpers
+
+            // @model List<SelectListItem>
+            // var ls = getTrackers("");
+
+            // @model BlueMine.Models.Project.NewItemModel
+            var ni = new BlueMine.Models.Project.NewItemModel();
+            ni.Trackers = getTrackers("");
+
+            var defaultItem = new SelectListItem()
+            {
+                Value = null,
+                Text = "--- Bitte auswählen ---"
+            };
+
+            ni.Trackers.Insert(0, defaultItem);
             
-// return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
-            return View("NewItem1", ls);
+            // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
+            return View("NewItem1", ni);
         }
 
         [Route("projects/{uri}/issues/gantt")]

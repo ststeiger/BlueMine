@@ -26,5 +26,8 @@
     <EmbeddedResource Include="SQL\classes.sql" />
     <EmbeddedResource Include="SQL\projects.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libExcelImport\libExcelImport.csproj" />
+  </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
 </Project>
