@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace System.Drawing
 {
 
@@ -11,10 +8,12 @@ namespace System.Drawing
         protected GraphicsUnit m_unit;
         protected System.Drawing.Image m_image;
 
+
         public Graphics()
         {
             m_unit = GraphicsUnit.Pixel;
         }
+
 
         public Graphics(System.Drawing.Image img)
             :this()
