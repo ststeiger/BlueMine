@@ -67,7 +67,7 @@ namespace BlueMine.Controllers
                 }
             );
         } // End Action Index 
-        
+
 
         [Route("lols")]
         public IActionResult lolz(string uri)
@@ -116,7 +116,7 @@ namespace BlueMine.Controllers
                 */
             );
             ; //.ToList();
-            
+
             // string sql = lol2.ToString();
             // string sql = BlueMine.Models.IQueryableExtensions.ToSql(lol2);
             // string sql = BlueMine.Models.IQueryableExtensions1.ToSql(lol2);
@@ -149,13 +149,11 @@ namespace BlueMine.Controllers
         [Route("projects/{uri}/issues/new")]
         public IActionResult NewIssueForProject(string uri)
         {
-// return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
+            // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem");
         }
-
-
-
-
+        
+        
         [Route("dds")]
         public List<SelectListItem> getTrackers(string uri)
         {
@@ -217,7 +215,7 @@ namespace BlueMine.Controllers
             };
 
             ni.Trackers.Insert(0, defaultItem);
-            
+
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem1", ni);
         }
