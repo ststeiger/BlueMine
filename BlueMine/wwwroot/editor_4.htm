@@ -40,43 +40,45 @@
 
 
     <style>
-        body 
-        {
+        body {
             font-family: Verdana;
             font-size: 18px;
         }
-
     </style>
 
     <script>
-        
-        
-        
+
+
+
         // https://stackoverflow.com/questions/3545018/selected-text-event-trigger-in-javascript
         function dispachSelectedEvent()
         {
             //$('div').mouseup(function() {
-                //    var text=getSelectedText();
-                //    if (text!='') alert(text);
+            //    var text=getSelectedText();
+            //    if (text!='') alert(text);
             //});
-            
-            function getSelectedText() {
-                if (window.getSelection) {
+
+            function getSelectedText()
+            {
+                if (window.getSelection)
+                {
                     return window.getSelection().toString();
-                } else if (document.selection) {
+                } else if (document.selection)
+                {
                     return document.selection.createRange().text;
                 }
                 return '';
-            }​
+            }
         }
-        
-        
+
+
+
         // http://codetheory.in/javascript-document-execcommand-web-method/
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
         // https://codepen.io/netsi1964/full/QbLLGW/
         // https://w3c.github.io/editing/execCommand.html
-        // window.clipboardData.getData('Text') 
-        // JavaScript document.execCommand('copy') 
+        // window.clipboardData.getData('Text')
+        // JavaScript document.execCommand('copy')
 
         function removeFormat(me)
         {
@@ -166,7 +168,7 @@
 
 
         // https://stackoverflow.com/questions/16529316/javascript-document-execcommand-own-tags
-        
+
         function custom(me)
         {
             var commandName = "insertHTML";
@@ -174,12 +176,12 @@
 
             // For commands which require an input argument - Specify null if no argument is needed.
 
-            // but... this strips all existing tags from the selection! 
-            // Potential problem: This removes all newlines from the selected text. 
-            //var valueArgument = "<span class='own-class'>" + document.getSelection() + "</span>"; 
+            // but... this strips all existing tags from the selection!
+            // Potential problem: This removes all newlines from the selected text.
+            //var valueArgument = "<span class='own-class'>" + document.getSelection() + "</span>";
             var valueArgument = getSelectionHtml();
             alert(valueArgument);
-            valueArgument = "<span class='own-class'>" + valueArgument + "</span>"; 
+            valueArgument = "<span class='own-class'>" + valueArgument + "</span>";
 
             // execCommand() will affect the currently active editable element.
             document.execCommand(commandName, showDefaultUI, valueArgument);
@@ -197,7 +199,7 @@
             return documentFragment;
         }
 
-        function html2fragment(html)
+        function html2fragment_noIE(html)
         {
             var frag = document.createDocumentFragment(), lastNode;
             var tmp = document.createElement('body'), child;
@@ -223,7 +225,7 @@
 
                 var sel = window.getSelection();
                 var range = sel.getRangeAt(0);
-                
+
                 var frag = document.createDocumentFragment();
 
                 // frag.innerHTML = html;
@@ -237,7 +239,7 @@
                 {
                     frag.appendChild(child);
                 }
-                
+
 
                 range.insertNode(frag);
             } else if (document.selection && document.selection.createRange)
@@ -273,20 +275,15 @@
                     // Range.createContextualFragment() would be useful here but is
                     // non-standard and not supported in all browsers (IE9, for one)
 
-                    
+
                     var el = document.createElement("div");
                     el.innerHTML = html;
-                    
+
                     var frag = document.createDocumentFragment(), node, lastNode;
                     while ((node = el.firstChild))
                     {
                         lastNode = frag.appendChild(node);
                     }
-                    
-
-                    
-
-
 
                     range.insertNode(frag);
 
@@ -310,12 +307,15 @@
         }
 
 
-
-
-
         function replaceHtmlBeforeSelection(before, after)
         {
             console.log("before")
+
+            var valueArgument = getSelectionHtml();
+            console.log("valueArgument", valueArgument);
+            var html = before + valueArgument + after;
+            console.log("html", html);
+
 
             m++;
             if (window.getSelection)
@@ -323,75 +323,59 @@
 
                 var sel = window.getSelection();
                 var range = sel.getRangeAt(0);
-                
-                
 
-                var valueArgument = getSelectionHtml();
-                console.log("valueArgument", valueArgument);
-                var html = before + valueArgument + after;
-                console.log("html", html);
-                
-                
                 range.deleteContents();
-                
-                var expandedSelRange = range.cloneRange();
 
+                var temp = document.createElement("div");
+                temp.innerHTML = html;
 
-                var el = document.createElement("div");
-                el.innerHTML = html;
-
-                var frag = html2fragment(html);
-
-                
+                var frag = document.createDocumentFragment(), node, lastNode;
+                while ((node = temp.firstChild))
+                {
+                    lastNode = frag.appendChild(node);
+                }
 
                 range.insertNode(frag);
-                var lastNode = frag;
 
                 if (lastNode)
                 {
-                    console.log("sele")
-                    // expandedSelRange.setEndAfter(lastNode);
-                    // range.setStartAfter(frag);
                     range.setStartBefore(lastNode);
                     range.setEndAfter(lastNode);
-                    // console.log("child",child);
-                    console.log("lastNode", lastNode);
 
-                    console.log("range", range);
-                    var container = document.createElement("div");
-                    container.appendChild(range.cloneContents());
-                    console.log("contents", container.innerHTML);
+                    // range.setStartAfter(null);
+                    // range.setEndBefore(null);
 
-                    
-
-
-                    console.log(expandedSelRange);
                     sel.removeAllRanges();
                     sel.addRange(range);
                 }
 
-            } else if (document.selection && document.selection.createRange)
+            }
+            else if (document.selection && document.selection.createRange)
             {
+                // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741548(v%3dvs.85)
                 // https://www.codeproject.com/Questions/897645/Replacing-selected-text-HTML-JavaScript
-                // document.selection.createRange().pasteHTML(html);
-
-                range = document.selection.createRange();
-                var expandedSelRange1 = range.duplicate();
-                range.collapse(true);
-                var expandedSelRange = range.duplicate();
+                // https://stackoverflow.com/questions/3053542/how-to-get-the-start-and-end-points-of-selection-in-text-area
+                var range = document.selection.createRange();
+                var leftSide = range.getBookmark();
+                var newRange = range.duplicate();
+                var rightSide = range.duplicate();
                 range.pasteHTML(html);
 
-                expandedSelRange.setEndPoint("EndToEnd", expandedSelRange1);
-                expandedSelRange.select();
+                newRange.moveToBookmark(leftSide);
+                newRange.setEndPoint("EndToStart", rightSide);
+                newRange.select();
             }
         }
+
+
+
 
 
         function TOFIXinserHtmlBeforeAfter(before, after)
         {
             if (before != null)
                 insertHtmlBeforeSelection(before)
-            
+
             if (after != null) insertHtmlAfterSelection(after)
         }
 
@@ -401,7 +385,7 @@
         {
             if (before != null)
                 replaceHtmlBeforeSelection("<div style='font-size: 20px; font-weight: bold; display: inline-block;'>", "</div>");
-            
+
             // if (after != null) insertHtmlAfterSelection(after)
         }
 
@@ -414,7 +398,7 @@
         }
 
 
-        var m=n=0;
+        var m = n = 0;
     </script>
 
 
@@ -429,19 +413,19 @@
     <input type="button" value="AFT" onclick="insertHtmlAfterSelection('<div style=\'background-color: green; display: inline-block;\'>' + n + '</div>');" />
 
     <input type="button" value="B" onclick="inserHtmlBeforeAfter('<h1>', '</h1>');" />
-   
-    
+
+
     <input type="button" value="LOG" onclick="console.log(document.body.innerHTML);" />
-    
 
 
-    
+
+
     <div id="editor" style="width: 15cm; height: 2cm; padding: 0.25cm; background-color: dodgerblue;" contenteditable="true">
         this is a simple test
     </div>
 
     <script>
-        
+
     </script>
 
 </body>
