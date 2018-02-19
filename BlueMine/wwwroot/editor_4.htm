@@ -307,14 +307,14 @@
         }
 
 
-        function replaceHtmlBeforeSelection(before, after)
+        function replaceSelectionHtml(before, after, cleanUp)
         {
-            console.log("before")
+            // console.log("before")
 
             var valueArgument = getSelectionHtml();
-            console.log("valueArgument", valueArgument);
-            var html = before + valueArgument + after;
-            console.log("html", html);
+            // console.log("valueArgument", valueArgument);
+            var html = before + cleanUp(valueArgument) + after;
+            // console.log("html", html);
 
 
             m++;
@@ -384,7 +384,53 @@
         function inserHtmlBeforeAfter(before, after)
         {
             if (before != null)
-                replaceHtmlBeforeSelection("<div style='font-size: 20px; font-weight: bold; display: inline-block;'>", "</div>");
+
+
+                // replaceSelectionHtml("<div style='font-size: 20px; font-weight: bold; display: inline-block;'>", "</div>");
+
+
+
+                function allDescendants(node)
+                {
+
+                    for (var i = 0; i < node.childNodes.length; i++)
+                    {
+                        var child = node.childNodes[i];
+                        allDescendants(child);
+                    }
+
+                    // console.log("cchild", node);
+                    //my_elem.parentNode.insertBefore(span, my_elem);
+
+                    if (node.tagName === "B")
+                    {
+                        // console.log("match innerHTML", node.innerHTML);
+                        // console.log("match node", node);
+                        // console.log("match node.parent", node.parentElement);
+                        node.insertAdjacentHTML('beforebegin', node.innerHTML);
+                        node.parentElement.removeChild(node);
+                    }
+
+
+                    console.log("cchild.inner", node.innerHTML);
+                    // doSomethingToNode(child);
+                }
+
+
+
+            replaceSelectionHtml("<b>", "</b>", function cu(html)
+            {
+                console.log("cu");
+
+                var temp = document.createElement("div");
+                temp.innerHTML = html;
+
+                console.log("temp old", temp.innerHTML);
+                allDescendants(temp);
+                console.log("temp new", temp.innerHTML);
+
+                return temp.innerHTML;
+            });
 
             // if (after != null) insertHtmlAfterSelection(after)
         }

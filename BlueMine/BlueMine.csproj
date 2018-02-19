@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libExcelImport\libExcelImport.csproj" />
+    <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
 </Project>
