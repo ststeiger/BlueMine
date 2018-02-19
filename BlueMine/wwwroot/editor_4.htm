@@ -50,6 +50,27 @@
 
     <script>
         
+        
+        
+        // https://stackoverflow.com/questions/3545018/selected-text-event-trigger-in-javascript
+        function dispachSelectedEvent()
+        {
+            //$('div').mouseup(function() {
+                //    var text=getSelectedText();
+                //    if (text!='') alert(text);
+            //});
+            
+            function getSelectedText() {
+                if (window.getSelection) {
+                    return window.getSelection().toString();
+                } else if (document.selection) {
+                    return document.selection.createRange().text;
+                }
+                return '';
+            }​
+        }
+        
+        
         // http://codetheory.in/javascript-document-execcommand-web-method/
         // https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
         // https://codepen.io/netsi1964/full/QbLLGW/

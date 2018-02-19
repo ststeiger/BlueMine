@@ -58,6 +58,9 @@ namespace BlueMine
             }
 
             app.UseMvc();
+
+            app.UseStaticFiles();
+
             /*
             app.UseMvc(routes =>
             {
