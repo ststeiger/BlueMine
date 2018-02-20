@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using BlueMine.Db;
 
 // For more information on enabling MVC for empty projects, 
 // visit https://go.microsoft.com/fwlink/?LinkID=397860 
 using Dapper;
 using BlueMine.Models;
+using BlueMine.Models.Project;
 using BlueMine.Redmine;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -34,6 +36,61 @@ namespace BlueMine.Controllers
         }
 
 
+        
+        [Route("project")]
+        public IActionResult poj()
+        {
+            System.Collections.Generic.List<Db.T_projects> projects = null;
+
+            string sql = "SELECT * FROM projects ";
+            // string sql = "SELECT * FROM projects WHERE id = @projid";
+
+            using (System.Data.Common.DbConnection connection = SqlFactory.GetConnection())
+            {
+                projects = connection.Query<Db.T_projects>(sql).ToList();
+            }
+            
+            
+            
+            
+            // var x = (from proj in projects where proj.parent_id != null select proj);
+            
+            // var y = projects.Where(u => u.parent_id != null).OrderBy(z => z.id).ToList();
+            // @Html.DisplayFor((from prop in Model where prop.parent_id != null select prop), "T_projects")
+            
+            
+            // @Html.DisplayForModel()
+            // @Html.EditorForModel()
+            
+            
+            // return View(projects);
+            
+            var pm = new Models.Project.ProjectModel()
+            {
+                GenericTree = new Models.Project.GenericRecursor<Db.T_projects, long?>(
+                    projects
+                    , x => x.parent_id, x => x.id)
+            };
+            
+            pm.GenericTree.Sort(pm.GenericTree, x => x.name
+                , SortDirection.Ascending);
+            
+            
+            
+            
+            return View("GenericIndex", 
+                new Models.Project.ProjectModel()
+                {
+                    GenericTree = new Models.Project.GenericRecursor<Db.T_projects, long?>(
+                        projects
+                        ,x => x.parent_id, x => x.id)
+                }
+                
+            );
+        } // End Action Index 
+
+        
+        
         // GET: /<controller>/
         [Route("projects")]
         public IActionResult Index()
@@ -60,11 +117,11 @@ namespace BlueMine.Controllers
 
 
             // return View(projects);
-
+            
             return View(
                 new Models.Project.ProjectModel()
                 {
-                    ProjectTree = new Models.Project.ProjectRecursor(null, projects)
+                    ProjectTree = new Models.Project.ProjectRecursor(projects)
                 }
             );
         } // End Action Index 

@@ -17,6 +17,12 @@ namespace BlueMine.Models.Project
         public int Level;
 
 
+        
+        public ProjectRecursor(List<Db.T_projects> list)
+            :this(null, list)
+        { } // End Constructor 
+        
+        
         public ProjectRecursor(Db.T_projects me, List<Db.T_projects> list)
             :this(me, list, -1)
         { } // End Constructor 

@@ -46,7 +46,7 @@ namespace BlueMine
             });
             
             services.AddMvc();
-        }
+        } // End Sub ConfigureServices 
         
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,11 +56,11 @@ namespace BlueMine
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseMvc();
-
+            
             app.UseStaticFiles();
-
+            
             /*
             app.UseMvc(routes =>
             {
@@ -69,7 +69,11 @@ namespace BlueMine
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             */
-
+            
         }
-    }
-}
+        
+        
+    } // End Class Startup 
+    
+    
+} // End Namespace BlueMine 

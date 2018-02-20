@@ -50,8 +50,10 @@
 <body>
 
 
-<ul id="projectTree">
-    @Html.DisplayFor(modell => modell.ProjectTree.RootNodes)    
+<ul id="projectTree">  
+
+    @Html.DisplayFor(x => x.GenericTree.RootNodes, "GenericRecursor")
+
 </ul>
 
 <!--

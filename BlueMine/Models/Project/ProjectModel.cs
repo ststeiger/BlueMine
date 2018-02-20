@@ -17,8 +17,11 @@ namespace BlueMine.Models.Project
     public class ProjectModel
     {
         public ProjectRecursor ProjectTree;
-
-
+        
+        
+        public GenericRecursor<Db.T_projects, long?> GenericTree;
+        
+        
         public static void GetProjectInfo()
         {
             string sql = @"
