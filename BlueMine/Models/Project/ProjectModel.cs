@@ -7,8 +7,8 @@ namespace BlueMine.Models.Project
     {
 
         public System.Collections.Generic.List<
-       Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-       > Trackers;
+            Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+        > Trackers;
 
     }
 
@@ -16,9 +16,8 @@ namespace BlueMine.Models.Project
 
     public class ProjectModel
     {
+
         public ProjectRecursor ProjectTree;
-        
-        
         public GenericRecursor<Db.T_projects, long?> GenericTree;
         
         

@@ -4,6 +4,10 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Code\quick.cs" />
+    <Compile Remove="Code\YamlSer.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Db\" />
     <Folder Include="Db\Redmine\BlueMappings" />
     <Folder Include="Views\Project\DisplayTemplates\" />

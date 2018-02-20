@@ -144,7 +144,8 @@ namespace System.Drawing
                 if (disposing)
                 {
                     // TODO: verwalteten Zustand (verwaltete Objekte) entsorgen.
-                    this.m_sixImage.Dispose();
+                    if(this.m_sixImage != null)
+                        this.m_sixImage.Dispose();
                 }
 
                 // TODO: nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer weiter unten überschreiben.

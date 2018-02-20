@@ -50,9 +50,6 @@ namespace BlueMine.Controllers
                 projects = connection.Query<Db.T_projects>(sql).ToList();
             }
             
-            
-            
-            
             // var x = (from proj in projects where proj.parent_id != null select proj);
             
             // var y = projects.Where(u => u.parent_id != null).OrderBy(z => z.id).ToList();
@@ -68,28 +65,31 @@ namespace BlueMine.Controllers
             var pm = new Models.Project.ProjectModel()
             {
                 GenericTree = new Models.Project.GenericRecursor<Db.T_projects, long?>(
-                    projects
-                    , x => x.parent_id, x => x.id)
+                      projects
+                    , x => x.parent_id
+                    , x => x.id)
             };
-            
-            pm.GenericTree.Sort(pm.GenericTree, x => x.name
-                , SortDirection.Ascending);
-            
-            
-            
-            
-            return View("GenericIndex", 
-                new Models.Project.ProjectModel()
-                {
-                    GenericTree = new Models.Project.GenericRecursor<Db.T_projects, long?>(
-                        projects
-                        ,x => x.parent_id, x => x.id)
-                }
-                
-            );
+
+            // pm.GenericTree.AddSort(SortTerm<Db.T_projects>.Create(x => x.id));
+            // pm.GenericTree.AddSort(SortTerm<Db.T_projects>.Create(x => x.id, SortDirection.Descending));
+
+            //pm.GenericTree.AddSort(
+            //      SortTerm<Db.T_projects>.Create(x => x.name)
+            //    , SortTerm<Db.T_projects>.Create(x => x.created_on)
+            //    , SortTerm<Db.T_projects>.Create(x => x.id)
+            //    , SortTerm<Db.T_projects>.Create(x => x.parent_id)
+            //);
+
+            // pm.GenericTree.AddSort(x => x.name, SortDirection.Ascending);
+            // pm.GenericTree.AddSort(x => x.created_on, SortDirection.Ascending);
+            // pm.GenericTree.AddSort(x => x.id, SortDirection.Ascending);
+            // pm.GenericTree.AddSort(x => x.parent_id, SortDirection.Ascending);
+
+            pm.GenericTree.AddSort(x => x.name);
+
+            return View("GenericIndex", pm);
         } // End Action Index 
 
-        
         
         // GET: /<controller>/
         [Route("projects")]
@@ -210,8 +210,31 @@ namespace BlueMine.Controllers
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem");
         }
-        
-        
+
+
+        [Route("ddt")]
+        public List<SelectListItem> getPriorities(string uri)
+        {
+            var ls1 = _context.projects.ToList();
+
+            var trackerz = (
+                from tracker in _context.trackers
+                    // orderby tracker.Name ascending 
+                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                    Value = tracker.Id.ToString(),
+                    Text = tracker.Name
+                    //,Selected = tracker.DefaultStatusId.Value
+                }
+
+            ).ToList()
+            .OrderBy(y => y.Text) // Order in .NET 
+            .ToList()
+            ;
+        }
+
+
+
         [Route("dds")]
         public List<SelectListItem> getTrackers(string uri)
         {
@@ -219,13 +242,50 @@ namespace BlueMine.Controllers
 
             var trackerz = (
                 from tracker in _context.trackers
+                // orderby tracker.Name ascending 
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
                     Value = tracker.Id.ToString(),
                     Text = tracker.Name
                     //,Selected = tracker.DefaultStatusId.Value
                 }
-            ).ToList();
+                
+            ).ToList()
+            .OrderBy(y => y.Text) // Order in .NET 
+            .ToList()
+            ;
+
+            //trackerz.Sort(
+            //    delegate(SelectListItem x, SelectListItem y){
+
+            //        if (x == null && y == null)
+            //            return 0;
+
+            //        if (x == null || y == null)
+            //        {
+            //            // return (int)direction * (x == null ? -1 : 1); // NULL-Values at top when ASC, bottom when DESC
+            //            // return (int)direction * (x == null ? 1 : -1); // NULL-Values at bottom when ASC, top when DESC
+
+            //            // return (x == null ? -1 : 1); // NULL-Values at top, indep. of search dir
+            //            return (x == null ? 1 : -1); // NULL-Values at bottom, indep. of search dir
+            //        }
+
+            //        if (x.Text == null && y.Text == null)
+            //            return 0;
+
+            //        if (x.Text == null || y.Text == null)
+            //        {
+            //            // return (int)direction * (x.Text == null ? -1 : 1); // NULL-Values at top when ASC, bottom when DESC
+            //            // return (int)direction * (x.Text == null ? 1 : -1); // NULL-Values at bottom when ASC, top when DESC
+
+            //            // return (x.Text == null ? -1 : 1); // NULL-Values at top, indep. of search dir
+            //            return (x.Text == null ? 1 : -1); // NULL-Values at bottom, indep. of search dir
+            //        }
+
+            //        return x.Text.CompareTo(y.Text);
+            //    }
+            //);
+
 
             /*
             List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> regions =

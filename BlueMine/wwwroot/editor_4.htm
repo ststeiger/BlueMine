@@ -380,6 +380,33 @@
         }
 
 
+        // compareStrings(string1, string2, true, false)
+        function compareStrings(string1, string2, ignoreCase, useLocale)
+        {
+            if (string1 == null && string2 == null)
+                return true;
+
+            if (string1 == null || string2 == null)
+                return false;
+
+            if (ignoreCase)
+            {
+                if (useLocale)
+                {
+                    string1 = string1.toLocaleLowerCase();
+                    string2 = string2.toLocaleLowerCase();
+                }
+                else
+                {
+                    string1 = string1.toLowerCase();
+                    string2 = string2.toLowerCase();
+                }
+            }
+
+            return string1 === string2;
+        }
+
+
 
         function inserHtmlBeforeAfter(before, after)
         {
@@ -402,7 +429,7 @@
                     // console.log("cchild", node);
                     //my_elem.parentNode.insertBefore(span, my_elem);
 
-                    if (node.tagName === "B")
+                    if (compareStrings(node.tagName, "b", true, false))
                     {
                         // console.log("match innerHTML", node.innerHTML);
                         // console.log("match node", node);
@@ -415,8 +442,6 @@
                     console.log("cchild.inner", node.innerHTML);
                     // doSomethingToNode(child);
                 }
-
-
 
             replaceSelectionHtml("<b>", "</b>", function cu(html)
             {
