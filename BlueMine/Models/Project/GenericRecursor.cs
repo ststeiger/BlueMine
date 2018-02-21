@@ -48,7 +48,7 @@ namespace BlueMine.Models.Project
                     TKey ret = sorter(x);
                     
                     return (System.IComparable)ret;
-                }
+                }, direction
             );
 
         } // End Constructor 
