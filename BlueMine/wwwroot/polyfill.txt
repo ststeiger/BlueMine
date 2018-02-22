@@ -1,0 +1,67 @@
+﻿
+https://stackoverflow.com/questions/3534142/how-to-get-glatlng-object-from-address-string-in-advance-in-google-maps
+
+https://chatbotsjournal.com/25-chatbot-platforms-a-comparative-table-aeefc932eaff
+https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f
+
+https://medium.com/the-node-js-collection/modern-javascript-explained-for-dinosaurs-f695e9747b70
+
+
+ML APIs:
+https://www.youtube.com/watch?v=ETeeSYMGZn0
+
+Video:
+https://cloud.google.com/video-intelligence
+https://cloud.google.com/vision
+https://cloud.google.com/speech
+https://cloud.google.com/natural-language
+https://cloud.google.com/translation
+https://github.com/sararob/ml-talk-demos
+https://github.com/sararob/video-intelligence-demo 
+
+
+https://office.live.com/start/Word.aspx
+https://office.live.com/start/Excel.aspx
+https://office.live.com/start/PowerPoint.aspx
+https://www.onenote.com/hrd
+https://account.microsoft.com/account/outlook
+
+
+
+
+
+In the JavaScript world, one frequently hears the words shim and polyfill.
+What are those things and what is the difference between them?
+
+Shim. A shim is a library that brings a new API to an older environment,
+using only the means of that environment.
+
+Polyfill.
+A polyfill is a piece of code (usually JavaScript on the Web)
+used to provide modern functionality on older browsers that do not natively support it.
+Thus, a polyfill is a browser-related shim.
+
+In October 2010, Remy Sharp blogged about the term “polyfill” [via Rick Waldron]:
+Polyfilla is a UK product known as Spackling Paste in the US.
+With that in mind: think of the browsers as a wall with cracks in it.
+These [polyfills] help smooth out the cracks and give us
+a nice smooth wall of browsers to work with.
+
+
+
+
+Lord Vishnu/Transcendental (Vaikuntha;Supreme Personality of Godness)
+Lord Odin/Transcendence (Valhalla; Hall of the Gods)
+
+Lord Odin/ofAsgard  (Valhalla; Hall of the Gods)
+Odin of Asgard/Transcendental (Valhalla; Hall of the Gods)
+Sigmund/theHero (Valkyries; guardians of the slain)
+Haimdall/GandsonOfAegir (Asgard; ever-vigilant guardian of the gods’ stronghold)
+Heimdall stood guard over Asgard, the home of the gods.
+He lived near Bifrost, the rainbow bridge that connected Asgard
+to the world of humans and from there kept watch for the approach of the giants,
+who were the enemies of the gods.
+
+Not MSIE/1.0 Not Mozilla/4.0 Mozilla/5.0 , NOR Safari/1.0, NOR Safari/1.0, Not Opera/1.0 , NOR OPR/1.0 NOR Chrome/1.0 NOR Chromium/1.0
+(NOT KHTML, and nothing like Gecko).
+(not compatible; Not Konqueror/3.2; Not FreeBSD)

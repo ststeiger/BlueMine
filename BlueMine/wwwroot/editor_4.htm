@@ -51,55 +51,22 @@
         // Commercial alternative: https://xdsoft.net/jodit/play.html
         // document.getElementsByTagName("title")[0].firstChild.nodeValue
         // var myTitle = document.getElementById("demo").childNodes[0].nodeValue;
+        // transform: scale(1);
+        // transform-origin: 0% 0% 0px;
 
-        /**
+        // https://gist.github.com/chriszarate/5092641
+        // commonAncestorContainer: range.parentElement(),
+        // function isRange(obj) { return ('type' in obj && obj.type === 'Range'); }
+        // var range = window.getSelection().getRangeAt(0);
+        // range.startContainer
+        // range.endContainer
+        // range.startOffse
+        // range.endOffset
 
-        https://stackoverflow.com/questions/3534142/how-to-get-glatlng-object-from-address-string-in-advance-in-google-maps
+        // Browser-differences
+        // https://gist.github.com/visnup/3456262
+        // https://stackoverflow.com/questions/361130/get-selected-text-and-selected-nodes-on-a-page
 
-        https://chatbotsjournal.com/25-chatbot-platforms-a-comparative-table-aeefc932eaff
-        https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f
-
-        https://medium.com/the-node-js-collection/modern-javascript-explained-for-dinosaurs-f695e9747b70
-
-
-
-
-        In the JavaScript world, one frequently hears the words shim and polyfill.
-        What are those things and what is the difference between them?
-
-        Shim. A shim is a library that brings a new API to an older environment,
-        using only the means of that environment.
-
-        Polyfill.
-        A polyfill is a piece of code (usually JavaScript on the Web)
-        used to provide modern functionality on older browsers that do not natively support it.
-        Thus, a polyfill is a browser-related shim.
-
-        In October 2010, Remy Sharp blogged about the term “polyfill” [via Rick Waldron]:
-        Polyfilla is a UK product known as Spackling Paste in the US.
-        With that in mind: think of the browsers as a wall with cracks in it.
-        These [polyfills] help smooth out the cracks and give us
-        a nice smooth wall of browsers to work with.
-
-
-
-
-        Lord Vishnu/Transcendental (Vaikuntha;Supreme Personality of Godness)
-        Lord Odin/Transcendence (Valhalla; Hall of the Gods)
-
-        Lord Odin/ofAsgard  (Valhalla; Hall of the Gods)
-        Odin of Asgard/Transcendental (Valhalla; Hall of the Gods)
-        Sigmund/theHero (Valkyries; guardians of the slain)
-        Haimdall/GandsonOfAegir (Asgard; ever-vigilant guardian of the gods’ stronghold)
-        Heimdall stood guard over Asgard, the home of the gods.
-        He lived near Bifrost, the rainbow bridge that connected Asgard
-        to the world of humans and from there kept watch for the approach of the giants,
-        who were the enemies of the gods.
-
-        Not MSIE/1.0 Not Mozilla/4.0 Mozilla/5.0 , NOR Safari/1.0, NOR Safari/1.0, Not Opera/1.0 , NOR OPR/1.0 NOR Chrome/1.0 NOR Chromium/1.0
-        (NOT KHTML, and nothing like Gecko).
-        (not compatible; Not Konqueror/3.2; Not FreeBSD)
-        */
 
         // https://stackoverflow.com/questions/3545018/selected-text-event-trigger-in-javascript
         function dispachSelectedEvent()
@@ -265,7 +232,7 @@
         }
 
 
-        function moveUpward(ele)
+        function moveUpwardElement(ele)
         {
             var el = ele;
 
@@ -278,6 +245,89 @@
 
 
 
+        function moveUpwardNode(ele)
+        {
+            var el = ele;
+
+            do
+            {
+                console.log(el);
+            } while ((el = el.previousSibling || el.parentNode || null) != null && el != document.body)
+
+        }
+
+
+        // https://stackoverflow.com/questions/5471731/in-order-successor-in-binary-search-tree
+        function findNextNode(node)
+        {
+            //if (node.childNodes.length > 0)
+            //    return node.firstChild;
+
+            if (node.nextSibling)
+                return node.nextSibling;
+
+            while (true)
+            {
+                if (node.parentNode)
+                {
+                    if (node.parentNode.nextSibling)
+                        return node.parentNode.nextSibling;
+                    else
+                        node = node.parentNode;
+                }
+                else
+                    break; // return null;
+            } // Whend
+
+            return null;
+        }
+
+
+        function moveDownwardNode(ele)
+        {
+            var el = ele;
+
+            do
+            {
+                console.log(el);
+
+                el = findNextNode(el);
+            } while (el != null)
+
+        }
+
+
+
+        // https://stackoverflow.com/questions/5471731/in-order-successor-in-binary-search-tree
+        function findNextElement(ele)
+        {
+            // Ignore children - we have current element
+
+            //if (ele.children.length > 0)
+            //    return ele.firstElementChild;
+
+            if (ele.nextElementSibling)
+                return ele.nextElementSibling;
+
+            while (true)
+            {
+                if (ele.parentElement)
+                {
+                    if (ele.parentElement.nextElementSibling)
+                        return ele.parentElement.nextElementSibling;
+                    else
+                        ele = ele.parentElement;
+                }
+                else
+                    break; // return null;
+            } // Whend
+
+            return null;
+        }
+
+
+
+
         // https://javascript.info/dom-navigation
         // https://stackoverflow.com/questions/7935689/what-is-the-difference-between-children-and-childnodes-in-javascript
         // In a node tree, the top node is called the root (or root node)
@@ -285,6 +335,19 @@
         // A node can have a number of children
         // Siblings(brothers or sisters) are nodes with the same parent
         function moveDownward(ele)
+        {
+            var el = ele;
+
+            do
+            {
+                console.log(el);
+
+                el = findNextElement(el);
+            } while (el != null && document.body.contains(el))
+        }
+
+
+        function moveDownward_old(ele)
         {
             var el = ele;
             // debugger;
@@ -329,7 +392,6 @@
                 //    el = el.firstElementChild;
                 //}
             }
-
         }
 
 
@@ -342,12 +404,18 @@
         }
 
 
+        function inserImageBefore(html)
+        {
+
+            html = '<img src="http://www.lehrstellenboerse.ch/images/show_image?image_id=2116" width="200px" height="100px" />';
+            insertHtmlBeforeSelection(html);
+        }
+
+
+
         function insertHtmlBeforeSelection(html)
         {
             console.log("before")
-
-            html = '<img src="http://www.lehrstellenboerse.ch/images/show_image?image_id=2116" width="200px" height="100px" />';
-
 
             m++;
             if (window.getSelection)
@@ -375,6 +443,7 @@
             } else if (document.selection && document.selection.createRange)
             {
                 // document.selection.createRange().pasteHTML(html);
+                // https://stackoverflow.com/questions/4023194/how-to-insert-html-string-in-between-two-dom-nodes
 
                 range = document.selection.createRange();
                 var expandedSelRange1 = range.duplicate();
@@ -427,6 +496,7 @@
                 }
             } else if (document.selection && document.selection.createRange)
             {
+                // https://stackoverflow.com/questions/4023194/how-to-insert-html-string-in-between-two-dom-nodes
                 range = document.selection.createRange();
                 expandedSelRange = range.duplicate();
                 range.collapse(false);
@@ -482,6 +552,8 @@
             }
             else if (document.selection && document.selection.createRange)
             {
+                // https://stackoverflow.com/questions/4023194/how-to-insert-html-string-in-between-two-dom-nodes
+
                 // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741548(v%3dvs.85)
                 // https://www.codeproject.com/Questions/897645/Replacing-selected-text-HTML-JavaScript
                 // https://stackoverflow.com/questions/3053542/how-to-get-the-start-and-end-points-of-selection-in-text-area
@@ -535,6 +607,8 @@
 
             return string1 === string2;
         }
+
+
 
 
 
@@ -616,6 +690,7 @@
     <input type="button" value="AFT" onclick="insertHtmlAfterSelection('<div style=\'background-color: green; display: inline-block;\'>' + n + '</div>');" />
 
     <input type="button" value="B" onclick="inserHtmlBeforeAfter('<h1>', '</h1>');" />
+    <input type="button" value="IMG" onclick="inserImageBefore('<h1>', '</h1>');" />
 
 
     <input type="button" value="LOG" onclick="console.log(document.body.innerHTML);" />
