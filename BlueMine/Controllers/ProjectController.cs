@@ -30,14 +30,14 @@ namespace BlueMine.Controllers
     {
         private readonly RedmineContext _context;
 
+
         public ProjectController(RedmineContext context)
         {
             _context = context;
         }
-
-
         
-        [Route("project")]
+
+        [Route("/project")]
         public IActionResult poj()
         {
             System.Collections.Generic.List<Db.T_projects> projects = null;
@@ -231,6 +231,8 @@ namespace BlueMine.Controllers
             .OrderBy(y => y.Text) // Order in .NET 
             .ToList()
             ;
+
+            return trackerz;
         }
 
 
