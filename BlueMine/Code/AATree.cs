@@ -567,5 +567,9 @@ namespace CoreyM.Collections
                 return root.LeftMost.value;
             }
         }
+
+
     }
+
+
 }

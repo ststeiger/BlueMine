@@ -3,7 +3,7 @@ namespace BlueMine
 {
 
 
-    public static class tex
+    public static class UnixTicksExtensions 
     {
 
 

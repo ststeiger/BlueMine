@@ -1,20 +1,21 @@
 ﻿
-using Microsoft.AspNetCore.Razor.TagHelpers;
-
-
-
 // https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/authoring
 // https://www.davepaquette.com/archive/2015/05/06/link-and-script-tag-helpers-in-mvc6.aspx
-
 
 // https://stackoverflow.com/questions/42039269/create-custom-html-helper-in-asp-net-core
 namespace BlueMine.TagHelpers
 {
 
+    // Test cases - with and without virt-dir 
+    // <img src = "images/Waterfall.png?server=123&img=97#tab=preview" width="200" alt="Waterfall" /><br />
+    // <img src = "~/images/Waterfall.png?server=123&img=97#tab=preview" width="300" alt="RootWaterfall" /><br />
+    // <img src = "http://localhost:55337/images/Waterfall.png?server=123&img=97&no_cache=1518020623#tab=preview" width="400" alt="Not Waterfall" /><br />
+    // <img width = "500" alt="Not Waterfall" /><br />
 
+    
     // [HtmlTargetElement(Attributes = "bold")]
     //[HtmlTargetElement(tag : "image")]
-    [HtmlTargetElement(tag: "img", Attributes = "src")]
+    [Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElement(tag: "img", Attributes = "src")]
     public class MyImageTagHelper : Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper
     {
 
@@ -234,7 +235,8 @@ namespace BlueMine.TagHelpers
 
 
         // https://stackoverflow.com/questions/40001242/aspnetcore-get-path-to-wwwroot-in-taghelper
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override void Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext context
+            , Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput output)
         {
             EnsureFileVersionProvider();
 
