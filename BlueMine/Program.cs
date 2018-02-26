@@ -62,7 +62,8 @@ namespace BlueMine
             mytree.Add(new IpRange(21, 255), new Country("USA"));
 
 
-            mytree.fin
+            uint aa = 5;
+            var a = mytree[aa];
 
 
 
