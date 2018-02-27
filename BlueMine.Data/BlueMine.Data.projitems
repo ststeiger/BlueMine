@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CRUD.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMineContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EF_DapperMapping\BlueMineContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\attachments.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\auth_sources.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\boards.cs" />
@@ -62,8 +62,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\20180209175804_AddPerson.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\AcmeDataContextModelSnapshot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\IQueryableExtensions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\BluemineContext Extension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RedmineContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\BluemineContextExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RedmineContextExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SortTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)GenericRecursor.cs" />
   </ItemGroup>
@@ -73,5 +73,8 @@
     <None Include="$(MSBuildThisFileDirectory)SQL\Insert_T_Translations_EN.sql" />
     <None Include="$(MSBuildThisFileDirectory)SQL\List_issue_status.sql" />
     <None Include="$(MSBuildThisFileDirectory)SQL\RedmineInfo.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Db\EF_DapperMapping\" />
   </ItemGroup>
 </Project>
