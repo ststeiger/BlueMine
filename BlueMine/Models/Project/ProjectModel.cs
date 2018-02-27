@@ -10,6 +10,15 @@ namespace BlueMine.Models.Project
             Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
         > Trackers;
 
+        public System.Collections.Generic.List<
+            Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+        > Stati;
+
+        public System.Collections.Generic.List<
+            Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+        > Priorities;
+
+
     }
 
 
@@ -18,9 +27,10 @@ namespace BlueMine.Models.Project
     {
 
         public ProjectRecursor ProjectTree;
-        public GenericRecursor<Db.T_projects, long?> GenericTree;
+        public BlueMine.Data.GenericRecursor<Db.T_projects, long?> GenericTree;
+        public BlueMine.Data.GenericRecursor<BlueMine.Redmine.projects, long?> GenericEntityTree;
         
-        
+
         public static void GetProjectInfo()
         {
             string sql = @"

@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>b3a7c64f-e67e-4ad3-a250-2e8a718c2d2b</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>BlueMine.Data</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CRUD.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMineContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\attachments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\auth_sources.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\boards.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\changes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\changesets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\comments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\custom_fields.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\custom_field_enumerations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\custom_values.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\documents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\email_addresses.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\enabled_modules.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\enumerations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\imports.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\import_items.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\issues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\issue_categories.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\issue_relations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\issue_statuses.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\journals.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\journal_details.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\members.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\member_roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\messages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\news.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\open_id_authentication_associations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\open_id_authentication_nonces.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\projects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\queries.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\RedmineContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\repositories.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\time_entries.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\tokens.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\trackers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\users.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\user_preferences.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\versions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\watchers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\wikis.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\wiki_contents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\wiki_content_versions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\wiki_pages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\wiki_redirects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\EntityFrameworkCoreMappings\workflows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\AcmeDataContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\20180209175804_AddPerson.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\20180209175804_AddPerson.Designer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\AcmeDataContextModelSnapshot.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IQueryableExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\BluemineContext Extension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\RedmineContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SortTerm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GenericRecursor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)SQL\CREATE_T_Translations.sql" />
+    <None Include="$(MSBuildThisFileDirectory)SQL\Insert_T_Translations_DE.sql" />
+    <None Include="$(MSBuildThisFileDirectory)SQL\Insert_T_Translations_EN.sql" />
+    <None Include="$(MSBuildThisFileDirectory)SQL\List_issue_status.sql" />
+    <None Include="$(MSBuildThisFileDirectory)SQL\RedmineInfo.sql" />
+  </ItemGroup>
+</Project>

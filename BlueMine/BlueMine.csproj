@@ -8,8 +8,6 @@
     <Compile Remove="Code\YamlSer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Db\" />
-    <Folder Include="Db\Redmine\BlueMappings" />
     <Folder Include="Views\Project\DisplayTemplates\" />
     <Folder Include="Views\Project\EditorTemplates\" />
   </ItemGroup>
@@ -27,7 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SQL\various.sql" />
-    <EmbeddedResource Include="SQL\classes.sql" />
     <EmbeddedResource Include="SQL\projects.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -35,4 +32,6 @@
     <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
+  <Import Project="..\BlueMine.Data\BlueMine.Data.projitems" Label="Shared" />
+  <Import Project="..\BlueMine.Dapper\BlueMine.Dapper.projitems" Label="Shared" />
 </Project>

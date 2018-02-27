@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>713d3dc9-7a21-4e42-b823-61f04173ee17</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>BlueMine.Dapper</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CRUD.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\attachments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\auth_sources.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\boards.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\changes.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\changesets.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\changesets_issues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\changeset_parents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\comments.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\custom_fields.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\custom_fields_projects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\custom_fields_roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\custom_fields_trackers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\custom_field_enumerations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\custom_values.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\documents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\email_addresses.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\enabled_modules.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\enumerations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\groups_users.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\imports.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\import_items.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\issues.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\issues_history.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\issue_categories.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\issue_relations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\issue_statuses.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\journals.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\journal_details.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\members.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\member_roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\messages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\news.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\open_id_authentication_associations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\open_id_authentication_nonces.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\projects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\projects_trackers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\queries.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\queries_roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\repositories.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\roles_managed_roles.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\schema_migrations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\time_entries.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\tokens.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\trackers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\users.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\user_preferences.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\versions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\V_DELDATA_ForeignKeyRelations.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\watchers.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\wikis.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\wiki_contents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\wiki_content_versions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\wiki_pages.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\wiki_redirects.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMappings\workflows.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\Recursorfix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\DbProviderFactories.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\IssueHistoryBugFix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\SqlFactory.cs" />
+  </ItemGroup>
+</Project>

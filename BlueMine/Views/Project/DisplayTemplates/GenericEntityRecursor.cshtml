@@ -1,5 +1,5 @@
 ﻿
-@model System.Collections.Generic.List<BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>>
+@model System.Collections.Generic.List<BlueMine.Data.GenericRecursor<BlueMine.Redmine.projects, long?>>
 
 
 @foreach (var treeBranch in Model)
@@ -15,7 +15,7 @@
              </li>
              @if (true)
              {
-                 @Html.DisplayFor(tree => treeBranch.ChildNodes, "GenericRecursor")
+                 @Html.DisplayFor(tree => treeBranch.ChildNodes, "GenericEntityRecursor")
              }
     
          </ul>

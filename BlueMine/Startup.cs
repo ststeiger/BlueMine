@@ -39,15 +39,27 @@ namespace BlueMine
             // services.AddDbContext<Redmine.RedmineContext>(ServiceLifetime.Scoped);
 
             services.AddDbContext<Redmine.RedmineContext>(
-                delegate(DbContextOptionsBuilder options)
-            { 
-                // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                // options.UseNpgsql("");
-                // options.UseSqlite("");
-                
-                options.UseSqlServer(SqlFactory.ConnectionString);
-            });
-            
+                delegate (DbContextOptionsBuilder options)
+                {
+                    // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    // options.UseNpgsql("");
+                    // options.UseSqlite("");
+
+                    options.UseSqlServer(SqlFactory.ConnectionString);
+                });
+
+
+            services.AddDbContext<BlueMine.Db.BlueMineContext>(
+    delegate (DbContextOptionsBuilder options)
+    {
+                    // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    // options.UseNpgsql("");
+                    // options.UseSqlite("");
+
+                    options.UseSqlServer(SqlFactory.ConnectionString);
+    });
+
+
             services.AddMvc();
         } // End Sub ConfigureServices 
 
