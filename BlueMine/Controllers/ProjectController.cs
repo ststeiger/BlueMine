@@ -215,24 +215,24 @@ namespace BlueMine.Controllers
         [Route("ddt")]
         public List<SelectListItem> getPriorities(string uri)
         {
-            var ls1 = _context.projects.ToList();
-
-            var trackerz = (
-                from tracker in _context.trackers
-                    // orderby tracker.Name ascending 
+            List<SelectListItem> lsPriorities = (
+                from enumz in _context.enumerations 
+                where !enumz.ProjectId.HasValue
+                orderby enumz.Position ascending 
+                
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
-                    Value = tracker.Id.ToString(),
-                    Text = tracker.Name
-                    //,Selected = tracker.DefaultStatusId.Value
+                     Value = enumz.Id.ToString()
+                    ,Text = enumz.Name
+                    ,Selected = enumz.IsDefault
                 }
-
+                
             ).ToList()
-            .OrderBy(y => y.Text) // Order in .NET 
+            //.OrderBy(y => y.Text) // Order in .NET 
             .ToList()
             ;
-
-            return trackerz;
+            
+            return lsPriorities;
         }
 
 
@@ -240,18 +240,15 @@ namespace BlueMine.Controllers
         [Route("dds")]
         public List<SelectListItem> getTrackers(string uri)
         {
-            var ls1 = _context.projects.ToList();
-
             var trackerz = (
                 from tracker in _context.trackers
-                // orderby tracker.Name ascending 
+                orderby tracker.Position ascending 
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
                     Value = tracker.Id.ToString(),
                     Text = tracker.Name
-                    //,Selected = tracker.DefaultStatusId.Value
+                    //,Selected = tracker.DefaultStatusId
                 }
-                
             ).ToList()
             .OrderBy(y => y.Text) // Order in .NET 
             .ToList()
