@@ -6,7 +6,6 @@ namespace BlueMine.Db
 {
 
 
-
     public partial class BlueMineContext : DbContext
     {
         

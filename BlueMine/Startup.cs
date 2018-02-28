@@ -36,28 +36,18 @@ namespace BlueMine
             services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
             services.AddSingleton<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
 
-            // services.AddDbContext<Redmine.RedmineContext>(ServiceLifetime.Scoped);
+            // services.AddDbContext<Db.BlueMineContext>(ServiceLifetime.Scoped);
 
-            services.AddDbContext<Redmine.RedmineContext>(
+            services.AddDbContext<BlueMine.Db.BlueMineContext>(
                 delegate (DbContextOptionsBuilder options)
                 {
                     // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                     // options.UseNpgsql("");
                     // options.UseSqlite("");
 
-                    options.UseSqlServer(SqlFactory.ConnectionString);
-                });
-
-
-            services.AddDbContext<BlueMine.Db.BlueMineContext>(
-    delegate (DbContextOptionsBuilder options)
-    {
-                    // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                    // options.UseNpgsql("");
-                    // options.UseSqlite("");
-
-                    options.UseSqlServer(SqlFactory.ConnectionString);
-    });
+                    options.UseSqlServer(BlueMine.Data.SqlFactory.ConnectionString);
+                }
+            );
 
 
             services.AddMvc();

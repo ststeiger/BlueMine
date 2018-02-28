@@ -1,5 +1,5 @@
 ﻿
-namespace BlueMine
+namespace BlueMine.Data 
 {
     
     
@@ -12,7 +12,7 @@ namespace BlueMine
         static SqlFactory()
         {
             s_cs = GetConnectionString();
-            s_fac = BlueMine.Dapper.DbProviderFactories.GetFactory(
+            s_fac = BlueMine.Data.DbProviderFactories.GetFactory(
                 typeof(System.Data.SqlClient.SqlClientFactory)
             );
         }

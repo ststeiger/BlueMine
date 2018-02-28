@@ -33,5 +33,4 @@
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
   <Import Project="..\BlueMine.Data\BlueMine.Data.projitems" Label="Shared" />
-  <Import Project="..\BlueMine.Dapper\BlueMine.Dapper.projitems" Label="Shared" />
 </Project>

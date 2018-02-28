@@ -3,7 +3,7 @@ using System.Linq;
 using Dapper;
 
 
-namespace BlueMine.Dapper
+namespace BlueMine.Data.Dapper
 {
 
 

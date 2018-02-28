@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
-using BlueMine.Redmine;
+using BlueMine.Db;
 
 
 
@@ -16,10 +16,10 @@ namespace BlueMine.Data
 
     public class CRUD
     {
-        private readonly RedmineContext _context;
+        private readonly BlueMineContext _context;
 
 
-        public CRUD(RedmineContext context)
+        public CRUD(BlueMineContext context)
         {
             _context = context;
         }
@@ -39,7 +39,7 @@ namespace BlueMine.Data
             var lol = (
                 from projects in _context.projects
                 from issues in _context.issues
-                    .Where(issue => issue.ProjectId == projects.Id)
+                    .Where(issue => issue.project_id == projects.id)
                 select issues
             ).AsNoTracking().ToList();
 
@@ -56,9 +56,9 @@ namespace BlueMine.Data
 
             var lol2 = (
                 from project in _context.projects
-                join issue in _context.issues on project.Id equals issue.ProjectId into projectIssueJoin
+                join issue in _context.issues on project.id equals issue.project_id into projectIssueJoin
                 from projectIssue in projectIssueJoin.DefaultIfEmpty()
-                join tracker in _context.trackers on projectIssue.TrackerId equals tracker.Id into
+                join tracker in _context.trackers on projectIssue.tracker_id equals tracker.id into
                     projectIssueTrackerJoin
                 from projectIssueTracker in projectIssueTrackerJoin.DefaultIfEmpty()
                 select project
@@ -86,21 +86,21 @@ namespace BlueMine.Data
 
 
 
-        public BlueMine.Data.GenericRecursor<BlueMine.Redmine.projects, long?> GetProjectTree(string uri)
+        public BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?> GetProjectTree(string uri)
         {
             var lsProjects = GetProjects(uri);
-            return new BlueMine.Data.GenericRecursor<BlueMine.Redmine.projects, long?>(
+            return new BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>(
                     lsProjects
-                  , x => x.ParentId
-                  , x => x.Id);
+                  , x => x.parent_id
+                  , x => x.id);
         }
         
 
-        public List<BlueMine.Redmine.projects> GetProjects(string uri)
+        public List<BlueMine.Db.T_projects> GetProjects(string uri)
         {
-            List<BlueMine.Redmine.projects> lsProjects = (
+            List<BlueMine.Db.T_projects> lsProjects = (
                 from project in _context.projects
-                orderby project.Name ascending
+                orderby project.name ascending
                 select project
             ).AsNoTracking()
             .ToList()
@@ -117,12 +117,12 @@ namespace BlueMine.Data
         {
             List<SelectListItem> lsStati = (
                 from stati in _context.issue_statuses
-                orderby stati.Position ascending
+                orderby stati.position ascending
 
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
-                     Value = stati.Id.ToString()
-                    ,Text = stati.Name
+                     Value = stati.id.ToString()
+                    ,Text = stati.name
                     //,Selected = stati.is_default
                 }
 
@@ -142,16 +142,14 @@ namespace BlueMine.Data
         {
             List<SelectListItem> lsPriorities = (
                 from enumz in _context.enumerations
-                where !enumz.ProjectId.HasValue
-                orderby enumz.Position ascending
+                where !enumz.project_id.HasValue
+                orderby enumz.position ascending
 
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
-                    Value = enumz.Id.ToString()
-                    ,
-                    Text = enumz.Name
-                    ,
-                    Selected = enumz.IsDefault
+                     Value = enumz.id.ToString()
+                    ,Text = enumz.name
+                    ,Selected = enumz.is_default
                 }
 
             ).AsNoTracking()
@@ -169,12 +167,12 @@ namespace BlueMine.Data
         {
             var trackerz = (
                 from tracker in _context.trackers
-                orderby tracker.Position ascending
+                orderby tracker.position ascending
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
-                    Value = tracker.Id.ToString(),
-                    Text = tracker.Name
-                    //,Selected = tracker.DefaultStatusId
+                    Value = tracker.id.ToString(),
+                    Text = tracker.name
+                    // ,Selected = tracker.default_status_id
                 }
             ).AsNoTracking()
             .ToList()

@@ -23,20 +23,18 @@ namespace BlueMine.Controllers
 
     public class ProjectController : Controller
     {
-        private readonly BlueMine.Redmine.RedmineContext _context;
+        
         private readonly BlueMine.Db.BlueMineContext m_BlueMineContext;
         private readonly BlueMine.Data.CRUD m_Repo;
-        private readonly BlueMine.Dapper.CRUD m_DapperRepo;
+        private readonly BlueMine.Data.Dapper.CRUD m_DapperRepo;
         
 
-        public ProjectController(BlueMine.Redmine.RedmineContext context
-          ,BlueMine.Db.BlueMineContext bluemine
+        public ProjectController(BlueMine.Db.BlueMineContext bluemine
         )
         {
-            this._context = context;
             this.m_BlueMineContext = bluemine;
-            this.m_Repo = new BlueMine.Data.CRUD(this._context);
-            this.m_DapperRepo = new BlueMine.Dapper.CRUD();
+            this.m_Repo = new BlueMine.Data.CRUD(this.m_BlueMineContext);
+            this.m_DapperRepo = new BlueMine.Data.Dapper.CRUD();
         }
 
 
@@ -85,21 +83,7 @@ namespace BlueMine.Controllers
 
             return View("GenericIndex", pm);
         } // End Action Index 
-
-
-        [Route("/project_older")]
-        public IActionResult ProjectsWithEntityFramwork()
-        {
-            var pm = new Models.Project.ProjectModel()
-            {
-                GenericEntityTree = this.m_Repo.GetProjectTree("")
-            };
-
-            pm.GenericEntityTree.AddSort(x => x.Name);
-
-            return View("GenericEntityIndex", pm);
-        } // End Action Index 
-
+        
 
         [Route("/project")]
         public IActionResult ProjectsWithBlueEntityFramwork()
@@ -113,9 +97,7 @@ namespace BlueMine.Controllers
             //.OrderBy(y => y.Text) // Order in .NET 
             .ToList()
             ;
-
-
-
+            
             var pt = new BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>(
               lsProjects
             , x => x.parent_id

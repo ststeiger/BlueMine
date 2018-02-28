@@ -28,7 +28,6 @@ namespace BlueMine.Models.Project
 
         public ProjectRecursor ProjectTree;
         public BlueMine.Data.GenericRecursor<Db.T_projects, long?> GenericTree;
-        public BlueMine.Data.GenericRecursor<BlueMine.Redmine.projects, long?> GenericEntityTree;
         
 
         public static void GetProjectInfo()

@@ -1,5 +1,5 @@
 
-namespace BlueMine.Dapper 
+namespace BlueMine.Data 
 {
 
 

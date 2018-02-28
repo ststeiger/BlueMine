@@ -27,15 +27,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpenCore", "SharpenCore\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BlueMine.Data", "BlueMine.Data\BlueMine.Data.shproj", "{B3A7C64F-E67E-4AD3-A250-2E8A718C2D2B}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BlueMine.Dapper", "BlueMine.Dapper\BlueMine.Dapper.shproj", "{713D3DC9-7A21-4E42-B823-61F04173EE17}"
-EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dapper\Dapper.projitems*{0bc120d8-0b4c-41f4-99f5-e023aa4c16f2}*SharedItemsImports = 13
 		ImageSharp.Drawing\ImageSharp.Drawing.projitems*{17cd41e9-7166-436d-9d4f-9e8bcf8ac8a6}*SharedItemsImports = 13
 		ImageSharp.Shapes\ImageSharp.Shapes.projitems*{50804626-6a55-40f1-9cc2-04b360f7b54b}*SharedItemsImports = 13
 		ImageSharp.Core\ImageSharp.Core.projitems*{5317f91f-0eb2-4cc4-938f-cbfbbc8da430}*SharedItemsImports = 13
-		BlueMine.Dapper\BlueMine.Dapper.projitems*{713d3dc9-7a21-4e42-b823-61f04173ee17}*SharedItemsImports = 13
 		ImageSharp.Fonts\ImageSharp.Fonts.projitems*{8116bb0c-aac0-48ba-859d-f768e139cb3a}*SharedItemsImports = 13
 		BlueMine.Data\BlueMine.Data.projitems*{b3a7c64f-e67e-4ad3-a250-2e8a718c2d2b}*SharedItemsImports = 13
 		ImageSharp\ImageSharp.projitems*{e702870a-6d73-41aa-9294-36cdca62ac9b}*SharedItemsImports = 13
