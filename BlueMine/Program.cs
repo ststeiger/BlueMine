@@ -8,6 +8,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using OdsReadWrite;
 
 
 namespace BlueMine
@@ -83,6 +84,27 @@ namespace BlueMine
             
             
             // 227 => 0 => 0 => 1
+            
+            OdsReadWrite.OdsReaderWriter odr = new OdsReaderWriter();
+            using (System.Data.DataSet ds = odr.ReadOdsFile(@"/root/mysheet.ods"))
+            {
+                System.Console.WriteLine(ds.Tables.Count);
+                using (var f = System.IO.File.OpenWrite("/root/Documents/myshit.xml"))
+                {
+                    //ds.WriteXml(f, System.Data.XmlWriteMode.WriteSchema);
+                    ds.WriteXml(f, System.Data.XmlWriteMode.IgnoreSchema);
+                }
+                
+                odr.WriteOdsFile(ds, "/root/Documents/yourfile.ods");
+            }
+            
+            /*
+            BlueMine.OdsImporter imp = new OdsImporter();
+            using(var st = System.IO.File.OpenRead(@"/root/mysheet.ods"))
+            {
+                imp.Import(st);
+            }
+            */
             
             
             BuildWebHost(args).Run();

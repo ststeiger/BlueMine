@@ -11,34 +11,20 @@ namespace BlueMine
     { }
 
 
-    
-    public class ImporterBase
-    {
-        public virtual string[] SupportedFileExtensions
-        {
-            get { return new[] { "ods" }; }
-        }
 
-        public virtual ImportResult Import(System.IO.Stream fileStream, long companyId, short year)
-        {
-            return null;
-        }
-
-    }
-
-    public class OdsImporter : ImporterBase
+    public class OdsImporter 
     {
         public OdsImporter()
-        {
-        }
-
-        public override string[] SupportedFileExtensions
+        { }
+        
+        
+        public string[] SupportedFileExtensions
         {
             get { return new[] { "ods" }; }
         }
-
-
-        public override ImportResult Import(System.IO.Stream fileStream, long companyId, short year)
+        
+        
+        public ImportResult Import(System.IO.Stream fileStream)
         {
             string contentXml = GetContentXml(fileStream);
 
@@ -55,7 +41,8 @@ namespace BlueMine
 
             return result;
         }
-
+        
+        
         private static string GetContentXml(System.IO.Stream fileStream)
         {
             string contentXml = "";
@@ -68,6 +55,7 @@ namespace BlueMine
                 {
                     if (!contentEntry.IsFile)
                         continue;
+                    
                     if (contentEntry.Name.ToLower() == "content.xml")
                         break;
                 }
@@ -87,22 +75,24 @@ namespace BlueMine
                     System.Array.Resize<byte>(ref bytesResult, arrayLength + i);
                     System.Array.Copy(bytes, 0, bytesResult, arrayLength, i);
                 }
+                
                 contentXml = System.Text.Encoding.UTF8.GetString(bytesResult);
             }
+            
             return contentXml;
         }
-
-
-        private void ImportRow(XElement row, ImportResult result)
+        
+        
+        private static void ImportRow(XElement row, ImportResult result)
         {
             System.Collections.Generic.List<XElement> cells = (
                 from c in row.Descendants()
                 where c.Name == "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-cell"
                 select c
             ).ToList();
-
-            //var dto = new DataDto();
-
+            
+            // var dto = new DataDto();
+            
             int count = cells.Count;
             int j = -1;
 
@@ -129,15 +119,17 @@ namespace BlueMine
                 {
                     // dto.SomeOtherProperty = cells[i].Value;
                 }
-
-                // some more data reading
+                
+                // some more data reading 
+                
             } // Next i 
-
-            // save data
+            
+            // save data 
+            
         } // End Sub ImportRow 
-
-
+        
+        
     } // End Class OdsImporter : ImporterBase 
-
-
+    
+    
 } // End Namespace BlueMine 
