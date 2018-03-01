@@ -8,7 +8,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using OdsReadWrite;
 
 
 namespace BlueMine
@@ -85,6 +84,7 @@ namespace BlueMine
             
             // 227 => 0 => 0 => 1
             
+            // OfficeOpenXml.OpenDocumentSpreadsheet.OdsReaderWriter.Test();
             
             BuildWebHost(args).Run();
         }

@@ -1,22 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="___NoMono\FontFamily.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="4.4.0" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.4.0" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="4.4.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\ImageSharpPacked\ImageSharpPacked.csproj" />
+    <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
   </ItemGroup>
-
 </Project>

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace BlueMine.Models.Project
 {
     
@@ -46,7 +45,7 @@ OFFSET 0 ROWS FETCH NEXT 1 ROWS ONLY
         
         public static void GetBoards(int project_id)
         {
-            Type.GetTypeFromProgID("");
+            System.Type.GetTypeFromProgID("");
             System.Activator.CreateInstance(null);
             string sql = @"
 SELECT * FROM boards WHERE project_id = 64

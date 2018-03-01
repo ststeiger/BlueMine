@@ -1,16 +1,18 @@
 ﻿
 // https://www.codeproject.com/Articles/38425/How-to-Read-and-Write-ODF-ODS-Files-OpenDocument-S
-namespace OdsReadWrite
+
+
+namespace OfficeOpenXml.OpenDocumentSpreadsheet 
 {
     
     
-    internal sealed class OdsReaderWriter
+    public class OdsReaderWriter
     {
 
         public static void Test()
         {
             
-            OdsReadWrite.OdsReaderWriter odr = new OdsReaderWriter();
+            OdsReaderWriter odr = new OdsReaderWriter();
             using (System.Data.DataSet ds = odr.ReadOdsFile(@"/root/Documents/mysheet.ods"))
             {
                 System.Console.WriteLine(ds.Tables.Count);
