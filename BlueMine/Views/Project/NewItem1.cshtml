@@ -68,16 +68,12 @@
     <textarea id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit" ></textarea>
     
     <label for="issue_status_id">Status<span class="required"> *</span></label>
-    <select id="issue_status_id" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')" >
-        <option selected="selected" value="1">Neu</option>
+    <select id="issue_status_id" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')" asp-items="Model.Stati" >
+        <option>--- Please select ---</option>
     </select>
 
     <label for="issue_priority_id">Priorität<span class="required"> *</span></label>
-    <select name="issue[priority_id]" id="issue_priority_id">
-        <option value="1">1-sehr hoch</option>
-        <option value="2">2-hoch</option>
-        <option selected="selected" value="3">3-mittel</option>
-        <option value="4">4-niedrig</option>
+    <select name="issue[priority_id]" id="issue_priority_id" asp-items="Model.Priorities">
     </select>
 
 

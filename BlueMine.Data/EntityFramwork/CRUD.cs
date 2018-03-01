@@ -2,33 +2,28 @@
 using System.Linq;
 using System.Collections.Generic;
 
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 using BlueMine.Db;
 
 
-
 namespace BlueMine.Data
 {
-
-
+    
+    
     public class CRUD
     {
         private readonly BlueMineContext _context;
-
-
+        
+        
         public CRUD(BlueMineContext context)
         {
             _context = context;
         }
-
-
-
-
-        [Route("lols")]
-        public string lolz(string uri)
+        
+        
+        public string TestSqlGeneration(string uri)
         {
             var ls = _context.projects.ToList();
 
@@ -74,18 +69,17 @@ namespace BlueMine.Data
                 */
             );
             ; //.ToList();
-
+            
             // string sql = lol2.ToString();
             // string sql = BlueMine.Models.IQueryableExtensions.ToSql(lol2);
             // string sql = BlueMine.Models.IQueryableExtensions1.ToSql(lol2);
             string sql = lol2.ToSql();
             System.Console.WriteLine(sql);
 
-            return $"<html><body><h1>lol {ls.Count}</h1></body></html>";
+            return $"<html><body><span>{sql}</span></body></html>";
         }
-
-
-
+        
+        
         public BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?> GetProjectTree(string uri)
         {
             var lsProjects = GetProjects(uri);
@@ -104,10 +98,9 @@ namespace BlueMine.Data
                 select project
             ).AsNoTracking()
             .ToList()
-            //.OrderBy(y => y.Text) // Order in .NET 
-            .ToList()
+            //.OrderBy(y => y.Text).ToList() // Order in .NET 
             ;
-
+            
             return lsProjects;
         }
 
@@ -128,23 +121,22 @@ namespace BlueMine.Data
 
             ).AsNoTracking()
             .ToList()
-            //.OrderBy(y => y.Text) // Order in .NET 
-            .ToList()
+            //.OrderBy(y => y.Text).ToList() // Order in .NET 
             ;
-
+            
             return lsStati;
         }
-
-
-
-        // [Route("ddt")]
+        
+        
         public List<SelectListItem> GetPriorities(string uri)
         {
             List<SelectListItem> lsPriorities = (
                 from enumz in _context.enumerations
-                where !enumz.project_id.HasValue
+                where !enumz.project_id.HasValue 
+                && enumz.type == "IssuePriority"
                 orderby enumz.position ascending
-
+                
+                
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {
                      Value = enumz.id.ToString()
@@ -154,15 +146,13 @@ namespace BlueMine.Data
 
             ).AsNoTracking()
             .ToList()
-            //.OrderBy(y => y.Text) // Order in .NET 
-            .ToList()
+            //.OrderBy(y => y.Text).ToList() // Order in .NET 
             ;
 
             return lsPriorities;
         }
-
-
-        // [Route("dds")]
+        
+        
         public List<SelectListItem> GetTrackers(string uri)
         {
             var trackerz = (
@@ -176,8 +166,7 @@ namespace BlueMine.Data
                 }
             ).AsNoTracking()
             .ToList()
-            .OrderBy(y => y.Text) // Order in .NET 
-            .ToList()
+            //.OrderBy(y => y.Text).ToList() // Order in .NET 
             ;
 
             //trackerz.Sort(
@@ -210,8 +199,8 @@ namespace BlueMine.Data
             //        return x.Text.CompareTo(y.Text);
             //    }
             //);
-
-
+            
+            
             /*
             List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> regions =
                 new List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>()
@@ -230,12 +219,12 @@ namespace BlueMine.Data
                     }
                 };
             */
-
+            
             return trackerz;
         }
         
-
+        
     }
-
-
+    
+    
 }
