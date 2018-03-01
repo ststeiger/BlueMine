@@ -268,7 +268,7 @@ namespace OdsReadWrite
             //this.GetZipFile(Assembly.GetExecutingAssembly().GetManifestResourceStream("OdsReadWrite.template.ods"));
             
             using (System.IO.FileStream iss  = 
-                System.IO.File.OpenRead("/root/Documents/OdsReadWrite/OdsReadWrite/template.ods"))
+                System.IO.File.OpenRead("/root/Documents/template.ods"))
             {
                 using(ICSharpCode.SharpZipLib.Zip.ZipFile templateFile = 
                     new ICSharpCode.SharpZipLib.Zip.ZipFile(iss))
