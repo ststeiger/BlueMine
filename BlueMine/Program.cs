@@ -86,16 +86,16 @@ namespace BlueMine
             // 227 => 0 => 0 => 1
             
             OdsReadWrite.OdsReaderWriter odr = new OdsReaderWriter();
-            using (System.Data.DataSet ds = odr.ReadOdsFile(@"/root/mysheet.ods"))
+            using (System.Data.DataSet ds = odr.ReadOdsFile(@"/root/Documents/mysheet.ods"))
             {
                 System.Console.WriteLine(ds.Tables.Count);
-                using (var f = System.IO.File.OpenWrite("/root/Documents/myshit.xml"))
+                using (var f = System.IO.File.OpenWrite("/root/Documents/mysheet.xml"))
                 {
                     //ds.WriteXml(f, System.Data.XmlWriteMode.WriteSchema);
                     ds.WriteXml(f, System.Data.XmlWriteMode.IgnoreSchema);
                 }
                 
-                odr.WriteOdsFile(ds, "/root/Documents/yourfile.ods");
+                odr.WriteOdsFile(ds, "/root/Documents/notmysheet.ods");
             }
             
             /*
@@ -105,7 +105,6 @@ namespace BlueMine
                 imp.Import(st);
             }
             */
-            
             
             BuildWebHost(args).Run();
         }

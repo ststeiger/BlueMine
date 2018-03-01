@@ -1,13 +1,5 @@
 ﻿
-using System;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Xml;
-using ICSharpCode.SharpZipLib.Zip;
-
-
+// https://www.codeproject.com/Articles/38425/How-to-Read-and-Write-ODF-ODS-Files-OpenDocument-S
 namespace OdsReadWrite
 {
     
@@ -65,95 +57,14 @@ namespace OdsReadWrite
         */
         
         
-        private ICSharpCode.SharpZipLib.Zip.ZipFile GetZipFile(Stream stream)
+        private ICSharpCode.SharpZipLib.Zip.ZipFile GetZipFile(
+            System.IO.Stream stream)
         {
             return new ICSharpCode.SharpZipLib.Zip.ZipFile(stream);;
         }
         
         
-        public static void lalla(string sourcePath, string fileName)
-        {
-            using (var fs = new FileStream(sourcePath, FileMode.Open, FileAccess.Read))
-            using (var zf = new ICSharpCode.SharpZipLib.Zip.ZipFile(fs)) {
-                ICSharpCode.SharpZipLib.Zip.ZipEntry ze = zf.GetEntry(fileName);
-                if (ze == null) {
-                    throw new ArgumentException(fileName, "not found in Zip");
-                }
-
-                using (System.IO.Stream s = zf.GetInputStream(ze)) {
-                    // do something with ZipInputStream
-                }
-            }
-        }
-        
-        
-        /*
-        private static XmlDocument GetContentXml(System.IO.Stream fileStream)
-        {
-            string contentXml = "";
-            
-            using (ICSharpCode.SharpZipLib.Zip.ZipInputStream zipInputStream = 
-                new ICSharpCode.SharpZipLib.Zip.ZipInputStream(fileStream))
-            {
-                ICSharpCode.SharpZipLib.Zip.ZipEntry contentEntry = null;
-                while ((contentEntry = zipInputStream.GetNextEntry()) != null)
-                {
-                    if (!contentEntry.IsFile)
-                        continue;
-                    if (contentEntry.Name.ToLower() == "content.xml")
-                        break;
-                }
-
-                if (contentEntry.Name.ToLower() != "content.xml")
-                {
-                    throw new System.Exception("Cannot find content.xml");
-                }
-
-                byte[] bytesResult = new byte[] { };
-                byte[] bytes = new byte[2000];
-                int i = 0;
-
-                while ((i = zipInputStream.Read(bytes, 0, bytes.Length)) != 0)
-                {
-                    int arrayLength = bytesResult.Length;
-                    System.Array.Resize<byte>(ref bytesResult, arrayLength + i);
-                    System.Array.Copy(bytes, 0, bytesResult, arrayLength, i);
-                }
-                
-                contentXml = System.Text.Encoding.UTF8.GetString(bytesResult);
-            }
-            
-            
-            XmlDocument document = new XmlDocument();
-            // document.Load(contentStream);
-            document.LoadXml(contentXml);
-            
-            return document;
-            return contentXml;
-        }
-        */
-        
-        
-        /*
-        private XmlDocument GetContentXmlFile(ZipFile zipFile)
-        {
-            // Get file(in zip archive) that contains data ("content.xml").
-            ZipEntry contentZipEntry = zipFile["content.xml"];
-
-            // Extract that file to MemoryStream.
-            Stream contentStream = new MemoryStream();
-            contentZipEntry.Extract(contentStream);
-            contentStream.Seek(0, SeekOrigin.Begin);
-
-            // Create XmlDocument from MemoryStream (MemoryStream contains content.xml).
-            XmlDocument contentXml = new XmlDocument();
-            contentXml.Load(contentStream);
-
-            return contentXml;
-        }
-        */
-
-        private XmlDocument GetContentXmlFile(ICSharpCode.SharpZipLib.Zip.ZipFile zipFile)
+        private System.Xml.XmlDocument GetContentXmlFile(ICSharpCode.SharpZipLib.Zip.ZipFile zipFile)
         {
             // Get file(in zip archive) that contains data ("content.xml").
             // ICSharpCode.SharpZipLib.Zip.ZipEntry contentZipEntry = zipFile["content.xml"];
@@ -164,12 +75,12 @@ namespace OdsReadWrite
             // contentStream.Seek(0, SeekOrigin.Begin);
 
             // Create XmlDocument from MemoryStream (MemoryStream contains content.xml).
-            XmlDocument contentXml = new XmlDocument();
+            System.Xml.XmlDocument contentXml = new System.Xml.XmlDocument();
             
             
             var ze = zipFile.GetEntry("content.xml");
             if (ze == null) {
-                throw new ArgumentException("content.xml not found in Zip");
+                throw new System.ArgumentException("content.xml not found in Zip");
             }
 
             using (System.IO.Stream contentStream = zipFile.GetInputStream(ze)) {
@@ -182,9 +93,10 @@ namespace OdsReadWrite
         
         
         
-        private XmlNamespaceManager InitializeXmlNamespaceManager(XmlDocument xmlDocument)
+        private System.Xml.XmlNamespaceManager InitializeXmlNamespaceManager(
+            System.Xml.XmlDocument xmlDocument)
         {
-            XmlNamespaceManager nmsManager = new XmlNamespaceManager(xmlDocument.NameTable);
+            System.Xml.XmlNamespaceManager nmsManager = new System.Xml.XmlNamespaceManager(xmlDocument.NameTable);
             
             for (int i = 0; i < namespaces.GetLength(0); i++)
                 nmsManager.AddNamespace(namespaces[i, 0], namespaces[i, 1]);
@@ -197,20 +109,23 @@ namespace OdsReadWrite
         /// </summary>
         /// <param name="inputFilePath">Path to the .ods file.</param>
         /// <returns>DataSet that represents .ods file.</returns>
-        public DataSet ReadOdsFile(string inputFilePath)
+        public System.Data.DataSet ReadOdsFile(string inputFilePath)
         {
-            DataSet odsData = new DataSet(Path.GetFileName(inputFilePath));
+            System.Data.DataSet odsData = 
+                new System.Data.DataSet(System.IO.Path.GetFileName(inputFilePath));
             
             using (ICSharpCode.SharpZipLib.Zip.ZipFile odsZipFile =
                 new ICSharpCode.SharpZipLib.Zip.ZipFile(inputFilePath))
             {                
                 // Get content.xml file
-                XmlDocument contentXml = this.GetContentXmlFile(odsZipFile);
+                System.Xml.XmlDocument contentXml = this.GetContentXmlFile(odsZipFile);
                 
                 // Initialize XmlNamespaceManager
-                XmlNamespaceManager nmsManager = this.InitializeXmlNamespaceManager(contentXml);
+                System.Xml.XmlNamespaceManager nmsManager = 
+                    this.InitializeXmlNamespaceManager(contentXml);
                 
-                foreach (XmlNode tableNode in this.GetTableNodes(contentXml, nmsManager))
+                foreach (System.Xml.XmlNode tableNode in 
+                    this.GetTableNodes(contentXml, nmsManager))
                     odsData.Tables.Add(this.GetSheet(tableNode, nmsManager));
             } // End Using odsZipFile 
             
@@ -218,38 +133,52 @@ namespace OdsReadWrite
         }
 
         // In ODF sheet is stored in table:table node
-        private XmlNodeList GetTableNodes(XmlDocument contentXmlDocument, XmlNamespaceManager nmsManager)
+        private System.Xml.XmlNodeList GetTableNodes(
+            System.Xml.XmlDocument contentXmlDocument, 
+            System.Xml.XmlNamespaceManager nmsManager)
         {
             return contentXmlDocument.SelectNodes("/office:document-content/office:body/office:spreadsheet/table:table", nmsManager);
         }
 
-        private DataTable GetSheet(XmlNode tableNode, XmlNamespaceManager nmsManager)
+        private System.Data.DataTable GetSheet(
+            System.Xml.XmlNode tableNode
+            , System.Xml.XmlNamespaceManager nmsManager)
         {
-            DataTable sheet = new DataTable(tableNode.Attributes["table:name"].Value);
+            System.Data.DataTable sheet = 
+                new System.Data.DataTable(tableNode.Attributes["table:name"].Value);
 
-            XmlNodeList rowNodes = tableNode.SelectNodes("table:table-row", nmsManager);
+            System.Xml.XmlNodeList rowNodes = tableNode
+                .SelectNodes("table:table-row", nmsManager);
 
             int rowIndex = 0;
-            foreach (XmlNode rowNode in rowNodes)
+            foreach (System.Xml.XmlNode rowNode in rowNodes)
                 this.GetRow(rowNode, sheet, nmsManager, ref rowIndex);
 
             return sheet;
         }
 
-        private void GetRow(XmlNode rowNode, DataTable sheet, XmlNamespaceManager nmsManager, ref int rowIndex)
+        private void GetRow(
+            System.Xml.XmlNode rowNode
+            , System.Data.DataTable sheet
+            , System.Xml.XmlNamespaceManager nmsManager, ref int rowIndex)
         {
-            XmlAttribute rowsRepeated = rowNode.Attributes["table:number-rows-repeated"];
-            if (rowsRepeated == null || Convert.ToInt32(rowsRepeated.Value, CultureInfo.InvariantCulture) == 1)
+            System.Xml.XmlAttribute rowsRepeated = 
+                rowNode.Attributes["table:number-rows-repeated"];
+            
+            if (rowsRepeated == null 
+                || System.Convert.ToInt32(rowsRepeated.Value
+                    , System.Globalization.CultureInfo.InvariantCulture) == 1)
             {
                 while (sheet.Rows.Count < rowIndex)
                     sheet.Rows.Add(sheet.NewRow());
+                
+                System.Data.DataRow row = sheet.NewRow();
 
-                DataRow row = sheet.NewRow();
-
-                XmlNodeList cellNodes = rowNode.SelectNodes("table:table-cell", nmsManager);
+                System.Xml.XmlNodeList cellNodes = rowNode
+                    .SelectNodes("table:table-cell", nmsManager);
 
                 int cellIndex = 0;
-                foreach (XmlNode cellNode in cellNodes)
+                foreach (System.Xml.XmlNode cellNode in cellNodes)
                     this.GetCell(cellNode, row, nmsManager, ref cellIndex);
 
                 sheet.Rows.Add(row);
@@ -258,7 +187,8 @@ namespace OdsReadWrite
             }
             else
             {
-                rowIndex += Convert.ToInt32(rowsRepeated.Value, CultureInfo.InvariantCulture);
+                rowIndex += System.Convert.ToInt32(rowsRepeated.Value, 
+                    System.Globalization.CultureInfo.InvariantCulture);
             }
 
             // sheet must have at least one cell
@@ -269,13 +199,18 @@ namespace OdsReadWrite
             }
         }
 
-        private void GetCell(XmlNode cellNode, DataRow row, XmlNamespaceManager nmsManager, ref int cellIndex)
+        private void GetCell(
+            System.Xml.XmlNode cellNode
+            , System.Data.DataRow row, 
+            System.Xml.XmlNamespaceManager nmsManager, 
+            ref int cellIndex)
         {
-            XmlAttribute cellRepeated = cellNode.Attributes["table:number-columns-repeated"];
+            System.Xml.XmlAttribute cellRepeated = 
+                cellNode.Attributes["table:number-columns-repeated"];
 
             if (cellRepeated == null)
             {
-                DataTable sheet = row.Table;
+                System.Data.DataTable sheet = row.Table;
 
                 while (sheet.Columns.Count <= cellIndex)
                     sheet.Columns.Add();
@@ -286,16 +221,17 @@ namespace OdsReadWrite
             }
             else
             {
-                cellIndex += Convert.ToInt32(cellRepeated.Value, CultureInfo.InvariantCulture);
+                cellIndex += System.Convert.ToInt32(cellRepeated.Value, 
+                    System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
-        private string ReadCellValue(XmlNode cell)
+        private string ReadCellValue(System.Xml.XmlNode cell)
         {
-            XmlAttribute cellVal = cell.Attributes["office:value"];
+            System.Xml.XmlAttribute cellVal = cell.Attributes["office:value"];
 
             if (cellVal == null)
-                return String.IsNullOrEmpty(cell.InnerText) ? null : cell.InnerText;
+                return string.IsNullOrEmpty(cell.InnerText) ? null : cell.InnerText;
             else
                 return cellVal.Value;
         }
@@ -306,30 +242,32 @@ namespace OdsReadWrite
         /// </summary>
         /// <param name="odsFile">DataSet that represent .ods file.</param>
         /// <param name="outputFilePath">The name of the file to save to.</param>
-        public void WriteOdsFile(DataSet odsFile, string outputFilePath)
+        public void WriteOdsFile(System.Data.DataSet odsFile, string outputFilePath)
         {
             //this.GetZipFile(Assembly.GetExecutingAssembly().GetManifestResourceStream("OdsReadWrite.template.ods"));
             
-            using (var iss  = System.IO.File.OpenRead("/root/Documents/OdsReadWrite/OdsReadWrite/template.ods"))
+            using (System.IO.FileStream iss  = 
+                System.IO.File.OpenRead("/root/Documents/OdsReadWrite/OdsReadWrite/template.ods"))
             {
-                using(ZipFile templateFile = new ZipFile(iss))
+                using(ICSharpCode.SharpZipLib.Zip.ZipFile templateFile = 
+                    new ICSharpCode.SharpZipLib.Zip.ZipFile(iss))
                 {
-                    XmlDocument contentXml = this.GetContentXmlFile(templateFile);
+                    System.Xml.XmlDocument contentXml = 
+                        this.GetContentXmlFile(templateFile);
                     
-                    XmlNamespaceManager nmsManager = this.InitializeXmlNamespaceManager(contentXml);
+                    System.Xml.XmlNamespaceManager nmsManager = 
+                        this.InitializeXmlNamespaceManager(contentXml);
                     
-                    XmlNode sheetsRootNode = this.GetSheetsRootNodeAndRemoveChildrens(contentXml, nmsManager);
+                    System.Xml.XmlNode sheetsRootNode = this.GetSheetsRootNodeAndRemoveChildrens(contentXml, nmsManager);
                     
-                    foreach (DataTable sheet in odsFile.Tables)
+                    foreach (System.Data.DataTable sheet in odsFile.Tables)
                         this.SaveSheet(sheet, sheetsRootNode);
-                    
-                    // this.SaveContentXml(templateFile, contentXml);
-                    // templateFile.Save(outputFilePath);
                     
                     using (System.IO.FileStream fs = 
                         System.IO.File.OpenWrite(outputFilePath))
                     {
-                        using (ZipOutputStream zipOut = new ZipOutputStream(fs))
+                        using (ICSharpCode.SharpZipLib.Zip.ZipOutputStream zipOut = 
+                            new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(fs))
                         {
                             SaveFromTemplate(templateFile, zipOut, contentXml);        
                         } // end using zipOut
@@ -343,8 +281,9 @@ namespace OdsReadWrite
         } // End Sub WriteOdsFile 
         
         
-        private void SaveFromTemplate(ZipFile zipFile
-            , ZipOutputStream zipOut
+        private void SaveFromTemplate(
+            ICSharpCode.SharpZipLib.Zip.ZipFile zipFile
+            , ICSharpCode.SharpZipLib.Zip.ZipOutputStream zipOut
             , System.Xml.XmlDocument doc) 
         {
             zipFile.IsStreamOwner = false;
@@ -352,7 +291,7 @@ namespace OdsReadWrite
             System.DateTime now = System.DateTime.Now;
             
             
-            foreach (ZipEntry zipEntry in zipFile)
+            foreach (ICSharpCode.SharpZipLib.Zip.ZipEntry zipEntry in zipFile)
             {
                 if (!zipEntry.IsFile)
                     continue;
@@ -360,7 +299,7 @@ namespace OdsReadWrite
                 string entryFileName = zipEntry.Name; // or Path.GetFileName(zipEntry.Name) to omit folder
                 // Specify any other filtering here.
                 
-                using (Stream zipStream = zipFile.GetInputStream(zipEntry))
+                using (System.IO.Stream zipStream = zipFile.GetInputStream(zipEntry))
                 {
                         // Zips-within-zips are extracted. If you don't want this and wish to keep embedded zips as-is, just delete these 3 lines. 
                         //if (entryFileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)) {
@@ -368,22 +307,26 @@ namespace OdsReadWrite
                         //}
                         //else {
 
-                        ZipEntry newEntry = new ZipEntry(entryFileName);
-                        newEntry.DateTime = now;
+                    ICSharpCode.SharpZipLib.Zip.ZipEntry newEntry = 
+                        new ICSharpCode.SharpZipLib.Zip.ZipEntry(entryFileName);
+                        
+                    newEntry.DateTime = now;
                         
                         // Setting the Size will allow the zip to be unpacked by XP's built-in extractor and other older code.
                         // Mandatory 
                         newEntry.Size = zipEntry.Size;
                         
                         
-                        if (string.Equals(entryFileName, "content.xml", StringComparison.InvariantCultureIgnoreCase))
+                        if (string.Equals(entryFileName, "content.xml", System.StringComparison.InvariantCultureIgnoreCase))
                         {
-                            using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+                            using (System.IO.MemoryStream ms = 
+                                new System.IO.MemoryStream())
                             {
                                 doc.Save(ms);
                                 
                                 newEntry.Size = ms.Length;
-                                ms.Position = 0;
+                                // ms.Position = 0;
+                                ms.Seek(0, System.IO.SeekOrigin.Begin);
                                 zipOut.PutNextEntry(newEntry);
                                 ms.CopyTo(zipOut, 4096);
                                 zipOut.CloseEntry();
@@ -406,25 +349,32 @@ namespace OdsReadWrite
         
         
         
-        private XmlNode GetSheetsRootNodeAndRemoveChildrens(XmlDocument contentXml, XmlNamespaceManager nmsManager)
+        private System.Xml.XmlNode GetSheetsRootNodeAndRemoveChildrens(
+            System.Xml.XmlDocument contentXml, 
+            System.Xml.XmlNamespaceManager nmsManager)
         {
-            XmlNodeList tableNodes = this.GetTableNodes(contentXml, nmsManager);
+            System.Xml.XmlNodeList tableNodes = 
+                this.GetTableNodes(contentXml, nmsManager);
 
-            XmlNode sheetsRootNode = tableNodes.Item(0).ParentNode;
+            System.Xml.XmlNode sheetsRootNode = tableNodes.Item(0).ParentNode;
             // remove sheets from template file
-            foreach (XmlNode tableNode in tableNodes)
+            foreach (System.Xml.XmlNode tableNode in tableNodes)
                 sheetsRootNode.RemoveChild(tableNode);
 
             return sheetsRootNode;
         }
 
-        private void SaveSheet(DataTable sheet, XmlNode sheetsRootNode)
+        private void SaveSheet(System.Data.DataTable sheet
+            , System.Xml.XmlNode sheetsRootNode)
         {
-            XmlDocument ownerDocument = sheetsRootNode.OwnerDocument;
+            System.Xml.XmlDocument ownerDocument = sheetsRootNode.OwnerDocument;
 
-            XmlNode sheetNode = ownerDocument.CreateElement("table:table", this.GetNamespaceUri("table"));
+            System.Xml.XmlNode sheetNode = 
+                ownerDocument.CreateElement("table:table", this.GetNamespaceUri("table"));
 
-            XmlAttribute sheetName = ownerDocument.CreateAttribute("table:name", this.GetNamespaceUri("table"));
+            System.Xml.XmlAttribute sheetName = 
+                ownerDocument.CreateAttribute("table:name", this.GetNamespaceUri("table"));
+            
             sheetName.Value = sheet.TableName;
             sheetNode.Attributes.Append(sheetName);
 
@@ -435,92 +385,66 @@ namespace OdsReadWrite
             sheetsRootNode.AppendChild(sheetNode);
         }
 
-        private void SaveColumnDefinition(DataTable sheet, XmlNode sheetNode, XmlDocument ownerDocument)
+        private void SaveColumnDefinition(
+            System.Data.DataTable sheet
+            , System.Xml.XmlNode sheetNode, 
+            System.Xml.XmlDocument ownerDocument)
         {
-            XmlNode columnDefinition = ownerDocument.CreateElement("table:table-column", this.GetNamespaceUri("table"));
+            System.Xml.XmlNode columnDefinition = 
+                ownerDocument.CreateElement("table:table-column", this.GetNamespaceUri("table"));
 
-            XmlAttribute columnsCount = ownerDocument.CreateAttribute("table:number-columns-repeated", this.GetNamespaceUri("table"));
-            columnsCount.Value = sheet.Columns.Count.ToString(CultureInfo.InvariantCulture);
+            System.Xml.XmlAttribute columnsCount = 
+                ownerDocument.CreateAttribute("table:number-columns-repeated", this.GetNamespaceUri("table"));
+            columnsCount.Value = sheet.Columns.Count.ToString(
+                System.Globalization.CultureInfo.InvariantCulture);
             columnDefinition.Attributes.Append(columnsCount);
 
             sheetNode.AppendChild(columnDefinition);
         }
 
-        private void SaveRows(DataTable sheet, XmlNode sheetNode, XmlDocument ownerDocument)
+        private void SaveRows(System.Data.DataTable sheet
+            , System.Xml.XmlNode sheetNode
+            , System.Xml.XmlDocument ownerDocument)
         {
-            DataRowCollection rows = sheet.Rows;
+            System.Data.DataRowCollection rows = sheet.Rows;
             for (int i = 0; i < rows.Count; i++)
             {
-                XmlNode rowNode = ownerDocument.CreateElement("table:table-row", this.GetNamespaceUri("table"));
-
+                System.Xml.XmlNode rowNode = 
+                    ownerDocument.CreateElement("table:table-row", this.GetNamespaceUri("table"));
+                
                 this.SaveCell(rows[i], rowNode, ownerDocument);
 
                 sheetNode.AppendChild(rowNode);
             }
         }
 
-        private void SaveCell(DataRow row, XmlNode rowNode, XmlDocument ownerDocument)
+        private void SaveCell(System.Data.DataRow row
+            , System.Xml.XmlNode rowNode, 
+            System.Xml.XmlDocument ownerDocument)
         {
             object[] cells = row.ItemArray;
 
             for (int i = 0; i < cells.Length; i++)
             {
-                XmlElement cellNode = ownerDocument.CreateElement("table:table-cell", this.GetNamespaceUri("table"));
+                System.Xml.XmlElement cellNode = 
+                    ownerDocument.CreateElement("table:table-cell", this.GetNamespaceUri("table"));
 
-                if (row[i] != DBNull.Value)
+                if (row[i] != System.DBNull.Value)
                 {
                     // We save values as text (string)
-                    XmlAttribute valueType = ownerDocument.CreateAttribute("office:value-type", this.GetNamespaceUri("office"));
+                    System.Xml.XmlAttribute valueType = 
+                        ownerDocument.CreateAttribute("office:value-type", this.GetNamespaceUri("office"));
                     valueType.Value = "string";
                     cellNode.Attributes.Append(valueType);
 
-                    XmlElement cellValue = ownerDocument.CreateElement("text:p", this.GetNamespaceUri("text"));
+                    System.Xml.XmlElement cellValue = 
+                        ownerDocument.CreateElement("text:p", this.GetNamespaceUri("text"));
                     cellValue.InnerText = row[i].ToString();
                     cellNode.AppendChild(cellValue);
                 }
 
                 rowNode.AppendChild(cellNode);
             }
-        }
-        
-        
-        private void SaveContentXml(ICSharpCode.SharpZipLib.Zip.ZipFile templateFile, XmlDocument contentXml)
-        {
-            ICSharpCode.SharpZipLib.Zip.ZipEntry zipEntry = 
-                templateFile.GetEntry("content.xml");
-            
-            
-            templateFile.BeginUpdate();
-            templateFile.Delete(zipEntry);
-            templateFile.CommitUpdate();   
-            
-            
-            MemoryStream memStream = new MemoryStream();
-            contentXml.Save(memStream);
-            memStream.Seek(0, SeekOrigin.Begin);
-            
-            // templateFile.AddEntry("content.xml", memStream);
-            
-            
-            // ICSharpCode.SharpZipLib.Zip
-            // ICSharpCode.SharpZipLib.Zip.MemoryArchiveStorage mos
-            
-            ZipEntry newEntry = new ZipEntry("content.xml");
-            newEntry.DateTime = DateTime.Now;
-            
-            // http://community.sharpdevelop.net/forums/p/8401/24200.aspx
-            templateFile.BeginUpdate();
-            templateFile.Add(newEntry);
-            Stream entryStream = templateFile.GetInputStream(newEntry.ZipFileIndex);
-            // StreamUtils.Copy(inStream, zipStream, new byte[4096]);
-            memStream.CopyTo(entryStream);
-            // entryStream.Close();
-            templateFile.CommitUpdate();
-            
-            // CustomStaticDataSource sds = new CustomStaticDataSource();
-            // sds.SetStream(memstream);
-            // templateFile.Add(dataSource, "");
-            // templateFile.Add("", memstream);
         }
         
         
@@ -532,7 +456,7 @@ namespace OdsReadWrite
                     return namespaces[i, 1];
             }
 
-            throw new InvalidOperationException("Can't find that namespace URI");
+            throw new System.InvalidOperationException("Can't find that namespace URI");
         }
         
         
