@@ -6,8 +6,29 @@ namespace OdsReadWrite
     
     internal sealed class OdsReaderWriter
     {
-        
-        
+
+        public static void Test()
+        {
+            
+            OdsReadWrite.OdsReaderWriter odr = new OdsReaderWriter();
+            using (System.Data.DataSet ds = odr.ReadOdsFile(@"/root/Documents/mysheet.ods"))
+            {
+                System.Console.WriteLine(ds.Tables.Count);
+                using (System.IO.FileStream f = 
+                    System.IO.File.OpenWrite("/root/Documents/mysheet.xml"))
+                {
+                    //ds.WriteXml(f, System.Data.XmlWriteMode.WriteSchema);
+                    ds.WriteXml(f, System.Data.XmlWriteMode.IgnoreSchema);
+                }
+                
+                odr.WriteOdsFile(ds, "/root/Documents/notmysheet.ods");
+            } // End Using ds 
+            
+        }
+
+
+
+
         // Namespaces. We need this to initialize XmlNamespaceManager so that we can search XmlDocument.
         private static string[,] namespaces = new string[,] 
         {

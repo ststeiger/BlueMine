@@ -14,6 +14,17 @@ namespace BlueMine
 
     public class OdsImporter 
     {
+
+        public static void ImporterTest()
+        {
+            OdsImporter imp = new OdsImporter();
+            using (var st = System.IO.File.OpenRead(@"/root/mysheet.ods"))
+            {
+                imp.Import(st);
+            }
+        }
+
+
         public OdsImporter()
         { }
         
