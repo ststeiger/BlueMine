@@ -12,23 +12,31 @@ namespace OfficeOpenXml.OpenDocumentSpreadsheet
 
         public static void Test()
         {
+            string inFile = @"D:\username\Desktop\Mappe1.ods";
+            string outFileXml = @"D:\username\Desktop\mysheet.xml";
+            string outFile = @"D:\username\Desktop\notmysheet.ods";
+
+            if (System.Environment.OSVersion.Platform == System.PlatformID.Unix)
+            {
+                inFile = "/root/Documents/mysheet.ods";
+                outFileXml = "/root/Documents/mysheet.xml";
+                outFile = "/root/Documents/notmysheet.ods";
+            } // End if (System.Environment.OSVersion.Platform == System.PlatformID.Unix) 
+
             OdsReaderWriter odr = new OdsReaderWriter();
-            using (System.Data.DataSet ds = odr.ReadOdsFile(@"/root/Documents/mysheet.ods"))
+            using (System.Data.DataSet ds = odr.ReadOdsFile(inFile))
             {
                 System.Console.WriteLine(ds.Tables.Count);
-                using (System.IO.FileStream fs =
-                    System.IO.File.OpenWrite("/root/Documents/mysheet.xml"))
+                using (System.IO.FileStream fs = System.IO.File.OpenWrite(outFileXml))
                 {
-                    //ds.WriteXml(fs, System.Data.XmlWriteMode.WriteSchema);
+                    //ds.WriteXml(fs, System.Data.XmlWriteMode.WriteSchema); 
                     ds.WriteXml(fs, System.Data.XmlWriteMode.IgnoreSchema);
                 } // End Using fs 
 
-                odr.WriteOdsFile(ds, "/root/Documents/notmysheet.ods");
+                odr.WriteOdsFile(ds, outFile);
             } // End Using ds 
 
         } // End Sub Test 
-
-
 
 
         // Namespaces. We need this to initialize XmlNamespaceManager so that we can search XmlDocument.
@@ -82,7 +90,7 @@ namespace OfficeOpenXml.OpenDocumentSpreadsheet
             if (ze == null)
             {
                 throw new System.ArgumentException("content.xml not found in Zip");
-            }
+            } // End if (ze == null) 
 
             using (System.IO.Stream contentStream = zipFile.GetInputStream(ze))
             {
@@ -246,6 +254,26 @@ namespace OfficeOpenXml.OpenDocumentSpreadsheet
         } // End Function ReadCellValue 
 
 
+        private static System.IO.Stream GetTemplateStream(string resourceName)
+        {
+            System.IO.Stream retValue = null;
+            System.Reflection.Assembly asm = typeof(OdsReaderWriter).Assembly;
+
+            foreach (string thisResourceName in asm.GetManifestResourceNames())
+            {
+
+                if (thisResourceName.EndsWith(resourceName, System.StringComparison.InvariantCultureIgnoreCase))
+                {
+                    retValue = asm.GetManifestResourceStream(thisResourceName);
+                    break;
+                } // End if (thisResourceName.EndsWith(resourceName, System.StringComparison.InvariantCultureIgnoreCase))
+
+            } // Next thisResourceName 
+
+            return retValue;
+        } // End Function thisResourceName 
+
+
         /// <summary>
         /// Writes DataSet as .ods file.
         /// </summary>
@@ -255,8 +283,7 @@ namespace OfficeOpenXml.OpenDocumentSpreadsheet
         {
             //this.GetZipFile(Assembly.GetExecutingAssembly().GetManifestResourceStream("OdsReadWrite.template.ods"));
 
-            using (System.IO.FileStream iss =
-                System.IO.File.OpenRead("/root/Documents/template.ods"))
+            using (System.IO.Stream iss = GetTemplateStream("template.ods"))
             {
                 using (ICSharpCode.SharpZipLib.Zip.ZipFile templateFile =
                     new ICSharpCode.SharpZipLib.Zip.ZipFile(iss))

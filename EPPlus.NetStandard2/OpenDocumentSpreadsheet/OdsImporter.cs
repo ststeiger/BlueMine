@@ -16,7 +16,7 @@ namespace OfficeOpenXml.OpenDocumentSpreadsheet
         public static void ImporterTest()
         {
             OdsImporter imp = new OdsImporter();
-            using (var st = System.IO.File.OpenRead(@"/root/mysheet.ods"))
+            using (System.IO.Stream st = System.IO.File.OpenRead(@"/root/mysheet.ods"))
             {
                 imp.Import(st);
             }
@@ -101,9 +101,9 @@ namespace OfficeOpenXml.OpenDocumentSpreadsheet
                 where c.Name == "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}table-cell"
                 select c
             ).ToList();
-            
-            // var dto = new DataDto();
-            
+
+            // DataDto dto = new DataDto();
+
             int count = cells.Count;
             int j = -1;
 

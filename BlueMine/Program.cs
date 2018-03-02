@@ -13,21 +13,23 @@ using Microsoft.Extensions.Logging;
 namespace BlueMine
 {
 
+
     public class Country
     {
+
         public int Id;
         public string Culture;
-
-
         static int idCounter = 1;
+
 
         public Country(string culture)
         {
             this.Id = idCounter++;
             this.Culture = culture;
-        }
+        } // End Constructor 
 
-    }
+
+    } // End Country 
 
 
     public class IpRange
@@ -40,9 +42,9 @@ namespace BlueMine
         {
             this.Lower = lowerBoundary;
             this.Upper = upperBoundary;
-        }
+        } // End Constructor 
 
-    }
+    } // End Constructor 
 
 
     public class Program
@@ -87,7 +89,7 @@ namespace BlueMine
             // OfficeOpenXml.OpenDocumentSpreadsheet.OdsReaderWriter.Test();
             
             BuildWebHost(args).Run();
-        }
+        } // End Sub Main 
 
 
         public static IWebHost BuildWebHost(string[] args)
@@ -95,10 +97,10 @@ namespace BlueMine
             return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .Build();
-        }
+        } // End Sub Main(string[] args) 
 
 
-    }
+    } // End Class Program 
 
 
-}
+} // End Namespace BlueMine 
