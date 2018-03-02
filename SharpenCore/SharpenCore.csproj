@@ -12,4 +12,6 @@
     <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
   </ItemGroup>
 
+  <Import Project="..\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.projitems" Label="Shared" />
+
 </Project>

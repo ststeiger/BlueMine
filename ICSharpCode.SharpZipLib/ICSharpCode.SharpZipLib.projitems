@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>dba2ffcc-a071-4942-bc7d-6555c65cbbb8</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>ICSharpCode.SharpZipLib</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BZip2\BZip2.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BZip2\BZip2Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BZip2\BZip2Exception.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BZip2\BZip2InputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)BZip2\BZip2OutputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Checksum\Adler32.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Checksum\BZip2Crc.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Checksum\Crc32.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Checksum\IChecksum.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\FileSystemScanner.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\INameTransform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\IScanFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\NameFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\PathFilter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\StreamUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\WindowsPathUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Encryption\PkzipClassic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Encryption\ZipAESStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Encryption\ZipAESTransform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GZip\GZip.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GZip\GZipConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GZip\GZipException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GZip\GzipInputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GZip\GzipOutputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lzw\LzwConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lzw\LzwException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Lzw\LzwInputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SharpZipBaseException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\InvalidHeaderException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarArchive.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarInputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Tar\TarOutputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\Deflater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\DeflaterConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\DeflaterEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\DeflaterHuffman.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\DeflaterPending.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\Inflater.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\InflaterDynHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\InflaterHuffmanTree.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\PendingBuffer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\Streams\DeflaterOutputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\Streams\InflaterInputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\Streams\OutputWindow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\Compression\Streams\StreamManipulator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\FastZip.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\IEntryFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\WindowsNameTransform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipConstants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipEntry.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipEntryFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipExtraData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipFile.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipHelperStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipInputStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipNameTransform.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Zip\ZipOutputStream.cs" />
+  </ItemGroup>
+</Project>

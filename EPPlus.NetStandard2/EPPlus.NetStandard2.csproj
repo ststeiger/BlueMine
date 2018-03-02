@@ -13,6 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImageSharpPacked\ImageSharpPacked.csproj" />
-    <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
   </ItemGroup>
+  <Import Project="..\ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.projitems" Label="Shared" />
 </Project>
