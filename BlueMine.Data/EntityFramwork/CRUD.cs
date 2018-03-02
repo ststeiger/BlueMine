@@ -94,11 +94,11 @@ namespace BlueMine.Data
         {
             List<BlueMine.Db.T_projects> lsProjects = (
                 from project in _context.projects
-                orderby project.name ascending
+                // orderby project.name ascending
                 select project
             ).AsNoTracking()
             .ToList()
-            //.OrderBy(y => y.Text).ToList() // Order in .NET 
+            .OrderBy(y => y.name).ToList() // Order in .NET 
             ;
             
             return lsProjects;

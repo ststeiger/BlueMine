@@ -17,9 +17,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace BlueMine.Controllers
 {
     // template: "{controller=Home}/{action=Index}/{id?}");
-    //[Route("[controller]/[action]/{id?}")]
-    //[Route("[controller]/{a?}/{id?}")]
-    //[Route("[controller]/{*uri}")]
+    // [Route("[controller]/[action]/{id?}")]
+    // [Route("[controller]/{a?}/{id?}")]
+    // [Route("[controller]/{*uri}")]
 
     public class ProjectController : Controller
     {
@@ -29,11 +29,10 @@ namespace BlueMine.Controllers
         private readonly BlueMine.Data.Dapper.CRUD m_DapperRepo;
         
 
-        public ProjectController(BlueMine.Db.BlueMineContext bluemine
-        )
+        public ProjectController(BlueMine.Db.BlueMineContext dbContext)
         {
-            this.m_BlueMineContext = bluemine;
-            this.m_Repo = new BlueMine.Data.CRUD(this.m_BlueMineContext);
+            this.m_BlueMineContext = dbContext;
+            this.m_Repo = new BlueMine.Data.CRUD(dbContext);
             this.m_DapperRepo = new BlueMine.Data.Dapper.CRUD();
         }
 
@@ -56,7 +55,8 @@ namespace BlueMine.Controllers
 
             // return View(projects);
 
-            var pm = new Models.Project.ProjectModel()
+            Models.Project.ProjectModel pm = 
+                new Models.Project.ProjectModel()
             {
                 GenericTree = new BlueMine.Data.GenericRecursor<Db.T_projects, long?>(
                       projects
@@ -88,24 +88,10 @@ namespace BlueMine.Controllers
         [Route("/project")]
         public IActionResult ProjectsWithBlueEntityFramwork()
         {
-            List<BlueMine.Db.T_projects> lsProjects = (
-                from project in this.m_BlueMineContext.projects
-                orderby project.name ascending
-                select project
-            ) //.AsNoTracking()
-            .ToList()
-            //.OrderBy(y => y.Text) // Order in .NET 
-            .ToList()
-            ;
-            
-            var pt = new BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>(
-              lsProjects
-            , x => x.parent_id
-            , x => x.id);
-
-            var pm = new Models.Project.ProjectModel()
+            Models.Project.ProjectModel pm = 
+                new Models.Project.ProjectModel()
             {
-                GenericTree = pt
+                GenericTree = this.m_Repo.GetProjectTree("")
             };
 
             pm.GenericTree.AddSort(x => x.name);
@@ -143,11 +129,13 @@ namespace BlueMine.Controllers
             return this.Content($"<html><body><h1>Issues for project {uri}</h1></body></html>", "text/html");
         }
 
+
         [Route("projects/{uri}/issues/{id:int}")]
         public IActionResult IssueForProject(string uri, int id)
         {
             return this.Content($"<html><body><h1>Issue {id} for project {uri}</h1></body></html>", "text/html");
         }
+
 
         [Route("projects/{uri}/issues/new")]
         public IActionResult NewIssueForProject(string uri)
@@ -168,15 +156,15 @@ namespace BlueMine.Controllers
             // @addTagHelper *, AuthoringTagHelpers
 
             // @model List<SelectListItem>
-            // var ls = getTrackers("");
-
             // @model BlueMine.Models.Project.NewItemModel
-            var ni = new BlueMine.Models.Project.NewItemModel();
+
+            Models.Project.NewItemModel ni = new BlueMine.Models.Project.NewItemModel();
+
             ni.Trackers = this.m_Repo.GetTrackers("");
             ni.Stati = this.m_Repo.GetStati("");
             ni.Priorities = this.m_Repo.GetPriorities("");
 
-            var defaultItem = new SelectListItem()
+            SelectListItem defaultItem = new SelectListItem()
             {
                 Value = null,
                 Text = "--- Bitte auswählen ---"
@@ -188,12 +176,14 @@ namespace BlueMine.Controllers
             return View("NewItem1", ni);
         }
 
+
         [Route("projects/{uri}/issues/gantt")]
         public IActionResult GanttForProject(string uri)
         {
             return this.Content($"<html><body><h1>Gantt-Chart for issues in project {uri}</h1></body></html>",
                 "text/html");
         }
+
 
         [Route("projects/{uri}/issues/calendar")]
         public IActionResult CalendarForProject(string uri)
@@ -202,11 +192,13 @@ namespace BlueMine.Controllers
                 "text/html");
         }
 
+
         [Route("projects/{uri}/activity")]
         public IActionResult IssuesActivityForProject(string uri)
         {
             return this.Content($"<html><body><h1>Activity for project {uri}</h1></body></html>", "text/html");
         }
+
 
         [Route("projects/{uri}/files")]
         public IActionResult FilesForProject(string uri)
@@ -214,11 +206,13 @@ namespace BlueMine.Controllers
             return this.Content($"<html><body><h1>Files for project {uri}</h1></body></html>", "text/html");
         }
 
+
         [Route("projects/{uri}/settings")]
         public IActionResult SettingsForProject(string uri)
         {
             return this.Content($"<html><body><h1>Settings for project {uri}</h1></body></html>", "text/html");
         }
+
 
         [Route("projects/{uri}/news")]
         public IActionResult NewsForProject(string uri)
@@ -226,11 +220,13 @@ namespace BlueMine.Controllers
             return this.Content($"<html><body><h1>News for project {uri}</h1></body></html>", "text/html");
         }
 
+
         [Route("projects/{uri}/wiki")]
         public IActionResult WikiForProject(string uri)
         {
             return this.Content($"<html><body><h1>Wiki for project {uri}</h1></body></html>", "text/html");
         }
+
 
         [Route("projects/{uri}/boards")]
         public IActionResult BoardsForProject(string uri)
@@ -238,11 +234,13 @@ namespace BlueMine.Controllers
             return this.Content($"<html><body><h1>Boards for project {uri}</h1></body></html>", "text/html");
         }
 
+
         [Route("projects/{uri}/boards/{id:int}")]
         public IActionResult SpecificBoardForProject(string uri, int id)
         {
             return this.Content($"<html><body><h1>Board {id} for project {uri}</h1></body></html>", "text/html");
         }
+
 
         [Route("projects/{uri}/documents")]
         public IActionResult DocumentsForProject(string uri)

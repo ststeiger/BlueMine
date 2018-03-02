@@ -2,6 +2,7 @@
 namespace BlueMine.Models.Project
 {
     
+
     public class NewItemModel 
     {
 
@@ -17,9 +18,7 @@ namespace BlueMine.Models.Project
             Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
         > Priorities;
 
-
     }
-
 
 
     public class ProjectModel
