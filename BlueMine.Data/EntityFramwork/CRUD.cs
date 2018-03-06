@@ -104,77 +104,7 @@ namespace BlueMine.Data
             return lsProjects;
         }
         
-        
-        public List<SelectListItem> GetUsers(string uri)
-        {
-            List<SelectListItem> lsUsers = (
-                from user in _context.users
-                where user.status == 1
-                      && user.type == "User"
-                
-                // orderby user.firstname, user.last_login_on
-                
-                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                {
-                     Value = user.id.ToString()
-                    ,Text = user.lastname + " " + user.firstname        
-                    //,Selected = stati.is_default
-                }
-                
-            ).AsNoTracking().ToList()
-            .OrderBy(y => y.Text).ToList() // Order in .NET 
-            ;
-            
-            return lsUsers;
-        }
-        
-        
-        public List<SelectListItem> GetStati(string uri)
-        {
-            List<SelectListItem> lsStati = (
-                from stati in _context.issue_statuses
-                orderby stati.position ascending
 
-                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                {
-                     Value = stati.id.ToString()
-                    ,Text = stati.name
-                    //,Selected = stati.is_default
-                }
-
-            ).AsNoTracking()
-            .ToList()
-            //.OrderBy(y => y.Text).ToList() // Order in .NET 
-            ;
-            
-            return lsStati;
-        }
-        
-        
-        public List<SelectListItem> GetPriorities(string uri)
-        {
-            List<SelectListItem> lsPriorities = (
-                from enumz in _context.enumerations
-                where !enumz.project_id.HasValue 
-                && enumz.type == "IssuePriority"
-                orderby enumz.position ascending
-                
-                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                {
-                     Value = enumz.id.ToString()
-                    ,Text = enumz.name
-                    ,Selected = enumz.is_default
-                }
-
-            ).AsNoTracking()
-            .ToList()
-            //.OrderBy(y => y.Text).ToList() // Order in .NET 
-            ;
-
-            return lsPriorities;
-        }
-        
-        
         public List<SelectListItem> GetTrackers(string uri)
         {
             var trackerz = (

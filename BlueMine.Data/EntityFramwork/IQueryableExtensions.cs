@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -11,6 +11,7 @@ using Remotion.Linq.Parsing.Structure;
 namespace Microsoft.EntityFrameworkCore 
 {
     
+
     // https://stackoverflow.com/questions/1412863/how-do-i-view-the-sql-generated-by-the-entity-framework
     // http://rion.io/2016/10/19/accessing-entity-framework-core-queries-behind-the-scenes-in-asp-net-core/
     // https://gist.github.com/rionmonster/2c59f449e67edf8cd6164e9fe66c545a
@@ -38,7 +39,7 @@ namespace Microsoft.EntityFrameworkCore
         {
             if (!(query is EntityQueryable<TEntity>) && !(query is InternalDbSet<TEntity>))
             {
-                throw new ArgumentException("Invalid query");
+                throw new System.ArgumentException("Invalid query");
             }
 
             var queryCompiler = (QueryCompiler) QueryCompilerField.GetValue(query.Provider);
@@ -53,11 +54,11 @@ namespace Microsoft.EntityFrameworkCore
             var sql = modelVisitor.Queries.First().ToString();
 
             return sql;
-        }
-    }
-    
-    
-    
+        } // End Function ToSql 
+    } // End Class IQueryableExtensions 
+
+
+
     public class IQueryableExtensions1
     {
         private static readonly TypeInfo QueryCompilerTypeInfo = typeof(QueryCompiler).GetTypeInfo();
@@ -83,7 +84,7 @@ namespace Microsoft.EntityFrameworkCore
         {
             if (!(query is EntityQueryable<TEntity>) && !(query is InternalDbSet<TEntity>))
             {
-                throw new ArgumentException("Invalid query");
+                throw new System.ArgumentException("Invalid query");
             }
 
             var queryCompiler = (IQueryCompiler) QueryCompilerField.GetValue(query.Provider);
@@ -101,10 +102,10 @@ namespace Microsoft.EntityFrameworkCore
             var sql = modelVisitor.Queries.First().ToString();
 
             return sql;
-        }
-        
-        
-    }
-    
-    
-}
+        } // End Function ToSql 
+
+
+    } // End Class IQueryableExtensions1 
+
+
+} // End Namespace Microsoft.EntityFrameworkCore 

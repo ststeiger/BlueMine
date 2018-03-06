@@ -27,13 +27,35 @@ namespace BlueMine.Controllers
         private readonly BlueMine.Db.BlueMineContext m_BlueMineContext;
         private readonly BlueMine.Data.CRUD m_Repo;
         private readonly BlueMine.Data.Dapper.CRUD m_DapperRepo;
-        
 
-        public ProjectController(BlueMine.Db.BlueMineContext dbContext)
+        private readonly BlueMine.Db.BlueMineRepository m_repi;
+
+        public ProjectController(BlueMine.Db.BlueMineContext dbContext
+            , BlueMine.Db.BlueMineRepository repi
+            )
         {
             this.m_BlueMineContext = dbContext;
             this.m_Repo = new BlueMine.Data.CRUD(dbContext);
             this.m_DapperRepo = new BlueMine.Data.Dapper.CRUD();
+            this.m_repi = repi;
+        }
+
+
+        [Route("/TestRepo")]
+        public System.Collections.Generic.List<SelectListItem> LuL()
+        {
+            var se1 = BlueMine.Data.SortExpression<Db.T_projects>.Create(x => x.name);
+            var se2 = BlueMine.Data.SortExpression<Db.T_projects>.Create(x => x.updated_on, Data.SortDirection.Descending);
+
+            // return this.m_repi.GetFilteredSorted<Db.T_projects>(null, se1, se2);
+            // return this.m_repi.GetFilteredSorted<Db.T_projects>(null, x => x.name);
+
+            // return this.m_repi.GetFilteredSorted<Db.T_projects>(x => x.parent_id == 6, x => x.name);
+            // return this.m_repi.GetAll<Db.T_projects>();
+
+            //return this.m_repi.GetAll<Db.T_projects>(x => x.name, y=> y.updated_on );
+
+            return this.m_repi.GetAsSelectList<Db.T_trackers>(x => x.id.ToString(), y => y.name);
         }
 
 
@@ -156,25 +178,13 @@ namespace BlueMine.Controllers
             // @addTagHelper *, AuthoringTagHelpers
 
             // @model List<SelectListItem>
-            // @model BlueMine.Models.Project.IssueModel
-            
-            
-            Models.Project.IssueModel ni = new BlueMine.Models.Project.IssueModel();
-            
-            ni.Trackers = this.m_Repo.GetTrackers("");
-            ni.Stati = this.m_Repo.GetStati("");
-            ni.Priorities = this.m_Repo.GetPriorities("");
+            // @model BlueMine.Models.Issue.IssueModel
 
-            SelectListItem defaultItem = new SelectListItem()
-            {
-                Value = null,
-                Text = "--- Bitte auswählen ---"
-            };
 
-            ni.Trackers.Insert(0, defaultItem);
-
+            Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repi, null);
+            
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
-            return View("NewItem1", ni);
+            return View("NewItem1", im);
         }
 
 

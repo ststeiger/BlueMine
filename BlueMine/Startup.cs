@@ -28,9 +28,23 @@ namespace BlueMine
         
         
         public IConfiguration Configuration { get; }
-        
-        
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
+
+        // https://stackoverflow.com/questions/38138100/what-is-the-difference-between-services-addtransient-service-addscope-and-servi
+
+        // Singleton which creates a single instance throughout the application.
+        // It creates the instance for the first time and reuses the same object in the all calls.
+
+        // Scoped lifetime services are created once per request within the scope.
+        // It is equivalent to Singleton in the current scope. 
+        // eg. in MVC it creates 1 instance per each http request 
+        // but uses the same instance in the other calls within the same web request.
+
+        // Transient lifetime services are created each time they are requested.
+        // This lifetime works best for lightweight, stateless services.
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
@@ -49,6 +63,7 @@ namespace BlueMine
                 }
             );
 
+            services.AddScoped<BlueMine.Db.BlueMineRepository>();
 
             services.AddMvc();
         } // End Sub ConfigureServices 

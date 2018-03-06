@@ -10,6 +10,41 @@ namespace BlueMine.Data
     };
 
 
+    public class SortExpression<T>
+    {
+        public System.Linq.Expressions.Expression<System.Func<T, System.IComparable>> Sort;
+        public SortDirection Direction;
+        
+
+        public SortExpression(System.Linq.Expressions.Expression<System.Func<T, System.IComparable>> sorter, SortDirection direction)
+        {
+            this.Sort = sorter;
+            this.Direction = direction;
+        } // End Constructor 
+
+
+        public SortExpression(System.Linq.Expressions.Expression<System.Func<T, System.IComparable>> sorter)
+            : this(sorter, SortDirection.Ascending)
+        { } // End Constructor 
+
+
+        public static SortExpression<T> Create<TKey>(System.Func<T, TKey> sorter, SortDirection direction)
+        {
+            System.Linq.Expressions.Expression<System.Func<T, System.IComparable>> expr
+                = x => (System.IComparable)sorter(x);
+
+            return new SortExpression<T>(expr, direction);
+        } // End Function Create 
+        
+
+        public static SortExpression<T> Create<TKey>(System.Func<T, TKey> sorter)
+        {
+            return Create<TKey>(sorter, SortDirection.Ascending);
+        } // End Function Create 
+
+    }
+
+
     public class SortTerm<T> 
     {
 
@@ -21,12 +56,12 @@ namespace BlueMine.Data
         {
             this.Sort = sorter;
             this.Direction = direction;
-        }
+        } // End Constructor 
 
 
         public SortTerm(System.Func<T, System.IComparable> sorter)
             : this(sorter, SortDirection.Ascending)
-        { }
+        { } // End Constructor 
 
 
         public static SortTerm<T> Create<TKey>(System.Func<T, TKey> sorter, SortDirection direction)
@@ -51,7 +86,7 @@ namespace BlueMine.Data
                 }, direction
             );
 
-        } // End Constructor 
+        } // End Function Create 
 
 
         public static SortTerm<T> Create<TKey>(System.Func<T, TKey> sorter)
@@ -59,7 +94,7 @@ namespace BlueMine.Data
             // where TKey: struct, System.IComparable
         {
             return Create<TKey>(sorter, SortDirection.Ascending);
-        } // End Constructor 
+        } // End Function Create 
 
 
     } // End Class SortTerm<T>  
