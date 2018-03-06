@@ -156,10 +156,11 @@ namespace BlueMine.Controllers
             // @addTagHelper *, AuthoringTagHelpers
 
             // @model List<SelectListItem>
-            // @model BlueMine.Models.Project.NewItemModel
-
-            Models.Project.NewItemModel ni = new BlueMine.Models.Project.NewItemModel();
-
+            // @model BlueMine.Models.Project.IssueModel
+            
+            
+            Models.Project.IssueModel ni = new BlueMine.Models.Project.IssueModel();
+            
             ni.Trackers = this.m_Repo.GetTrackers("");
             ni.Stati = this.m_Repo.GetStati("");
             ni.Priorities = this.m_Repo.GetPriorities("");

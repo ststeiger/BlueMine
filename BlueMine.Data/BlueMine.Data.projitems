@@ -9,6 +9,7 @@
     <Import_RootNamespace>BlueMine.Data</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Db\TablesExtensions\trackers.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\BlueMineContext.cs" />

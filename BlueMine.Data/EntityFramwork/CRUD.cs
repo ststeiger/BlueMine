@@ -1,9 +1,9 @@
 ﻿
 using System.Linq;
 using System.Collections.Generic;
-
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 
 using BlueMine.Db;
 
@@ -103,9 +103,32 @@ namespace BlueMine.Data
             
             return lsProjects;
         }
-
-
-
+        
+        
+        public List<SelectListItem> GetUsers(string uri)
+        {
+            List<SelectListItem> lsUsers = (
+                from user in _context.users
+                where user.status == 1
+                      && user.type == "User"
+                
+                // orderby user.firstname, user.last_login_on
+                
+                select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                {
+                     Value = user.id.ToString()
+                    ,Text = user.lastname + " " + user.firstname        
+                    //,Selected = stati.is_default
+                }
+                
+            ).AsNoTracking().ToList()
+            .OrderBy(y => y.Text).ToList() // Order in .NET 
+            ;
+            
+            return lsUsers;
+        }
+        
+        
         public List<SelectListItem> GetStati(string uri)
         {
             List<SelectListItem> lsStati = (
@@ -135,7 +158,6 @@ namespace BlueMine.Data
                 where !enumz.project_id.HasValue 
                 && enumz.type == "IssuePriority"
                 orderby enumz.position ascending
-                
                 
                 select new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
                 {

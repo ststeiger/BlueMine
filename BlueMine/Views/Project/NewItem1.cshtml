@@ -1,5 +1,5 @@
 ﻿
-@model BlueMine.Models.Project.NewItemModel
+@model BlueMine.Models.Project.IssueModel
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -56,27 +56,26 @@
     <h1>Hello New Item</h1>
     
     <label for="issue_tracker_id">Tracker<span class="required"> *</span></label>
-    <select id="issue_tracker_id" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')" asp-items="Model.Trackers">
+    <select id="issue_tracker_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')" >
         <option>--- Please select ---</option>
     </select>
-
-
+    
     <label for="issue_subject">Thema<span class="required"> *</span></label>
     <input id="issue_subject" name="issue[subject]" size="80" maxlength="255" type="text" value="" >
-
+    
     <label for="issue_description">Beschreibung</label>
     <textarea id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit" ></textarea>
     
     <label for="issue_status_id">Status<span class="required"> *</span></label>
-    <select id="issue_status_id" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')" asp-items="Model.Stati" >
+    <select id="issue_status_id" asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')"  >
         <option>--- Please select ---</option>
     </select>
-
+    
     <label for="issue_priority_id">Priorität<span class="required"> *</span></label>
-    <select name="issue[priority_id]" id="issue_priority_id" asp-items="Model.Priorities">
+    <select id="issue_priority_id" asp-items="Model.Priorities" name="issue[priority_id]" >
     </select>
-
-
+    
+    
     <label for="issue_assigned_to_id">Zugewiesen an</label>
     <select name="issue[assigned_to_id]" id="issue_assigned_to_id">
         <option value="">&nbsp;</option>

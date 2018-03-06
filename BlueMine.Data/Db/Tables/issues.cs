@@ -30,6 +30,6 @@ namespace BlueMine.Db
          public bool is_private { get; set; } // bit not null
          public System.DateTime? closed_on { get; set; } // datetime NULL
     }
-
-
+    
+    
 }

@@ -75,7 +75,7 @@ namespace BlueMine.Data
             , GenericRecursor<T, TRet> y, int i)
         {
             SortDirection direction = this.m_sorts[i].Direction;
-
+            
             if (x == null && y == null)
                 return 0;
 
