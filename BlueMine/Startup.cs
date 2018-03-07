@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
 
 
 namespace BlueMine
@@ -25,8 +23,8 @@ namespace BlueMine
         {
             Configuration = configuration;
         }
-        
-        
+
+
         public IConfiguration Configuration { get; }
 
 
@@ -47,13 +45,17 @@ namespace BlueMine
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
-            services.AddSingleton<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor, Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
+            services
+                .AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor,
+                    Microsoft.AspNetCore.Http.HttpContextAccessor>();
+            services
+                .AddSingleton<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor,
+                    Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
 
             // services.AddDbContext<Db.BlueMineContext>(ServiceLifetime.Scoped);
 
             services.AddDbContext<BlueMine.Db.BlueMineContext>(
-                delegate (DbContextOptionsBuilder options)
+                delegate(DbContextOptionsBuilder options)
                 {
                     // options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
                     // options.UseNpgsql("");
@@ -71,25 +73,22 @@ namespace BlueMine
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            string virtual_directory = "/Virt_DIR";
-            virtual_directory = "/";
-
-            if (virtual_directory.EndsWith("/"))
-                virtual_directory = virtual_directory.Substring(0, virtual_directory.Length - 1);
-
-            if (string.IsNullOrWhiteSpace(virtual_directory))
+            string virtualDirectory = "/Virt_DIR";
+            virtualDirectory = "/";
+            
+            if (virtualDirectory.EndsWith("/"))
+                virtualDirectory = virtualDirectory.Substring(0, virtualDirectory.Length - 1);
+            
+            if (string.IsNullOrWhiteSpace(virtualDirectory))
                 ConfigureMapped(app, env); // Don't map if you don't have to 
-                                                     // (wonder what the framework does or does not  do for that case)
+            // (wonder what the framework does or does not  do for that case)
             else
-                app.Map(virtual_directory, 
-                    delegate (IApplicationBuilder mappedApp)
-                    {
-                        ConfigureMapped(mappedApp, env);
-                    }
+                app.Map(virtualDirectory,
+                    delegate(IApplicationBuilder mappedApp) { ConfigureMapped(mappedApp, env); }
                 );
-        }
-
-
+        } // End Sub Configure 
+        
+        
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void ConfigureMapped(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -97,9 +96,9 @@ namespace BlueMine
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseMvc();
-            
+
             app.UseStaticFiles();
             
             /*
@@ -111,7 +110,7 @@ namespace BlueMine
             });
             */
             
-        }
+        } // End Sub ConfigureMapped 
         
         
     } // End Class Startup 

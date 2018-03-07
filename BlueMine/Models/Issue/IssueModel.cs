@@ -34,8 +34,8 @@ namespace BlueMine.Models.Issue
 
         public static IssueModel FromFactory(BlueMineRepository repository, int? issueId)
         {
-            var iff = new IssueModelFactory(repository);
-            return iff.Create(issueId);
+            IssueModelFactory imf = new IssueModelFactory(repository);
+            return imf.Create(issueId);
         }
 
 

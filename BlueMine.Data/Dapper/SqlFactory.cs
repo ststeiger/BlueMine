@@ -33,7 +33,7 @@ namespace BlueMine.Data
         }
         
         
-        public static string GetConnectionString()
+        private static string GetConnectionString()
         {
             System.Data.SqlClient.SqlConnectionStringBuilder csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
             

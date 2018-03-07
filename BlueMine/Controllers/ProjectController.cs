@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using BlueMine.Models.Project;
 
 
 // For more information on enabling MVC for empty projects, 
@@ -16,6 +17,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 // http://httpjunkie.com/2014/430/custom-routing-in-mvc5-with-attributes/
 namespace BlueMine.Controllers
 {
+    
+    
     // template: "{controller=Home}/{action=Index}/{id?}");
     // [Route("[controller]/[action]/{id?}")]
     // [Route("[controller]/{a?}/{id?}")]
@@ -23,21 +26,12 @@ namespace BlueMine.Controllers
 
     public class ProjectController : Controller
     {
-        
-        private readonly BlueMine.Db.BlueMineContext m_BlueMineContext;
-        private readonly BlueMine.Data.CRUD m_Repo;
-        private readonly BlueMine.Data.Dapper.CRUD m_DapperRepo;
+        private readonly BlueMine.Db.BlueMineRepository m_repo;
 
-        private readonly BlueMine.Db.BlueMineRepository m_repi;
 
-        public ProjectController(BlueMine.Db.BlueMineContext dbContext
-            , BlueMine.Db.BlueMineRepository repi
-            )
+        public ProjectController(BlueMine.Db.BlueMineRepository repo)
         {
-            this.m_BlueMineContext = dbContext;
-            this.m_Repo = new BlueMine.Data.CRUD(dbContext);
-            this.m_DapperRepo = new BlueMine.Data.Dapper.CRUD();
-            this.m_repi = repi;
+            this.m_repo = repo;
         }
 
 
@@ -45,98 +39,42 @@ namespace BlueMine.Controllers
         public System.Collections.Generic.List<SelectListItem> LuL()
         {
             var se1 = BlueMine.Data.SortExpression<Db.T_projects>.Create(x => x.name);
-            var se2 = BlueMine.Data.SortExpression<Db.T_projects>.Create(x => x.updated_on, Data.SortDirection.Descending);
+            var se2 = BlueMine.Data.SortExpression<Db.T_projects>.Create(x => x.updated_on,
+                Data.SortDirection.Descending);
 
-            // return this.m_repi.GetFilteredSorted<Db.T_projects>(null, se1, se2);
-            // return this.m_repi.GetFilteredSorted<Db.T_projects>(null, x => x.name);
+            // return this.m_repo.GetFilteredSorted<Db.T_projects>(null, se1, se2);
+            // return this.m_repo.GetFilteredSorted<Db.T_projects>(null, x => x.name);
 
-            // return this.m_repi.GetFilteredSorted<Db.T_projects>(x => x.parent_id == 6, x => x.name);
-            // return this.m_repi.GetAll<Db.T_projects>();
+            // return this.m_repo.GetFilteredSorted<Db.T_projects>(x => x.parent_id == 6, x => x.name);
+            // return this.m_repo.GetAll<Db.T_projects>();
 
-            //return this.m_repi.GetAll<Db.T_projects>(x => x.name, y=> y.updated_on );
-
-            return this.m_repi.GetAsSelectList<Db.T_trackers>(x => x.id.ToString(), y => y.name);
+            //return this.m_repo.GetAll<Db.T_projects>(x => x.name, y=> y.updated_on );
+            
+            return this.m_repo.GetAsSelectList<Db.T_trackers>(x => x.id.ToString(), y => y.name);
         }
-
-
-        [Route("/project_dapper_Generic")]
-        public IActionResult GenericProjectsWithDapper()
-        {
-            System.Collections.Generic.List<Db.T_projects> projects = 
-                this.m_DapperRepo.GetProjects();
-
-
-            // var x = (from proj in projects where proj.parent_id != null select proj);
-            // var y = projects.Where(u => u.parent_id != null).OrderBy(z => z.id).ToList();
-
-            // @Html.DisplayFor((from prop in Model where prop.parent_id != null select prop), "T_projects")
-
-            // @Html.DisplayForModel()
-            // @Html.EditorForModel()
-
-
-            // return View(projects);
-
-            Models.Project.ProjectModel pm = 
-                new Models.Project.ProjectModel()
-            {
-                GenericTree = new BlueMine.Data.GenericRecursor<Db.T_projects, long?>(
-                      projects
-                    , x => x.parent_id
-                    , x => x.id)
-            };
-
-            // pm.GenericTree.AddSort(SortTerm<Db.T_projects>.Create(x => x.id));
-            // pm.GenericTree.AddSort(SortTerm<Db.T_projects>.Create(x => x.id, SortDirection.Descending));
-
-            //pm.GenericTree.AddSort(
-            //      SortTerm<Db.T_projects>.Create(x => x.name)
-            //    , SortTerm<Db.T_projects>.Create(x => x.created_on)
-            //    , SortTerm<Db.T_projects>.Create(x => x.id)
-            //    , SortTerm<Db.T_projects>.Create(x => x.parent_id)
-            //);
-
-            // pm.GenericTree.AddSort(x => x.name, SortDirection.Ascending);
-            // pm.GenericTree.AddSort(x => x.created_on, SortDirection.Ascending);
-            // pm.GenericTree.AddSort(x => x.id, SortDirection.Ascending);
-            // pm.GenericTree.AddSort(x => x.parent_id, SortDirection.Ascending);
-
-            pm.GenericTree.AddSort(x => x.name);
-
-            return View("GenericIndex", pm);
-        } // End Action Index 
         
-
+        
         [Route("/project")]
-        public IActionResult ProjectsWithBlueEntityFramwork()
+        public IActionResult ProjectsGeneric()
         {
-            Models.Project.ProjectModel pm = 
-                new Models.Project.ProjectModel()
-            {
-                GenericTree = this.m_Repo.GetProjectTree("")
-            };
-
-            pm.GenericTree.AddSort(x => x.name);
+            // Generic tree 
+            Models.Project.ProjectModelFactory fac = new ProjectModelFactory(this.m_repo);
+            Models.Project.ProjectModel pm = fac.Create(null);
 
             return View("GenericIndex", pm);
         } // End Action Index 
 
 
-        // Projects with dapper non-generic
         [Route("projects")]
         public IActionResult Index()
         {
-            System.Collections.Generic.List<Db.T_projects> projects =
-                this.m_DapperRepo.GetProjects();
-
-            Models.Project.ProjectModel pm = new Models.Project.ProjectModel()
-            {
-                ProjectTree = new Models.Project.ProjectRecursor(projects)
-            };
+            // Non-generic tree 
+            Models.Project.ProjectModelFactory fac = new ProjectModelFactory(this.m_repo);
+            Models.Project.ProjectModel pm = fac.Create(null);
 
             return View(pm);
         } // End Action Index 
-        
+
 
         [Route("projects/{uri}")]
         public IActionResult SpecificProject(string uri)
@@ -181,8 +119,8 @@ namespace BlueMine.Controllers
             // @model BlueMine.Models.Issue.IssueModel
 
 
-            Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repi, null);
-            
+            Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
+
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem1", im);
         }
@@ -259,8 +197,8 @@ namespace BlueMine.Controllers
             return this.Content($"<html><body><h1>Documents for project {uri}</h1></body></html>", "text/html");
         }
         
-
+        
     } // End Class ProjectController 
-
-
+    
+    
 } // End Namespace BlueMine.Controllers 

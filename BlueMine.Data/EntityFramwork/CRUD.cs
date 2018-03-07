@@ -25,13 +25,12 @@ namespace BlueMine.Data
         
         public string TestSqlGeneration(string uri)
         {
-            var ls = _context.projects.ToList();
-
+            List<T_projects> ls = _context.projects.ToList();
+            
             // https://docs.microsoft.com/en-us/ef/core/querying/raw-sql
             // _context.projects.FromSql("select * from projects");
-
-
-            var lol = (
+            
+            List<T_issues> lsIssues = (
                 from projects in _context.projects
                 from issues in _context.issues
                     .Where(issue => issue.project_id == projects.id)
@@ -84,9 +83,9 @@ namespace BlueMine.Data
         {
             var lsProjects = GetProjects(uri);
             return new BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>(
-                    lsProjects
-                  , x => x.parent_id
-                  , x => x.id);
+                  lsProjects
+                , x => x.parent_id
+                , x => x.id);
         }
         
 
