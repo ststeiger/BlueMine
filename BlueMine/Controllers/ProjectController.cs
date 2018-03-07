@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using BlueMine.Models.Project;
 
 
+
+
 // For more information on enabling MVC for empty projects, 
 // visit https://go.microsoft.com/fwlink/?LinkID=397860 
 using Microsoft.AspNetCore.Mvc;
@@ -27,11 +29,57 @@ namespace BlueMine.Controllers
     public class ProjectController : Controller
     {
         private readonly BlueMine.Db.BlueMineRepository m_repo;
+        protected Microsoft.AspNetCore.Hosting.IHostingEnvironment m_env;
 
 
-        public ProjectController(BlueMine.Db.BlueMineRepository repo)
+        public ProjectController(BlueMine.Db.BlueMineRepository repo, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             this.m_repo = repo;
+            this.m_env = env;
+        }
+
+
+        [HttpGet("/TestImage")]
+        public async Task<IActionResult> GetTestImage()
+        {
+            string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
+            string file = System.IO.Path.Combine(dir, "Waterfall.png");
+
+            System.IO.Stream image = System.IO.File.OpenRead(file);
+            return File(image, "image/jpeg");
+        }
+
+        [HttpGet("/TestImage1")]
+        public ImageResult GetTestImage1()
+        {
+            string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
+            string file = System.IO.Path.Combine(dir, "Waterfall.png");
+            return new ImageResult("image/jpeg", System.IO.File.OpenRead(file));
+        }
+
+
+        [HttpGet("Image/{id}")]
+        public IActionResult Image(int? id)
+        {
+            if (id == null)
+                return this.NotFound();
+            else
+            {
+                string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
+                string file = System.IO.Path.Combine(dir, "Waterfall.png");
+
+                byte[] imagen = System.IO.File.ReadAllBytes(file);
+                return File(imagen, "image/jpeg");
+            }
+        }
+
+
+        [HttpGet("Resize/Image/{id}")]
+        public ImageResult ResizeImageImage(int? id)
+        {
+            string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
+            string file = System.IO.Path.Combine(dir, "Waterfall.png");
+            return new ImageResult("image/png", ImageHandler.ResizeImage(file));
         }
 
 
