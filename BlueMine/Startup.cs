@@ -67,6 +67,9 @@ namespace BlueMine
 
             services.AddScoped<BlueMine.Db.BlueMineRepository>();
 
+            services.AddSingleton<ImageHandler, SixLaborsImageHandler>();
+            services.AddTransient<Services.JsonSerializer, Services.NewtonJsonSerializer>();
+            
             services.AddMvc();
         } // End Sub ConfigureServices 
 

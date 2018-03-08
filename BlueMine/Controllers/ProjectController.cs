@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using BlueMine.Models.Project;
 
 
-
-
 // For more information on enabling MVC for empty projects, 
 // visit https://go.microsoft.com/fwlink/?LinkID=397860 
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +44,7 @@ namespace BlueMine.Controllers
         }
 
 
+
         [HttpGet("/TestImage")]
         public async Task<IActionResult> GetTestImage()
         {
@@ -56,12 +55,44 @@ namespace BlueMine.Controllers
             return File(image, "image/jpeg");
         }
 
-        [HttpGet("/TestImage1")]
-        public ImageResult GetTestImage1()
+
+
+        [HttpGet("Entity/{id}")]
+        public JsonpResult GetEntity(string id)
         {
-            string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
-            string file = System.IO.Path.Combine(dir, "Waterfall.png");
-            return new ImageResult("image/jpeg", System.IO.File.OpenRead(file));
+            System.Type type = System.Type.GetType("BlueMine.Db.T_" + id + ", BlueMine");
+            if (type == null)
+                return null;
+
+
+            List<System.Type> lsProhibited = new List<System.Type>() {
+                typeof(BlueMine.Db.T_settings)
+            };
+
+            if (lsProhibited.Contains(type))
+                return null;
+            
+
+            // var ls = this.m_repo.GetAll<type>();
+            System.Type tRepo = this.m_repo.GetType();
+
+            if (tRepo == null)
+                return null;
+
+            // System.Reflection.MethodInfo getAllGeneric = tRepo.GetMethod("GetAll");
+            System.Reflection.MethodInfo getAllGeneric = tRepo.GetMethod("GetAll", new System.Type[0] { });
+            if (getAllGeneric == null)
+                return null;
+
+            System.Reflection.MethodInfo getAll = getAllGeneric.MakeGenericMethod(type);
+            if (getAll == null)
+                return null;
+
+            object ls = getAll
+                //.Invoke(this.m_repo, new object[] { 5 });
+                .Invoke(this.m_repo, null);
+
+            return new JsonpResult(ls);
         }
 
 
@@ -80,28 +111,17 @@ namespace BlueMine.Controllers
             }
         }
 
-
-        [HttpGet("Resize/Image/{id}")]
-        public ImageResult ResizeImageImage(int? id)
+        // http://localhost:55337/Image/Resize/400/400
+        [HttpGet("Image/Resize/{width:int}/{height:int?}")]
+        public ResizeImageResult ResizeImageImage(int width, int? height)
         {
+            if (!height.HasValue)
+                height = width;
+
             string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
             string file = System.IO.Path.Combine(dir, "Waterfall.png");
-            
-            return new ImageResult(delegate(Microsoft.AspNetCore.Http.HttpContext context)
-            {
-                var a = context.RequestServices.GetService(typeof(string))();
-                
-                context.Response.ContentType = SaveFormat.Png.MimeType(); // this.ContentType;
-                ImageHandler.ResizeImage(System.IO.File.OpenRead(file), 
-                    context.Response.Body, SaveFormat.Png
-                    , new System.Drawing.Size(20, 20));
-                // response.ContentLength = this.m_stream.Length;
 
-                // void foo(string file, SaveFormat format, System.Drawing.Size maxSize)
-                
-            });
-            
-            // ireturn new ImageResult("image/png", ImageHandler.ResizeImage(file, SaveFormat.Png, 2.0f));
+            return new ResizeImageResult(SaveFormat.Png, file, new System.Drawing.Size(width, height.Value));
         }
 
 

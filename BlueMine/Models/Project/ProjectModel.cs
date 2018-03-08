@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BlueMine.Models.Project
 {
-    
-    
+
 
     public class ProjectModel
     {

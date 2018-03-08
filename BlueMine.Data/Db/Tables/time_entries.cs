@@ -9,7 +9,7 @@ namespace BlueMine.Db
          public int project_id { get; set; } // int not null
          public int user_id { get; set; } // int not null
          public int? issue_id { get; set; } // int NULL
-         public System.Decimal hours { get; set; } // float not null
+         public double hours { get; set; } // float not null
          public string comments { get; set; } // nvarchar(1024) NULL
          public int activity_id { get; set; } // int not null
          public System.DateTime spent_on { get; set; } // date not null

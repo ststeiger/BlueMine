@@ -8,6 +8,7 @@
     <Compile Remove="Code\YamlSer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Code\Trash\" />
     <Folder Include="Views\Project\DisplayTemplates\" />
     <Folder Include="Views\Project\EditorTemplates\" />
   </ItemGroup>
