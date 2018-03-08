@@ -32,10 +32,17 @@ namespace BlueMine.Controllers
         protected Microsoft.AspNetCore.Hosting.IHostingEnvironment m_env;
 
 
-        public ProjectController(BlueMine.Db.BlueMineRepository repo, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public ProjectController(BlueMine.Db.BlueMineRepository repo
+            // ,Db.BlueMineContext context
+            , Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             this.m_repo = repo;
             this.m_env = env;
+
+
+            // var crud = new BlueMine.Data.CRUD(context);
+            // crud.TestSqlGeneration("");
+
         }
 
 
@@ -79,7 +86,22 @@ namespace BlueMine.Controllers
         {
             string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
             string file = System.IO.Path.Combine(dir, "Waterfall.png");
-            return new ImageResult("image/png", ImageHandler.ResizeImage(file));
+            
+            return new ImageResult(delegate(Microsoft.AspNetCore.Http.HttpContext context)
+            {
+                var a = context.RequestServices.GetService(typeof(string))();
+                
+                context.Response.ContentType = SaveFormat.Png.MimeType(); // this.ContentType;
+                ImageHandler.ResizeImage(System.IO.File.OpenRead(file), 
+                    context.Response.Body, SaveFormat.Png
+                    , new System.Drawing.Size(20, 20));
+                // response.ContentLength = this.m_stream.Length;
+
+                // void foo(string file, SaveFormat format, System.Drawing.Size maxSize)
+                
+            });
+            
+            // ireturn new ImageResult("image/png", ImageHandler.ResizeImage(file, SaveFormat.Png, 2.0f));
         }
 
 

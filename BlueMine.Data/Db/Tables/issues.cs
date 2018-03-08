@@ -22,7 +22,8 @@ namespace BlueMine.Db
          public System.DateTime? updated_on { get; set; } // datetime NULL
          public System.DateTime? start_date { get; set; } // date NULL
          public int done_ratio { get; set; } // int not null
-         public System.Decimal? estimated_hours { get; set; } // float NULL
+         // public System.Decimal? estimated_hours { get; set; } // float NULL
+         public double? estimated_hours { get; set; } // float NULL
          public int? parent_id { get; set; } // int NULL
          public int? root_id { get; set; } // int NULL
          public int? lft { get; set; } // int NULL

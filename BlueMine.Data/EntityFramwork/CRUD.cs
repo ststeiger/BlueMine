@@ -48,6 +48,9 @@ namespace BlueMine.Data
             _context.SaveChanges();
             */
 
+            int pproj = 6;
+            string projName = "bla";
+
             var lol2 = (
                 from project in _context.projects
                 join issue in _context.issues on project.id equals issue.project_id into projectIssueJoin
@@ -55,6 +58,8 @@ namespace BlueMine.Data
                 join tracker in _context.trackers on projectIssue.tracker_id equals tracker.id into
                     projectIssueTrackerJoin
                 from projectIssueTracker in projectIssueTrackerJoin.DefaultIfEmpty()
+                // where project.parent_id == pproj
+                where project.name == projName   
                 select project
                 /*from mappings in tmpMapp.DefaultIfEmpty()
                 from groups in tmpGroups.DefaultIfEmpty()
@@ -73,8 +78,7 @@ namespace BlueMine.Data
             // string sql = BlueMine.Models.IQueryableExtensions.ToSql(lol2);
             // string sql = BlueMine.Models.IQueryableExtensions1.ToSql(lol2);
             string sql = lol2.ToSql();
-            System.Console.WriteLine(sql);
-
+            
             return $"<html><body><span>{sql}</span></body></html>";
         }
         
