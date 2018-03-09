@@ -47,12 +47,12 @@ namespace BlueMine
         {
             Microsoft.AspNetCore.Http.HttpResponse response = context.HttpContext.Response;
 
-            if (this.m_data == null)
-            {
-                response.StatusCode = StatusCodes.Status500InternalServerError;
-                return;
-            }
-
+            //if (this.m_data == null)
+            //{
+            //    response.StatusCode = StatusCodes.Status500InternalServerError;
+            //    return;
+            //}
+            
             response.StatusCode = StatusCodes.Status200OK;
             response.ContentType = "application/javascript; charset=utf-8";
 

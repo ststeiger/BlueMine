@@ -71,6 +71,19 @@ namespace BlueMine
             services.AddTransient<Services.JsonSerializer, Services.NewtonJsonSerializer>();
             
             services.AddMvc();
+            
+            
+            services.Configure<Microsoft.AspNetCore.Routing.RouteOptions>(options =>
+                
+                options.ConstraintMap.Add("BlueMineTable"
+                    //, typeof(RouteConstraints.EntitiesRouteConstraint<BlueMine.Db.BlueMineContext>)
+                    ,typeof(RouteConstraints.EntitiesRouteConstraint
+                        <BlueMine.Db.BlueMineContext, 
+                            BlueMine.Db.GenericEntityFramworkRepository<BlueMine.Db.BlueMineContext>,
+                            BlueMine.Db.BlueMineRepository>)
+                    )
+            );
+            
         } // End Sub ConfigureServices 
 
 

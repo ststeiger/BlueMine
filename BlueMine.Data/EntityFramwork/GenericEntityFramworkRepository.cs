@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 
 namespace BlueMine.Db
@@ -38,6 +39,43 @@ namespace BlueMine.Db
                 .AsNoTracking()
                 .First(predicate);
         }
+        
+        
+        public TEntity FindById<TEntity>(
+            params object[] keyValues
+        ) where TEntity : class
+        {
+            // https://msdn.microsoft.com/en-us/library/gg696418%28v=vs.103%29.aspx
+            // Uses the primary key value to attempt to find an entity tracked
+            // by the context. If the entity is not in the context then a query
+            // will be executed and evaluated against the data in the data source,
+            // and null is returned if the entity is not found 
+            // in the context or in the data source.
+            return this.m_ctx.Set<TEntity>().Find(keyValues);
+        }
+        
+        
+        public object FindById(System.Type type, params object[] keyValues)
+        {
+            System.Reflection.MethodInfo getFindByIdGeneric = 
+                this.GetType().GetMethod("FindById", new System.Type[] { typeof(object[]) });
+            
+            if (getFindByIdGeneric == null)
+                return null;
+            
+            System.Reflection.MethodInfo getFindById = getFindByIdGeneric
+                .MakeGenericMethod(type);
+            
+            if (getFindById == null)
+                return null;
+                
+            object objectById = getFindById.Invoke(this, new object[]
+            {
+                (object) keyValues
+            });
+            
+            return objectById;
+        } // End Function FindById 
 
 
         public async Task<TEntity> GirstFirstAsync<TEntity>(
@@ -101,24 +139,42 @@ namespace BlueMine.Db
         {
             return GetFilteredPagedSorted(null, null, null, (BlueMine.Data.SortExpression<TEntity>[])null);
         }
-
-
-        public List<TEntity>
-        GetAll<TEntity>(params Expression<System.Func<TEntity, System.IComparable>>[] sorts)
+        
+        
+        public object GetAll(System.Type type)
+        {
+            // System.Reflection.MethodInfo getAllGeneric = tRepo.GetMethod("GetAll");
+            System.Reflection.MethodInfo getAllGeneric = this.GetType()
+                .GetMethod("GetAll", new System.Type[0] { });
+                
+            if (getAllGeneric == null)
+                return null;
+            
+            System.Reflection.MethodInfo getAll = getAllGeneric.MakeGenericMethod(type);
+            if (getAll == null)
+                return null;
+            
+            object ls = getAll.Invoke(this, null);
+            return ls;
+        }
+        
+        
+        public List<TEntity> GetAll<TEntity>(
+            params Expression<System.Func<TEntity, System.IComparable>>[] sorts)
             where TEntity : class
         {
             return GetFilteredPagedSorted(null, null, null, sorts);
         }
-
-
+        
+        
         public List<TEntity> GetAll<TEntity>(
             params BlueMine.Data.SortExpression<TEntity>[] sorts
         ) where TEntity : class
         {
             return GetFilteredPagedSorted(null, null, null, sorts);
         }
-
-
+        
+        
         public List<TEntity> GetFilteredSorted<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , params Expression<System.Func<TEntity
@@ -398,8 +454,33 @@ namespace BlueMine.Db
 
             return ls;
         } // End Function GetAsSelectList 
+        
+        
+        public List<string> ListTables()
+        {
+            List<string> lsTables = new List<string>();
+            
+            // var mapping = _context.Model.FindEntityType(typeof(string)).Relational();
+            // string schema = mapping.Schema;
+            // string tableName = mapping.TableName;
+            foreach (IEntityType et in this.m_ctx.Model.GetEntityTypes())
+            {
+                // System.Console.WriteLine(et.ClrType.Name);
+                // System.Console.WriteLine(et.ClrType.FullName);
+                // System.Console.WriteLine(et.ClrType.Assembly.FullName);
+                        
+                IRelationalEntityTypeAnnotations rel = et.Relational();
+                        
+                // string schema = rel.Schema;
+                string table = rel.TableName;
+                lsTables.Add(table);
+                // System.Console.WriteLine(schema, table);
+            } // Next et 
 
-
+            return lsTables;
+        } // End Function ListTables 
+        
+        
         public List<TEntity> GetSortedInDotNet<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , params BlueMine.Data.SortTerm<TEntity>[] sorts

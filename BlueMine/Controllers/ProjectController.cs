@@ -36,11 +36,9 @@ namespace BlueMine.Controllers
         {
             this.m_repo = repo;
             this.m_env = env;
-
-
+            
             // var crud = new BlueMine.Data.CRUD(context);
             // crud.TestSqlGeneration("");
-
         }
 
 
@@ -57,43 +55,6 @@ namespace BlueMine.Controllers
 
 
 
-        [HttpGet("Entity/{id}")]
-        public JsonpResult GetEntity(string id)
-        {
-            System.Type type = System.Type.GetType("BlueMine.Db.T_" + id + ", BlueMine");
-            if (type == null)
-                return null;
-
-
-            List<System.Type> lsProhibited = new List<System.Type>() {
-                typeof(BlueMine.Db.T_settings)
-            };
-
-            if (lsProhibited.Contains(type))
-                return null;
-            
-
-            // var ls = this.m_repo.GetAll<type>();
-            System.Type tRepo = this.m_repo.GetType();
-
-            if (tRepo == null)
-                return null;
-
-            // System.Reflection.MethodInfo getAllGeneric = tRepo.GetMethod("GetAll");
-            System.Reflection.MethodInfo getAllGeneric = tRepo.GetMethod("GetAll", new System.Type[0] { });
-            if (getAllGeneric == null)
-                return null;
-
-            System.Reflection.MethodInfo getAll = getAllGeneric.MakeGenericMethod(type);
-            if (getAll == null)
-                return null;
-
-            object ls = getAll
-                //.Invoke(this.m_repo, new object[] { 5 });
-                .Invoke(this.m_repo, null);
-
-            return new JsonpResult(ls);
-        }
 
 
         [HttpGet("Image/{id}")]
