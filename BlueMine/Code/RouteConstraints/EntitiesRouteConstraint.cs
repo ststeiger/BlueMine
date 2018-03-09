@@ -3,13 +3,13 @@ namespace BlueMine.RouteConstraints
 {
     
     
-    public class EntitiesRouteConstraint<T1, T2, T3> 
+    public class EntitiesRouteConstraint<TDbContext, TGenericRepository, TRepository> 
         : Microsoft.AspNetCore.Routing.IRouteConstraint 
-        // we need T1 to define T2
-        where T1: Microsoft.EntityFrameworkCore.DbContext
-        // we need T2 to call our function
-        where T2: BlueMine.Db.GenericEntityFramworkRepository<T1>
-        where T3: T2 // we need T3 for dependency resolution 
+        // we need TDbContext to define TGenericRepository
+        where TDbContext: Microsoft.EntityFrameworkCore.DbContext
+        // we need TGenericRepository to call our function
+        where TGenericRepository: BlueMine.Db.GenericEntityFramworkRepository<TDbContext>
+        where TRepository: TGenericRepository // we need TRepository for DI resolution 
         // TODO: Define interface for repository so EF can be dropped as dependency
     {
         
@@ -34,7 +34,8 @@ namespace BlueMine.RouteConstraints
             {
                 if (s_tables == null)
                 {
-                    T2 bmc = (T2) services.GetService(typeof(T3));
+                    TGenericRepository bmc = (TGenericRepository) 
+                        services.GetService(typeof(TRepository));
                     
                     if (bmc == null)
                     {
