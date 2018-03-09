@@ -1401,7 +1401,7 @@ namespace BlueMine.Db
             modelBuilder.Entity<T_issues_history>(entity =>
             {
 
-                entity.HasKey(e => e.isshist_uid).HasName("PK_issues_history");
+                entity.HasKey(e => e.issue_history_id).HasName("PK_issues_history");
 
 
                 entity.Property(e => e.operation_dbuser)
@@ -1416,7 +1416,7 @@ namespace BlueMine.Db
 
                 entity.Property(e => e.operation_time)
                     .HasColumnName("operation_time")
-                    .HasMaxLength(128);
+                    .HasColumnType("datetime");
 
 
                 entity.Property(e => e.id)
@@ -1531,10 +1531,10 @@ namespace BlueMine.Db
                     .HasColumnType("datetime");
 
 
-                entity.Property(e => e.isshist_uid)
+                entity.Property(e => e.issue_history_id)
                     .IsRequired()
-                    .HasColumnName("isshist_uid")
-                    .HasDefaultValueSql("(newid())");
+                    .HasColumnName("issue_history_id")
+                    ;
 
 
             });

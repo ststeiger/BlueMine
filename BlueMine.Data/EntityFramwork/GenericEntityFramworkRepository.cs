@@ -454,33 +454,46 @@ namespace BlueMine.Db
 
             return ls;
         } // End Function GetAsSelectList 
-        
-        
-        public List<string> ListTables()
+
+
+        public List<string> ListTableNames()
         {
             List<string> lsTables = new List<string>();
-            
+
             // var mapping = _context.Model.FindEntityType(typeof(string)).Relational();
             // string schema = mapping.Schema;
             // string tableName = mapping.TableName;
             foreach (IEntityType et in this.m_ctx.Model.GetEntityTypes())
             {
-                // System.Console.WriteLine(et.ClrType.Name);
-                // System.Console.WriteLine(et.ClrType.FullName);
-                // System.Console.WriteLine(et.ClrType.Assembly.FullName);
-                        
                 IRelationalEntityTypeAnnotations rel = et.Relational();
-                        
                 // string schema = rel.Schema;
                 string table = rel.TableName;
+
+                // System.Console.WriteLine(table, schema);
                 lsTables.Add(table);
-                // System.Console.WriteLine(schema, table);
             } // Next et 
 
             return lsTables;
-        } // End Function ListTables 
-        
-        
+        } // End Function ListTableNames 
+
+
+        public List<System.Type> ListClasses()
+        {
+            List<System.Type> lsTables = new List<System.Type>();
+
+            foreach (IEntityType et in this.m_ctx.Model.GetEntityTypes())
+            {
+                // System.Console.WriteLine(et.ClrType.Name);
+                // System.Console.WriteLine(et.ClrType.FullName);
+                // System.Console.WriteLine(et.ClrType.Assembly.FullName);
+
+                lsTables.Add(et.ClrType);
+            } // Next et 
+
+            return lsTables;
+        } // End Function ListClasses 
+
+
         public List<TEntity> GetSortedInDotNet<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , params BlueMine.Data.SortTerm<TEntity>[] sorts

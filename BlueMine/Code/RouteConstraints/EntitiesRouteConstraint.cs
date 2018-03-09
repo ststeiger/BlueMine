@@ -48,7 +48,7 @@ namespace BlueMine.RouteConstraints
                         System.StringComparer.InvariantCultureIgnoreCase
                     );
                     
-                    foreach (string table in bmc.ListTables())
+                    foreach (string table in bmc.ListTableNames())
                     {
                         hs.Add(table);
                     }

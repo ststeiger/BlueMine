@@ -24,8 +24,9 @@ namespace BlueMine.Controllers
             this.m_repo = repo;
             this.m_env = env;
         } // End Constructor 
+
         
-        
+        // http://localhost:55337/API/issues_history
         [Microsoft.AspNetCore.Mvc.HttpGet("API/{entity:BlueMineTable}/{id:int?}")]
         public JsonpResult GetEntity(string entity, int? id)
         {

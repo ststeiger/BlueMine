@@ -13,7 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BlueMineContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Db\TablesExtension\Recursorfix.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Db\Recursorfix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\Tables\attachments.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\Tables\auth_sources.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\Tables\boards.cs" />
@@ -75,7 +75,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\20180209175804_AddPerson.Designer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\AcmeDataContextModelSnapshot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\DbProviderFactories.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Db\TablesExtension\IssueHistoryBugFix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\SqlFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\GenericEntityFramworkRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\IQueryableExtensions.cs" />
@@ -89,13 +88,13 @@
     <None Include="$(MSBuildThisFileDirectory)SQL\Insert_T_Translations_EN.sql" />
     <None Include="$(MSBuildThisFileDirectory)SQL\List_issue_status.sql" />
     <None Include="$(MSBuildThisFileDirectory)SQL\RedmineInfo.sql" />
+    <None Include="$(MSBuildThisFileDirectory)SQL\redmine_history_trigger.sql" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)EntityFramwork\EF_Tutorial.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Db\EF\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Db\TablesExtension\" />
     <Folder Include="$(MSBuildThisFileDirectory)General\" />
   </ItemGroup>
 </Project>
