@@ -157,28 +157,6 @@ namespace BlueMine.Controllers
         }
 
 
-
-        public static List<string> GetValues(string csv)
-        {
-            List<string> ls = new List<string>();
-
-            using (System.IO.TextReader reader = new System.IO.StringReader(csv))
-            {
-                System.Tuple<IList<string>, IEnumerable<IList<string>>> data = 
-                    Data.CsvParser.ParseHeadAndTail(reader, '-', '"');
-
-                foreach (string header in data.Item1)
-                {
-                    if (!string.IsNullOrWhiteSpace(header))
-                        ls.Add(header);
-                } // Next header 
-
-            } // End Using reader 
-
-            return ls;
-        } // End Function GetValues 
-
-
         // http://localhost:55337/projects/abc/issues/new
         // http://localhost:55337/projects/abc/issues/new1
         [Route("projects/{uri}/issues/new1")]
@@ -193,11 +171,12 @@ namespace BlueMine.Controllers
             // @model BlueMine.Models.Issue.IssueModel
 
             // SELECT * FROM custom_values WHERE custom_field_id = 2
-            // SELECT * FROM custom_fields 
+            // SELECT * FROM custom_fields WHERE id = '' 
             string csv = "2,1016,7/31/2008 14:22,Geoff Dalgas,6/5/2011 22:21,http://stackoverflow.com,\"Corvallis, OR\",7679,351,81,b437f461b3fd27387c5d8ab47a293d35,34";
             csv = "--- - INTERN - \"------\" - BKB - Campus Sursee - Helvetia - Julius Bär - Post - Raiffeisen - Rockwell - RSI - SauterFM - SNB - Sonova (Phonak) - SRGSSR - Swisscom - Swisslife - SwissRe - Wincasa - Zürich";
 
-            List<string> ls = GetValues(csv);
+            List<string> ls = this.m_repo.GetValues(csv);
+            System.Console.WriteLine(ls);
 
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
 
