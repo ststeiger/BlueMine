@@ -17,11 +17,24 @@ namespace BlueMine.Db
     {
 
         protected T m_ctx;
-
-
+        
+        protected System.Reflection.MethodInfo m_getFindByIdGeneric;
+        protected System.Reflection.MethodInfo m_getAllGeneric;
+        
+        
         public GenericEntityFramworkRepository(T context)
         {
             this.m_ctx = context;
+            this.m_getFindByIdGeneric = this.GetType().GetMethod("FindById", new System.Type[] { typeof(object[]) });
+            // System.Reflection.MethodInfo getAllGeneric = this.GetType().GetMethod("GetAll");
+            this.m_getAllGeneric = this.GetType().GetMethod("GetAll", new System.Type[0] { });
+            
+            if (this.m_getFindByIdGeneric == null)
+                throw new System.InvalidProgramException();
+            
+            if (this.m_getAllGeneric == null)
+                throw new System.InvalidProgramException();
+            
         }
 
 
@@ -31,19 +44,31 @@ namespace BlueMine.Db
         // Task Update(int id, TEntity entity);
 
 
-        public TEntity GetFirst<TEntity>(
-            Expression<System.Func<TEntity, bool>> predicate
-        ) where TEntity : class
+        public TEntity GetFirst<TEntity>(Expression<System.Func<TEntity, bool>> predicate) 
+            where TEntity : class
         {
-            return this.m_ctx.Set<TEntity>()
-                .AsNoTracking()
-                .First(predicate);
+            return this.m_ctx.Set<TEntity>().AsNoTracking().First(predicate);
         }
         
         
-        public TEntity FindById<TEntity>(
-            params object[] keyValues
-        ) where TEntity : class
+        public bool RemoveById<TEntity>(params object[] keyValues) 
+            where TEntity : class
+        {
+            bool success = false;
+            
+            TEntity ea = this.m_ctx.Set<TEntity>().Find(keyValues);
+            if (ea != null)
+                success = true;
+            
+            this.m_ctx.Remove(ea);
+            this.m_ctx.SaveChanges();
+            
+            return success;
+        }
+        
+        
+        public TEntity FindById<TEntity>(params object[] keyValues) 
+            where TEntity : class
         {
             // https://msdn.microsoft.com/en-us/library/gg696418%28v=vs.103%29.aspx
             // Uses the primary key value to attempt to find an entity tracked
@@ -57,14 +82,7 @@ namespace BlueMine.Db
         
         public object FindById(System.Type type, params object[] keyValues)
         {
-            System.Reflection.MethodInfo getFindByIdGeneric = 
-                this.GetType().GetMethod("FindById", new System.Type[] { typeof(object[]) });
-            
-            if (getFindByIdGeneric == null)
-                return null;
-            
-            System.Reflection.MethodInfo getFindById = getFindByIdGeneric
-                .MakeGenericMethod(type);
+            System.Reflection.MethodInfo getFindById = this.m_getFindByIdGeneric.MakeGenericMethod(type);
             
             if (getFindById == null)
                 return null;
@@ -76,66 +94,60 @@ namespace BlueMine.Db
             
             return objectById;
         } // End Function FindById 
-
-
-        public async Task<TEntity> GirstFirstAsync<TEntity>(
-            Expression<System.Func<TEntity, bool>> predicate
-        ) where TEntity : class
+        
+        
+        public async Task<TEntity> GirstFirstAsync<TEntity>(Expression<System.Func<TEntity, bool>> predicate) 
+            where TEntity : class
         {
-            return await this.m_ctx.Set<TEntity>()
-                .AsNoTracking()
-                .FirstAsync(predicate);
+            return await this.m_ctx.Set<TEntity>().AsNoTracking().FirstAsync(predicate);
         }
-
-
+        
+        
         public TEntity GirstFirstOrDefault<TEntity>(
             Expression<System.Func<TEntity, bool>> predicate
         ) where TEntity : class
         {
-            return this.m_ctx.Set<TEntity>()
-                .AsNoTracking()
-                .FirstOrDefault(predicate);
+            return this.m_ctx.Set<TEntity>().AsNoTracking().FirstOrDefault(predicate);
         }
-
-
+        
+        
         public async Task<TEntity> GirstFirstOrDefaultAsync<TEntity>(
             Expression<System.Func<TEntity, bool>> predicate
         ) where TEntity : class
         {
-            return await this.m_ctx.Set<TEntity>()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(predicate);
+            return await this.m_ctx.Set<TEntity>().AsNoTracking().FirstOrDefaultAsync(predicate);
         }
-
-
+        
+        
         //protected int CalculatePages(int totalCount, int pageSize)
         //{
         //    return ((int)(totalCount / pageSize)) + ((totalCount % pageSize) > 0 ? 1 : 0);
         //}
-
-
+        
+        
         //public int GetNumPages<TEntity>(int pageSize) where TEntity : class
         //{
         //    int totalCount = this.m_ctx.Set<TEntity>().Count();
         //    return CalculatePages(totalCount, pageSize);
         //}
-
-
+        
+        
         protected long CalculatePages(long totalCount, long pageSize)
         {
             return ((long)(totalCount / pageSize)) + ((totalCount % pageSize) > 0 ? 1L : 0L);
         }
         
-
-        public long GetNumPages<TEntity>(long pageSize) where TEntity : class
+        
+        public long GetNumPages<TEntity>(long pageSize) 
+            where TEntity : class
         {
             long totalCount = this.m_ctx.Set<TEntity>().LongCount();
             return CalculatePages(totalCount, pageSize);
         }
-
-
-        public List<TEntity>
-        GetAll<TEntity>() where TEntity : class
+        
+        
+        public List<TEntity> GetAll<TEntity>() 
+            where TEntity : class
         {
             return GetFilteredPagedSorted(null, null, null, (BlueMine.Data.SortExpression<TEntity>[])null);
         }
@@ -143,14 +155,7 @@ namespace BlueMine.Db
         
         public object GetAll(System.Type type)
         {
-            // System.Reflection.MethodInfo getAllGeneric = tRepo.GetMethod("GetAll");
-            System.Reflection.MethodInfo getAllGeneric = this.GetType()
-                .GetMethod("GetAll", new System.Type[0] { });
-                
-            if (getAllGeneric == null)
-                return null;
-            
-            System.Reflection.MethodInfo getAll = getAllGeneric.MakeGenericMethod(type);
+            System.Reflection.MethodInfo getAll = this.m_getAllGeneric.MakeGenericMethod(type);
             if (getAll == null)
                 return null;
             
@@ -160,8 +165,8 @@ namespace BlueMine.Db
         
         
         public List<TEntity> GetAll<TEntity>(
-            params Expression<System.Func<TEntity, System.IComparable>>[] sorts)
-            where TEntity : class
+            params Expression<System.Func<TEntity, System.IComparable>>[] sorts
+            ) where TEntity : class
         {
             return GetFilteredPagedSorted(null, null, null, sorts);
         }
@@ -186,16 +191,16 @@ namespace BlueMine.Db
 
 
         public List<TEntity> GetFilteredSorted<TEntity>(
-            Expression<System.Func<TEntity, bool>> predicate
+              Expression<System.Func<TEntity, bool>> predicate
             , params BlueMine.Data.SortExpression<TEntity>[] sorts)
             where TEntity : class
         {
             return GetFilteredPagedSorted(predicate, null, null, sorts);
         }
-
-
+        
+        
         public List<TEntity> GetFilteredPagedSorted<TEntity>(
-            Expression<System.Func<TEntity, bool>> predicate
+             Expression<System.Func<TEntity, bool>> predicate
            , System.Nullable<int> pageSize
            , System.Nullable<int> page
            , params Expression<System.Func<TEntity, System.IComparable>>[] sorts
@@ -203,30 +208,30 @@ namespace BlueMine.Db
         {
             List<BlueMine.Data.SortExpression<TEntity>> ls =
                 new List<BlueMine.Data.SortExpression<TEntity>>();
-
+            
             for (int i = 0; i < sorts.Length; ++i)
             {
                 ls.Add(
                     new BlueMine.Data.SortExpression<TEntity>(sorts[i], BlueMine.Data.SortDirection.Ascending)
                 );
             } // Next i 
-
+            
             return GetFilteredPagedSorted(predicate, pageSize, page, ls.ToArray());
         }
 
 
         public List<TEntity> GetFilteredPagedSorted<TEntity>(
-            Expression<System.Func<TEntity, bool>> predicate
+              Expression<System.Func<TEntity, bool>> predicate
             , System.Nullable<int> pageSize
             , System.Nullable<int> page
             , params BlueMine.Data.SortExpression<TEntity>[] sorts
         ) where TEntity : class
         {
             IQueryable<TEntity> query = this.m_ctx.Set<TEntity>();
-
+            
             if (predicate != null)
                 query = query.Where(predicate);
-
+            
             if (sorts != null)
             {
                 //foreach (Expression<System.Func<TEntity, System.IComparable>> thisSort in sorts)
@@ -268,10 +273,10 @@ namespace BlueMine.Db
         {
             return GetAsSelectList(null, value, text, null, null, null
                 , (BlueMine.Data.SortExpression<TEntity>[])null
-                );
+            );
         }
-
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               System.Func<TEntity, string> value
             , System.Func<TEntity, string> text
@@ -280,7 +285,8 @@ namespace BlueMine.Db
         {
             return GetAsSelectList(null, value, text, null, null, null, sorts);
         }
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               System.Func<TEntity, string> value
             , System.Func<TEntity, string> text
@@ -319,7 +325,9 @@ namespace BlueMine.Db
             , System.Func<TEntity, string> text
         ) where TEntity : class
         {
-            return GetAsSelectList(predicate, value, text, null, null, null, (Expression<System.Func<TEntity, System.IComparable>>[])null);
+            return GetAsSelectList(predicate, value, text
+                , null, null, null
+                , (Expression<System.Func<TEntity, System.IComparable>>[])null);
         }
 
 
@@ -354,7 +362,8 @@ namespace BlueMine.Db
         {
             return GetAsSelectList(predicate, value, text, selected, null, null, sorts);
         }
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , System.Func<TEntity, string> value
@@ -365,8 +374,8 @@ namespace BlueMine.Db
         {
             return GetAsSelectList(predicate, value, text, selected, null, null, sorts);
         }
-
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , System.Func<TEntity, string> value
@@ -377,8 +386,8 @@ namespace BlueMine.Db
             return GetAsSelectList(predicate, value, text, selected, null, null,
                 (Expression<System.Func<TEntity, System.IComparable>>[])null);
         }
-
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , System.Func<TEntity, string> value
@@ -401,8 +410,8 @@ namespace BlueMine.Db
 
             return GetAsSelectList(predicate, value, text, selected, null, null, ls.ToArray());
         }
-
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , System.Func<TEntity, string> value
@@ -414,13 +423,13 @@ namespace BlueMine.Db
         ) where TEntity : class
         {
             IQueryable<TEntity> query = this.m_ctx.Set<TEntity>();
-
+            
             if (predicate != null)
                 query = query.Where(predicate);
-
+            
             if (sorts != null)
             {
-
+                
                 for (int i = sorts.Length - 1; i > -1; --i)
                 {
                     if (sorts[i].Direction == BlueMine.Data.SortDirection.Ascending)
@@ -428,7 +437,7 @@ namespace BlueMine.Db
                     else
                         query = query.OrderByDescending(sorts[i].Sort);
                 } // Next i 
-
+                
                 ////foreach (Expression<System.Func<TEntity, System.IComparable>> thisSort in sorts)
                 //foreach (BlueMine.Data.SortExpression<TEntity> thisSortExpression in sorts)
                 //{
@@ -437,10 +446,10 @@ namespace BlueMine.Db
                 //    else
                 //        query = query.OrderByDescending(thisSortExpression.Sort);
                 //} // Next thisSort 
-
+                
             } // End if (sorts != null) 
-
-
+            
+            
             List<SelectListItem> ls = query.AsNoTracking()
                 .Select(item => new SelectListItem()
                 {
@@ -475,8 +484,8 @@ namespace BlueMine.Db
 
             return lsTables;
         } // End Function ListTableNames 
-
-
+        
+        
         public List<System.Type> ListClasses()
         {
             List<System.Type> lsTables = new List<System.Type>();
@@ -492,8 +501,8 @@ namespace BlueMine.Db
 
             return lsTables;
         } // End Function ListClasses 
-
-
+        
+        
         public List<TEntity> GetSortedInDotNet<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , params BlueMine.Data.SortTerm<TEntity>[] sorts
@@ -566,25 +575,26 @@ namespace BlueMine.Db
 
 
         // https://stackoverflow.com/questions/37970020/entity-framework-core7-bulk-update
-        public void Delete<TEntity>(
-            Expression<System.Func<TEntity, bool>> predicate
-        ) where TEntity : class
+        public void Delete<TEntity>(Expression<System.Func<TEntity, bool>> predicate) 
+            where TEntity : class
         {
             // https://forums.asp.net/t/2077667.aspx?Update+Record+based+on+WHERE+clause+in+Entity+Framework+6
             this.m_ctx.RemoveRange(
                 this.m_ctx.Set<TEntity>().Where(predicate)
             );
         }
-
-
-        public void Update<TEntity>(TEntity entity) where TEntity : class
+        
+        
+        public void Update<TEntity>(TEntity entity) 
+            where TEntity : class
         {
             this.m_ctx.Update(entity).State = EntityState.Modified;
             this.m_ctx.SaveChanges();
         }
 
 
-        public void Update<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        public void Update<TEntity>(IEnumerable<TEntity> entities) 
+            where TEntity : class
         {
             foreach (TEntity ent in entities)
             {
@@ -593,8 +603,8 @@ namespace BlueMine.Db
 
             this.m_ctx.SaveChanges();
         }
-
-
+        
+        
         // Bulk-Update 
         public void Update<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
@@ -603,30 +613,32 @@ namespace BlueMine.Db
         {
             List<TEntity> ls = this.m_ctx.Set<TEntity>().Where(predicate).ToList();
             ls.ForEach(updateFields);
-
+            
             this.m_ctx.UpdateRange(ls);
         }
-
-
-        public void Add<TEntity>(TEntity ent) where TEntity : class
+        
+        
+        public void Add<TEntity>(TEntity ent) 
+            where TEntity : class
         {
             this.m_ctx.Add(ent).State = EntityState.Added;
             this.m_ctx.SaveChanges();
         }
-
-
-        public void Add<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        
+        
+        public void Add<TEntity>(IEnumerable<TEntity> entities) 
+            where TEntity : class
         {
             foreach (TEntity ent in entities)
             {
                 this.m_ctx.Add(ent).State = EntityState.Added;
             }
-
+            
             this.m_ctx.SaveChanges();
         }
-
-
+        
+        
     } // End  class GenericEntityFramworkRepository<T> 
-
-
-} // End Namespace BlueMine.Db
+    
+    
+} // End Namespace BlueMine.Db 
