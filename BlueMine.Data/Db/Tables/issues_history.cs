@@ -8,7 +8,7 @@ namespace BlueMine.Db
         public int issue_history_id { get; set; } // uniqueidentifier NOT NULL
         public string operation_dbuser { get; set; } // nvarchar(128) NULL
         public string operation_name { get; set; } // nvarchar(128) NULL
-        public System.DateTime? operation_time { get; set; } // nvarchar(128) NULL
+        public System.DateTime? operation_time { get; set; } // datetime NULL
         public int id { get; set; } // int not null
         public int tracker_id { get; set; } // int not null
         public int project_id { get; set; } // int not null

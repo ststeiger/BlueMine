@@ -24,28 +24,8 @@ namespace BlueMine.Controllers
             this.m_repo = repo;
             this.m_env = env;
         } // End Constructor 
+        
 
-
-        public class foo
-        {
-            public string HelloWorld = "foo";
-            public string Cia_World = "foo";
-            public string lia_World = "foo";
-            public string liaoTorld = "foo";
-            
-            
-            public string adiosWorld = "foo";
-        }
-        
-        
-        [Microsoft.AspNetCore.Mvc.HttpGet("omg")]
-        public JsonpResult GetEntity()
-        {
-            return new JsonpResult(new foo());
-        } // End Function GetEntity 
-
-        
-        
         // http://localhost:55337/API/issues_history
         [Microsoft.AspNetCore.Mvc.HttpGet("API/{entity:BlueMineTable}/{id:int?}")]
         public JsonpResult GetEntity(string entity, int? id)
