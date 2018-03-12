@@ -77,19 +77,9 @@
     
     
     <label for="issue_assigned_to_id">Zugewiesen an</label>
-    <select name="issue[assigned_to_id]" id="issue_assigned_to_id">
+    <select id="issue_assigned_to_id" asp-items="Model.Users" name="issue[assigned_to_id]" >
         <option value="">&nbsp;</option>
         <option value="5">&lt;&lt; ich &gt;&gt;</option>
-        <option value="1">COR Administrator</option>
-        <option value="13">Fabio Visconti</option>
-        <option value="6">Hanspeter Hafner</option>
-        <option value="10">Josef Zihlmann</option>
-        <option value="7">Nando Hämmerli</option>
-        <option value="9">Patrick Sprenger</option>
-        <option value="8">Rico Luder</option>
-        <option value="14">Service Desk</option>
-        <option value="5">Stefan Steiger</option>
-        <option value="12">Thomas Hartmann</option>
     </select>
 
 

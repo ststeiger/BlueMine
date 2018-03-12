@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 
+
 // https://blogs.msdn.microsoft.com/dotnet/2017/08/14/announcing-entity-framework-core-2-0/
 // https://blogs.msdn.microsoft.com/webdev/2013/10/17/attribute-routing-in-asp-net-mvc-5/
 // https://stackoverflow.com/questions/1263635/route-all-controller-actions-to-a-single-method-then-display-a-view-according-t
@@ -156,6 +157,28 @@ namespace BlueMine.Controllers
         }
 
 
+
+        public static List<string> GetValues(string csv)
+        {
+            List<string> ls = new List<string>();
+
+            using (System.IO.TextReader reader = new System.IO.StringReader(csv))
+            {
+                System.Tuple<IList<string>, IEnumerable<IList<string>>> data = 
+                    Data.CsvParser.ParseHeadAndTail(reader, '-', '"');
+
+                foreach (string header in data.Item1)
+                {
+                    if (!string.IsNullOrWhiteSpace(header))
+                        ls.Add(header);
+                } // Next header 
+
+            } // End Using reader 
+
+            return ls;
+        } // End Function GetValues 
+
+
         // http://localhost:55337/projects/abc/issues/new
         // http://localhost:55337/projects/abc/issues/new1
         [Route("projects/{uri}/issues/new1")]
@@ -169,6 +192,12 @@ namespace BlueMine.Controllers
             // @model List<SelectListItem>
             // @model BlueMine.Models.Issue.IssueModel
 
+            // SELECT * FROM custom_values WHERE custom_field_id = 2
+            // SELECT * FROM custom_fields 
+            string csv = "2,1016,7/31/2008 14:22,Geoff Dalgas,6/5/2011 22:21,http://stackoverflow.com,\"Corvallis, OR\",7679,351,81,b437f461b3fd27387c5d8ab47a293d35,34";
+            csv = "--- - INTERN - \"------\" - BKB - Campus Sursee - Helvetia - Julius Bär - Post - Raiffeisen - Rockwell - RSI - SauterFM - SNB - Sonova (Phonak) - SRGSSR - Swisscom - Swisslife - SwissRe - Wincasa - Zürich";
+
+            List<string> ls = GetValues(csv);
 
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
 

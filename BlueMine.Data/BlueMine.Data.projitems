@@ -79,6 +79,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\GenericEntityFramworkRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\IQueryableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BluemineContextExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\CsvParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\SortTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\GenericRecursor.cs" />
   </ItemGroup>
@@ -95,6 +96,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Db\EF\" />
-    <Folder Include="$(MSBuildThisFileDirectory)General\" />
   </ItemGroup>
 </Project>

@@ -24,16 +24,41 @@ namespace BlueMine.Controllers
             this.m_repo = repo;
             this.m_env = env;
         } // End Constructor 
-        
+
+
+        private static System.Type GetEntityType(string entity)
+        {
+            if (entity == null)
+                return null;
+
+            entity = entity.ToLowerInvariant();
+            System.Type type = System.Type.GetType("BlueMine.Db.T_" + entity + ", BlueMine");
+            return type;
+        }
+
+
+        [Microsoft.AspNetCore.Mvc.HttpGet("API/{entity:BlueMineTable}/Remove/{id:int}")]
+        public JsonpResult RemoveEntity(string entity, int? id)
+        {
+            System.Type type = GetEntityType(entity);
+            if (type == null)
+                return new JsonpResult(null);
+
+            if (id.HasValue)
+            {
+                this.m_repo.RemoveById(type, id.Value);
+                return new JsonpResult(1);
+            } // End if (id.HasValue) 
+
+            return new JsonpResult(null);
+        }
+
 
         // http://localhost:55337/API/issues_history
         [Microsoft.AspNetCore.Mvc.HttpGet("API/{entity:BlueMineTable}/{id:int?}")]
         public JsonpResult GetEntity(string entity, int? id)
         {
-            if (entity != null)
-                entity = entity.ToLowerInvariant();
-            
-            System.Type type = System.Type.GetType("BlueMine.Db.T_" + entity + ", BlueMine");
+            System.Type type = GetEntityType(entity);
             if (type == null)
                 return new JsonpResult(null);
             

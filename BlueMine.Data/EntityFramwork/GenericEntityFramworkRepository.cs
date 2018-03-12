@@ -50,23 +50,29 @@ namespace BlueMine.Db
             return this.m_ctx.Set<TEntity>().AsNoTracking().First(predicate);
         }
         
-        
-        public bool RemoveById<TEntity>(params object[] keyValues) 
-            where TEntity : class
+
+        public bool RemoveById(System.Type type, params object[] keyValues)
         {
             bool success = false;
-            
-            TEntity ea = this.m_ctx.Set<TEntity>().Find(keyValues);
+
+            object ea = this.FindById(type, keyValues);
             if (ea != null)
                 success = true;
-            
+
             this.m_ctx.Remove(ea);
             this.m_ctx.SaveChanges();
-            
+
             return success;
         }
-        
-        
+
+
+        public bool RemoveById<TEntity>(params object[] keyValues)
+            where TEntity : class
+        {
+            return RemoveById(typeof(TEntity), keyValues);
+        }
+
+
         public TEntity FindById<TEntity>(params object[] keyValues) 
             where TEntity : class
         {
@@ -76,6 +82,7 @@ namespace BlueMine.Db
             // will be executed and evaluated against the data in the data source,
             // and null is returned if the entity is not found 
             // in the context or in the data source.
+
             return this.m_ctx.Set<TEntity>().Find(keyValues);
         }
         

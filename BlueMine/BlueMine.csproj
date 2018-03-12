@@ -4,8 +4,12 @@
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Code\afadsf.cs" />
+    <Compile Remove="Code\CsvParser.cs" />
     <Compile Remove="Code\quick.cs" />
+    <Compile Remove="Code\TextFieldParser.cs" />
     <Compile Remove="Code\YamlSer.cs" />
+    <Compile Remove="Code\yuckie.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code\Trash\" />
