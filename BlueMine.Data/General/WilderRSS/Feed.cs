@@ -11,7 +11,7 @@ namespace WilderMinds.RssSyndication
         public System.Uri Link { get; set; }
         public string Title { get; set; }
         public string Copyright { get; set; }
-        public System.Collections.Generic.ICollection<Item> Items { get; set; }
+        public System.Collections.Generic.List<Item> Items { get; set; }
 
 
         public Feed()

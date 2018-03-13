@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>98a85f3b-7545-40e8-91ac-bcfb86ae0452</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>BlueMine.MetaWeblog</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DateTime8601.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IMetaWeblogProvider.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MetaWeblogException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MetaWeblogExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MetaWeblogMiddleware.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MetaWeblogService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Structs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XmlRpcMethodAttribute.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XmlRpcService.cs" />
+  </ItemGroup>
+</Project>

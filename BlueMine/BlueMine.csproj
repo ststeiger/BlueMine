@@ -38,4 +38,5 @@
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
   <Import Project="..\BlueMine.Data\BlueMine.Data.projitems" Label="Shared" />
+  <Import Project="..\BlueMine.MetaWeblog\BlueMine.MetaWeblog.projitems" Label="Shared" />
 </Project>

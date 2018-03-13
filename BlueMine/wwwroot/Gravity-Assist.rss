@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?> <rss version="2.0" xml:base="http://www.nasa.gov/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:media="http://search.yahoo.com/mrss/"> <channel> <title>Gravity Assist</title>
+ <description>Dr. Jim Green, NASA&#039;s director of planetary science, takes you on a guided tour of the solar system and beyond.</description>
+ <link>http://www.nasa.gov/</link>
+ <atom:link rel="self" href="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss" />
+ <language>en-us</language>
+ <image> <url>https://www.nasa.gov/sites/default/files/styles/full_width/public/thumbnails/image/gravity-assist-logo_0.jpg</url>
+ <title>Gravity Assist</title>
+ <link>http://www.nasa.gov/</link>
+</image>
+ <copyright>no copyright</copyright>
+ <managingEditor>laura.l.cantillo@nasa.gov</managingEditor>
+ <webMaster>laura.l.cantillo@nasa.gov</webMaster>
+ <itunes:subtitle>Gravity Assist audio podcast episodes</itunes:subtitle>
+ <itunes:summary>Dr. Jim Green, NASA&#039;s director of planetary science, takes you on a guided tour of the solar system and beyond.</itunes:summary>
+ <itunes:category text="Science &amp; Medicine" />
+ <itunes:keywords>NASA, podcast, nasa podcast, solar system, universe, cosmos, outer space</itunes:keywords>
+ <itunes:image href="https://www.nasa.gov/sites/default/files/thumbnails/image/gravity-assist-logo_0.jpg" />
+ <itunes:author>National Aeronautics and Space Administration (NASA)</itunes:author>
+ <itunes:explicit>no</itunes:explicit>
+ <itunes:owner> <itunes:email>laura.l.cantillo@nasa.gov</itunes:email>
+ <itunes:name>Laurie Cantillo</itunes:name>
+</itunes:owner>
+ <item> <title>Gravity Assist: Explorer 1 &amp; Jim Green’s ‘Gravity Assist’</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-explorer-1-jim-green-s-gravity-assist</link>
+ <description>The year was 1958; the space race was on. NASA’s first space satellite, Explorer 1, launched a Geiger counter and miniature tape recorder into space that registered astonishingly high radiation levels above Earth. This discovery gave humanity its first glimpse of the Van Allen radiation belts, named for James Van Allen.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_gravity_assist_jim_green_edit_3.mp3" length="54987008" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-explorer-1-jim-green-s-gravity-assist</guid>
+ <pubDate>Thu, 01 Mar 2018 13:57 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Science &amp; Science Fiction with Andy Weir</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-science-science-fiction-with-andy-weir</link>
+ <description>NASA’s Jim Green and bestselling author Andy Weir explore the fascinating intersection of science and science fiction.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/gravity_assist_andy_weir_interview_edit_4.mp3" length="57095168" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-science-science-fiction-with-andy-weir</guid>
+ <pubDate>Wed, 07 Feb 2018 09:51 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: The Kuiper Belt with Alan Stern</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-the-kuiper-belt-with-alan-stern</link>
+ <description>In this episode of Gravity Assist, Jim Green talks with New Horizons Principal Investigator Alan Stern about what we’ve learned about Kuiper Belt object 2014 MU69.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/20170925_gravity_assists_kyper_belt_edit_4.mp3" length="47714048" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-the-kuiper-belt-with-alan-stern</guid>
+ <pubDate>Wed, 31 Jan 2018 13:15 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Pluto with Alan Stern</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-pluto-with-alan-stern</link>
+ <description>In this episode of Gravity Assist, Jim Green talks with New Horizons Principal Investigator Alan Stern of the Southwest Research Institute about what the July 2015 flyby of Pluto revealed about this mysterious and diverse world.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/20170925_gravity_assists_pluto_edit_2.mp3" length="44750528" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-pluto-with-alan-stern</guid>
+ <pubDate>Wed, 24 Jan 2018 12:32 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Ice Giants (Uranus &amp; Neptune) with Amy Simon</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-ice-giants-uranus-neptune-with-amy-simon</link>
+ <description>n this episode of Gravity Assist, NASA’s Jim Green and Amy Simon discuss Uranus, Neptune, and Neptune’s intriguing moon – Triton -- and what we still have to learn about these mysterious bodies.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/20171211_gravity_assist_ice_giants_edit_4.mp3" length="39364928" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-ice-giants-uranus-neptune-with-amy-simon</guid>
+ <pubDate>Wed, 17 Jan 2018 07:26 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Saturn with Linda Spilker</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-saturn-with-linda-spilker</link>
+ <description>With me today is Dr. Linda Spilker from NASA&#039;s Jet Propulsion Laboratory.  She&#039;s the project scientist for our Cassini Mission, which as everyone knows, had a recent spectacular finale at Saturn.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/20171013_gravity_assist_saturn_edit_4.mp3" length="49318208" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-saturn-with-linda-spilker</guid>
+ <pubDate>Wed, 10 Jan 2018 07:31 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Jupiter with Jared Espley</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-jupiter-with-jared-espley</link>
+ <description>As large as 1,000 Earths, Jupiter is the heavy hitter of the solar system. Even its Great Red Spot is larger than Earth, yet it’s shrinking! In this episode of Gravity Assist, Planetary Science Director Jim Green talks with Jared Espley of NASA’s Juno mission.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/20171107_gravityassist_8_jupiter.mp3" length="51669248" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-jupiter-with-jared-espley</guid>
+ <pubDate>Wed, 03 Jan 2018 11:27 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Mars with Bruce Jakosky and Michael Meyer</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-mars-with-bruce-jakosky-and-michael-meyer</link>
+ <description>With Jim Green today is the “man about Mars,” Bruce Jakosky from the University of Colorado.  Bruce is the principal investigator of NASA&#039;s MAVEN mission. Joining them is Michael Meyer the lead Mars scientist at NASA Headquarters.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_tv_gravity_assist_6_mars.mp3" length="54657728" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-mars-with-bruce-jakosky-and-michael-meyer</guid>
+ <pubDate>Wed, 20 Dec 2017 08:55 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: The Moon with Sarah Noble</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-podcast-the-moon-with-sarah-noble</link>
+ <description>Jim Green is joined by lunar expert Sarah Noble to discuss how the Moon was formed, lava tubes and moonquakes, the “dark side of the Moon,” and mysteries we have yet to solve about Earth’s nearest neighbor.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_tv_gravity_assist_5_the_moon.mp3" length="52444928" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-podcast-the-moon-with-sarah-noble</guid>
+ <pubDate>Wed, 13 Dec 2017 09:00 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist: Earth with Tom Wagner</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-podcast-earth-with-tom-wagner</link>
+ <description>NASA not only seeks to unravel the secrets of the solar system and the universe, we have a robust program to better understand how Earth works as a system, how it’s changing, and to assist when natural disasters like hurricanes and earthquakes occur.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_tv_gravity_assist_4_the_earth.mp3" length="52863488" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-podcast-earth-with-tom-wagner</guid>
+ <pubDate>Wed, 06 Dec 2017 07:46 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist Podcast, Venus with David Grinspoon</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-podcast-venus-with-david-grinspoon</link>
+ <description>The next stop on our virtual tour is Venus, the closest planet to Earth and the hottest planet in our solar system, with surface temperatures scorching enough to melt lead.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_tv_gravity_assist_3_david_grinspoon_venus.mp3" length="58382696" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-podcast-venus-with-david-grinspoon</guid>
+ <pubDate>Wed, 29 Nov 2017 09:00 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist Podcast, Mercury with Faith Vilas</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-podcast-mercury-with-faith-vilas</link>
+ <description>Our virtual tour of the solar system continues with Mercury, the closest planet to the Sun. Since it’s tough to observe Mercury except at dawn or twilight, most of what we know about Mercury is from NASA’s Mariner 10 and MESSENGER missions.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_tv_gravity_assist_2_mercury.mp3" length="53007488" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-podcast-mercury-with-faith-vilas</guid>
+ <pubDate>Wed, 22 Nov 2017 09:00 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>Gravity Assist Podcast, The Sun with Nicky Fox</title>
+ <link>http://www.nasa.gov/mediacast/gravity-assist-podcast-the-sun-with-nicky-fox</link>
+ <description>We start our “Gravity Assist” virtual tour of the solar system with – where else – the Sun! Jim is joined by Project Scientist Dr. Nicky Fox of the Johns Hopkins University Applied Physics Lab to talk about our fascinating star and NASA’s upcoming Parker Solar Probe—a mission to “touch the Sun.”</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa_tv_gravity_assist_1_nicky_fox_the_sun.mp3" length="55736768" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/gravity-assist-podcast-the-sun-with-nicky-fox</guid>
+ <pubDate>Wed, 15 Nov 2017 10:24 EST</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+ <item> <title>NASA’s New “Gravity Assist” Podcast Debuts Nov. 15, 2017</title>
+ <link>http://www.nasa.gov/mediacast/nasa-s-new-gravity-assist-podcast-debuts-nov-15</link>
+ <description>Hi, I&#039;m Jim Green, NASA&#039;s director of planetary science. I&#039;m excited to tell you about a new podcast series. It&#039;s called NASA&#039;s Gravity Assist. Please join me as I talk with some of the greatest planetary scientists of our time.</description>
+ <enclosure url="http://www.nasa.gov/sites/default/files/atoms/audio/nasa-new-gravity-assist-podcast-debuts-nov-15.mp3" length="1447530" type="audio/mpeg" />
+ <guid isPermaLink="false">http://www.nasa.gov/mediacast/nasa-s-new-gravity-assist-podcast-debuts-nov-15</guid>
+ <pubDate>Thu, 02 Nov 2017 15:04 EDT</pubDate>
+ <source url="http://www.nasa.gov/rss/dyn/Gravity-Assist.rss">Gravity Assist</source>
+</item>
+</channel>
+</rss>

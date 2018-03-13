@@ -27,18 +27,19 @@ namespace BlueMine.Controllers
         } // End Constructor 
 
 
-        [Microsoft.AspNetCore.Mvc.HttpGet("feed")]
-        public Microsoft.AspNetCore.Mvc.IActionResult Feed()
+        [Microsoft.AspNetCore.Mvc.HttpGet("WilderFeed")]
+        public Microsoft.AspNetCore.Mvc.IActionResult WilderFeed()
         {
-            var feed = new Feed()
+
+            Feed feed = new Feed()
             {
-                Title = "Shawn Wildermuth's Blog",
-                Description = "My Favorite Rants and Raves",
-                Link = new System.Uri("http://wildermuth.com/feed"),
-                Copyright = "© 2016 Wilder Minds LLC"
+                Title = "Steve's Blog",
+                Description = "My Rants and Raves",
+                Link = new System.Uri("http://xy.com/feed"),
+                Copyright = "© " + System.DateTime.Now.Year + " XY Technologies LLC®™, All rights reserved."
             };
 
-            var license = @"<div>
+            string license = @"<div>
         <div style=""float: left;"">
           <a rel=""license"" href=""http://creativecommons.org/licenses/by-nc-nd/3.0/"">
             <img alt=""Creative Commons License"" style=""border-width: 0"" src=""http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"" /></a></div>
@@ -50,32 +51,43 @@ namespace BlueMine.Controllers
           Based on a work at <a xmlns:dct=""http://purl.org/dc/terms/"" href=""http://wildermuth.com""
             rel=""dct:source"">wildermuth.com</a>.</div>
         </div>";
-            var ad =
+            string ad =
                 @"<hr/><div>If you liked this article, see Shawn's courses on <a href=""http://shawnw.me/psauthor"">Pluralsight</a>.</div>";
 
 
-            var entries = this.m_repo.GetStories();
-
-            foreach (var entry in entries)
+            foreach (Db.BlogStory entry in this.m_repo.GetStories())
             {
-                var item = new Item()
+                Item item = new Item()
                 {
                     Title = entry.Title,
                     Body = string.Concat(entry.Body, license, ad),
                     Link = new System.Uri(new System.Uri(Request.GetEncodedUrl()), entry.Slug),
                     Permalink = new System.Uri(new System.Uri(Request.GetEncodedUrl()), entry.Slug).ToString(),
                     PublishDate = entry.DatePublished,
-                    Author = new Author() {Name = "Shawn Wildermuth", Email = "shawn@wildermuth.com"}
+                    Author = new Author() { Name = "Noobie Noob", Email = "noob@noobie.com" }
                 };
 
                 item.Categories.AddRange(entry.Categories.Split(','));
 
-
                 feed.Items.Add(item);
-            }
+            } // Next entry 
 
-            return File(System.Text.Encoding.UTF8.GetBytes(feed.Serialize()), "text/xml");
+            return File(System.Text.Encoding.UTF8.GetBytes(feed.Serialize()), "text/xml;charset=utf-8");
         }
+
+
+        [Microsoft.AspNetCore.Mvc.HttpGet("feed")]
+        public Microsoft.AspNetCore.Mvc.IActionResult Feed()
+        {
+            string fn = System.IO.Path.Combine(this.m_env.WebRootPath, "Gravity-Assist.rss");
+            Xml2CSharp.Rss rss = Tools.XML.Serialization.DeserializeXmlFromFile<Xml2CSharp.Rss>(fn);
+            // System.Console.WriteLine(rss);
+
+            string xml = Tools.XML.Serialization.SerializeToXml(rss);
+            // System.Console.WriteLine(xml);
+            
+            return new TextResult(xml, "application/rss+xml");
+        } // End Action Feed 
 
 
         private static System.Type GetEntityType(string entity)
@@ -86,7 +98,7 @@ namespace BlueMine.Controllers
             entity = entity.ToLowerInvariant();
             System.Type type = System.Type.GetType("BlueMine.Db.T_" + entity + ", BlueMine");
             return type;
-        }
+        } // End Function GetEntityType 
 
 
         [Microsoft.AspNetCore.Mvc.HttpGet("API/{entity:BlueMineTable}/Remove/{id:int}")]
@@ -103,7 +115,7 @@ namespace BlueMine.Controllers
             } // End if (id.HasValue) 
 
             return new JsonpResult(null);
-        }
+        } // End Action RemoveEntity 
 
 
         // http://localhost:55337/API/issues_history
@@ -131,6 +143,10 @@ namespace BlueMine.Controllers
 
             object ls = this.m_repo.GetAll(type);
             return new JsonpResult(ls);
-        } // End Function GetEntity 
-    } // End Class EntitiesRouteConstraint<T> 
+        } // End Action GetEntity 
+
+
+    } // End Class EntitiesController 
+
+
 } // End Namespace BlueMine.Controllers 

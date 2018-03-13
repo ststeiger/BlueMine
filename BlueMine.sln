@@ -29,6 +29,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BlueMine.Data", "BlueMine.D
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "ICSharpCode.SharpZipLib", "ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.shproj", "{DBA2FFCC-A071-4942-BC7D-6555C65CBBB8}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "BlueMine.MetaWeblog", "BlueMine.MetaWeblog\BlueMine.MetaWeblog.shproj", "{98A85F3B-7545-40E8-91AC-BCFB86AE0452}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Dapper\Dapper.projitems*{0bc120d8-0b4c-41f4-99f5-e023aa4c16f2}*SharedItemsImports = 13
@@ -36,6 +38,7 @@ Global
 		ImageSharp.Shapes\ImageSharp.Shapes.projitems*{50804626-6a55-40f1-9cc2-04b360f7b54b}*SharedItemsImports = 13
 		ImageSharp.Core\ImageSharp.Core.projitems*{5317f91f-0eb2-4cc4-938f-cbfbbc8da430}*SharedItemsImports = 13
 		ImageSharp.Fonts\ImageSharp.Fonts.projitems*{8116bb0c-aac0-48ba-859d-f768e139cb3a}*SharedItemsImports = 13
+		BlueMine.MetaWeblog\BlueMine.MetaWeblog.projitems*{98a85f3b-7545-40e8-91ac-bcfb86ae0452}*SharedItemsImports = 13
 		BlueMine.Data\BlueMine.Data.projitems*{b3a7c64f-e67e-4ad3-a250-2e8a718c2d2b}*SharedItemsImports = 13
 		ICSharpCode.SharpZipLib\ICSharpCode.SharpZipLib.projitems*{dba2ffcc-a071-4942-bc7d-6555c65cbbb8}*SharedItemsImports = 13
 		ImageSharp\ImageSharp.projitems*{e702870a-6d73-41aa-9294-36cdca62ac9b}*SharedItemsImports = 13

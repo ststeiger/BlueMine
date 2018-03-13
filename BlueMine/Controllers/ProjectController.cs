@@ -176,7 +176,7 @@ namespace BlueMine.Controllers
             csv = "--- - INTERN - \"------\" - BKB - Campus Sursee - Helvetia - Julius Bär - Post - Raiffeisen - Rockwell - RSI - SauterFM - SNB - Sonova (Phonak) - SRGSSR - Swisscom - Swisslife - SwissRe - Wincasa - Zürich";
 
             List<string> ls = this.m_repo.GetValues(csv);
-            System.Console.WriteLine(ls);
+          System.Console.WriteLine(ls);
 
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
 

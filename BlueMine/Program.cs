@@ -55,17 +55,17 @@ namespace BlueMine
         {
             // CoreyM.Collections.AATree<IpRange, Country> mytree = new CoreyM.Collections.AATree<IpRange, Country>();
 
-            
+
             //CoreyM.Collections.AATree<Country, IpRange> mytree = new CoreyM.Collections.AATree<Country, IpRange>();
-            
+
             //// mytree.Add(new IpRange(0, 5), new Country("Switzerland"));
             //// mytree.Add(new IpRange(6, 10), new Country("France"));
             //// mytree.Add(new IpRange(11, 15), new Country("Germany"));
             //// mytree.Add(new IpRange(16, 20), new Country("Italy"));
             //// mytree.Add(new IpRange(21, 255), new Country("USA"));
-            
-            
-            
+
+
+
             //mytree.Add(new Country("Switzerland"), new IpRange(0, 5));
             //mytree.Add(new Country("France"), new IpRange(6, 10));
             //mytree.Add(new Country("Germany"), new IpRange(11, 15));
@@ -74,20 +74,20 @@ namespace BlueMine
 
 
             // var res = mytree[new IpRange(21, 255)];
-            
+
             // var res = mytree[123];
             // 255 => 0 => 0 => 1
             // 255 * 255 * 255 * 255 => range // 15+ gb
-            
+
             // 0-255 ==> all that have this
             // all that have start=>cidr
             // cidr ranges
-            
-            
+
+
             // 227 => 0 => 0 => 1
-            
+
             // OfficeOpenXml.OpenDocumentSpreadsheet.OdsReaderWriter.Test();
-            
+
             BuildWebHost(args).Run();
         } // End Sub Main 
 
