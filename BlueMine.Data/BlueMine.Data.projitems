@@ -80,6 +80,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\IQueryableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BluemineContextExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\CsvParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\RSS\Author.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\RSS\Feed.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\RSS\Item.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\SortTerm.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\GenericRecursor.cs" />
   </ItemGroup>

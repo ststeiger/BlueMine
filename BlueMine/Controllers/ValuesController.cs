@@ -27,8 +27,9 @@ namespace BlueMine.Controllers
             this.m_Repo = new BlueMine.Data.CRUD(dbContext);
             this.m_DapperRepo = new BlueMine.Data.Dapper.CRUD();
         }
-
-
+        
+        
+        
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
@@ -64,9 +65,9 @@ namespace BlueMine.Controllers
         public void Delete(int id)
         {
         }
-
-
+        
+        
     } // End Class ValuesController : Controller 
-
-
+    
+    
 } // End Namespace BlueMine.Controllers 
