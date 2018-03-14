@@ -52,22 +52,33 @@ namespace BlueMine
     {
 
 
-        public static void Main(string[] args)
+        public static Guid ToGuid(ulong a, ulong b)
         {
-            ulong a = 0;
-            ulong b = 1;
-            
+            byte[] bytes = new byte[16];
             byte[] aa = System.BitConverter.GetBytes(a);
             byte[] bb = System.BitConverter.GetBytes(b);
-            byte[] ba = new byte[16];
-            System.Array.Copy(aa, 0, ba, 0, 8);
-            System.Array.Copy(bb, 0, ba, 8, 8);
+
+            System.Array.Copy(aa, 0, bytes, 0, 8);
+            System.Array.Copy(bb, 0, bytes, 8, 8);
+
+            return new System.Guid(bytes);
+        }
+
+        public static Guid ToGuid(ulong a)
+        {
+            return ToGuid(0, a);
+        }
+        
+
+        public static void Main(string[] args)
+        {
+            // string aaa = ToGuid(1).ToString();
+            string aaa = ToGuid(1).ToString();
             
-            string aaa = new System.Guid(ba).ToString();
             System.Console.WriteLine(aaa);
-            
-            
-            EntitiesController.Num2Hex(999, 16);
+
+            System.Guid g = new iCaramba.UInt128(111999).ToGuid();
+            System.Console.WriteLine(g);
             
             
             // CoreyM.Collections.AATree<IpRange, Country> mytree = new CoreyM.Collections.AATree<IpRange, Country>();

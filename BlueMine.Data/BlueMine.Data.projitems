@@ -80,6 +80,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\IQueryableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BluemineContextExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\CsvParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\UInt128.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\RSS\aaaaaaaa.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\RSS\CustomDate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\RSS\RSS.cs" />

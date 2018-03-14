@@ -28,8 +28,8 @@ namespace BlueMine.Controllers
             this.m_repo = repo;
             this.m_env = env;
         } // End Constructor 
-        
-        
+
+
         [Microsoft.AspNetCore.Mvc.HttpGet("WilderFeed")]
         public Microsoft.AspNetCore.Mvc.IActionResult WilderFeed()
         {
@@ -41,8 +41,8 @@ namespace BlueMine.Controllers
                 Link = new System.Uri("http://xy.com/feed"),
                 Copyright = "© " + System.DateTime.Now.Year + " XY Technologies LLC®™, All rights reserved."
             };
-            
-            
+
+
             string license = @"<div>
         <div style=""float: left;"">
           <a rel=""license"" href=""http://creativecommons.org/licenses/by-nc-nd/3.0/"">
@@ -57,8 +57,8 @@ namespace BlueMine.Controllers
         </div>";
             string ad =
                 @"<hr/><div>If you liked this article, see Shawn's courses on <a href=""http://shawnw.me/psauthor"">Pluralsight</a>.</div>";
-            
-            
+
+
             foreach (Db.BlogStory entry in this.m_repo.GetStories())
             {
                 Item item = new Item()
@@ -70,84 +70,27 @@ namespace BlueMine.Controllers
                     PublishDate = entry.DatePublished,
                     Author = new Author() { Name = "Noobie Noob", Email = "noob@noobie.com" }
                 };
-                
+
                 item.Categories.AddRange(entry.Categories.Split(','));
-                
+
                 feed.Items.Add(item);
             } // Next entry 
-            
+
             return File(System.Text.Encoding.UTF8.GetBytes(feed.Serialize()), "text/xml;charset=utf-8");
         }
-        
-        
-        
-        public static string Num2Hex(ulong num, ulong @base)
-        {
-            string retValue = null;
-            string latinBase = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            if((int)@base > latinBase.Length)
-                throw new System.ArgumentException("Base value not supported.");
-            
-            /* 
-            // 0A3555D7-9986-4CAC-A295-1492A59BFF8B
-            // 8 - 4 - 4 -4 - 12
-            // {8, 13, 18, 23}
-            
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-            int i = 0;
-            
-            do
-            {
-                char c = latinBase[(int)(num % @base)];
-                sb.Insert(0, c);
-                num = num/@base;
-                ++i;
-                
-                if (i == 8 || i == 13 || i == 18 || i == 23)
-                {
-                    sb.Insert(0, '-');
-                    ++i;
-                }
-                
-            } while( num > 0);
-            
-            retValue = sb.ToString();
-            sb.Clear();
-            sb = null;
-            */
-            
-            
-            char[] result = new char[36];
-            // for (int i = 35; i > -1; --i)
-            for(int i = 0; i < 36; ++i)
-            {
-                if (i == 8 || i == 13 || i == 18 || i == 23)
-                {
-                    result[i] = '-';
-                    continue;
-                }
-                
-                result[i] = latinBase[(int)(num % @base)];
-                num = num/@base;
-            }
-            
-            retValue = new String(result);
-            return retValue;
-        }
-        
-        
-        
+
+
         [Microsoft.AspNetCore.Mvc.HttpGet("feed")]
         public Microsoft.AspNetCore.Mvc.IActionResult Feed()
         {
             string fn = System.IO.Path.Combine(this.m_env.WebRootPath, "Gravity-Assist.rss");
             Xml2CSharp.Rss rss2 = Tools.XML.Serialization.DeserializeXmlFromFile<Xml2CSharp.Rss>(fn);
             // System.Console.WriteLine(rss);
-            
-            
-            
+
+
+
             Xml2CSharp.Rss rss = new Rss();
-            
+
             rss.Channel = new Channel();
             rss.Channel.Author = "FooFoo";
             rss.Channel.Category = new Category();
@@ -163,23 +106,26 @@ namespace BlueMine.Controllers
             rss.Channel.Image.Link2 = "https.//google.com";
             {
             }
-            
+
             rss.Channel.Items.Add(
                 new Xml2CSharp.Item()
                 {
-                    PubDate = System.DateTime.Now, Title = "someTitle"
-                    , Description = "", CommentRss = "", 
-                }    
+                    PubDate = System.DateTime.Now,
+                    Title = "someTitle"
+                    ,
+                    Description = "",
+                    CommentRss = "",
+                }
             );
-            
-            
+
+
             string xml = Tools.XML.Serialization.SerializeToXml(rss);
             // System.Console.WriteLine(xml);
-            
+
             return new TextResult(xml, "application/rss+xml");
         } // End Action Feed 
-        
-        
+
+
         private static System.Type GetEntityType(string entity)
         {
             if (entity == null)
