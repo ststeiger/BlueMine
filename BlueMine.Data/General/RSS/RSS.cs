@@ -353,12 +353,14 @@ namespace Xml2CSharp
 
         [XmlElement(ElementName = "item")]
         public System.Collections.Generic.List<Item> Items { get; set; }
+            = new System.Collections.Generic.List<Item>();
     }
 
     //[XmlRoot(ElementName = "rss", Namespace = "urn:Abracadabra", IsNullable = true)]
     [XmlRoot(ElementName = "rss")]
     public class Rss
     {
+        /*
         [XmlNamespaceDeclarations]
         public XmlSerializerNamespaces Namespaces
         {
@@ -379,8 +381,8 @@ namespace Xml2CSharp
             // Add any other namespaces, with prefixes, here.
         });
         }
-
-
+        */
+        
         [XmlElement(ElementName = "channel")]
         public Channel Channel { get; set; }
 

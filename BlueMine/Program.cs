@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using BlueMine.Controllers;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +54,22 @@ namespace BlueMine
 
         public static void Main(string[] args)
         {
+            ulong a = 0;
+            ulong b = 1;
+            
+            byte[] aa = System.BitConverter.GetBytes(a);
+            byte[] bb = System.BitConverter.GetBytes(b);
+            byte[] ba = new byte[16];
+            System.Array.Copy(aa, 0, ba, 0, 8);
+            System.Array.Copy(bb, 0, ba, 8, 8);
+            
+            string aaa = new System.Guid(ba).ToString();
+            System.Console.WriteLine(aaa);
+            
+            
+            EntitiesController.Num2Hex(999, 16);
+            
+            
             // CoreyM.Collections.AATree<IpRange, Country> mytree = new CoreyM.Collections.AATree<IpRange, Country>();
 
 
