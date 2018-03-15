@@ -16,6 +16,89 @@ namespace BlueMine.Data
         private ulong High;
 
 
+        /*
+        private static uint int2uint_old(int a)
+        {
+            int sign = System.Math.Sign(a);
+            uint val = (uint) System.Math.Abs(a);
+
+            uint unsignedValue;
+            if(sign > 0) // +a
+                unsignedValue = unchecked(uint.MaxValue + val + 1);
+            else // -a, a=0
+                unsignedValue = unchecked(uint.MaxValue - val + 1);
+
+            return unsignedValue;
+        }
+
+
+        private static uint int2uint(int a)
+        {
+            int sign = a < 0 ? -1 : (a > 0 ? 1 : 0);
+            uint val = (uint) (sign == -1 ? -1 * a : a);
+            
+            uint unsignedValue;
+            if(sign > 0) // +a
+                unsignedValue = unchecked(uint.MaxValue + val + 1);
+            else // -a, a=0
+                unsignedValue = unchecked(uint.MaxValue - val + 1);
+
+            return unsignedValue;
+        }
+        
+        
+
+        private static ulong long2ulong(long a)
+        {
+            int sign = a < 0 ? -1 : (a > 0 ? 1 : 0);
+            ulong val = (ulong) (sign == -1 ? -1 * a : a);
+            
+            ulong unsignedValue;
+            if(sign > 0) // +a
+                unsignedValue = unchecked(ulong.MaxValue + val + 1);
+            else // -a, a=0
+                unsignedValue = unchecked(ulong.MaxValue - val + 1);
+
+            return unsignedValue;
+        }
+        */
+        
+        
+        //long2ulong
+        
+        public static long MapULongToLong(ulong ulongValue)
+        {
+            return unchecked((long)ulongValue + long.MinValue);
+        }
+
+        public static ulong MapLongToUlong(long longValue)
+        {
+            return unchecked((ulong)(longValue - long.MinValue));
+        }
+        
+        
+        
+        public long LowSigned
+        {
+            get { return MapULongToLong(this.Low); }
+        }
+        
+        
+        public long HighSigned
+        {
+            get { return MapULongToLong(this.High); }
+        }
+        
+        
+        public static UInt128 FromSignedValues(long low, long high)
+        {
+            ulong ulow = MapLongToUlong(low);
+            ulong uhigh = MapLongToUlong(high);
+            
+            return new UInt128(ulow, uhigh);
+        }
+        
+        
         public UInt128(ulong low, ulong high)
         {
             this.Low = low;
