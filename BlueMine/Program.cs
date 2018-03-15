@@ -53,34 +53,7 @@ namespace BlueMine
         
         
         public static void Main(string[] args)
-        {            
-            iCaramba.TestClass.Test();
-
-            
-            // iCaramba.UInt128.DivMod(5, 3);
-            var five = new iCaramba.UInt128(5);
-            var three = new iCaramba.UInt128(3);
-            var product = five % three;
-
-            
-            var big = new iCaramba.UInt128("007067254035709164129995914892622964742");
-            var bigUID = big.MyGuid();
-            
-            
-            System.Console.WriteLine("", five, three, product, bigUID);
-            
-            
-            iCaramba.UInt128 a = new iCaramba.UInt128(256) + 3;
-            // a = iCaramba.UInt128.Square(a);
-            
-            System.Console.WriteLine(a);
-            
-            string g = new iCaramba.UInt128(1).ToGuid2().ToString();
-            //g = iCaramba.UInt128.MinValue.ToGuid2().ToString();
-            g = new iCaramba.UInt128(16777216-1).ToGuid2().ToString();            
-            System.Console.WriteLine(g);            
-            
-            
+        {
             // CoreyM.Collections.AATree<IpRange, Country> mytree = new CoreyM.Collections.AATree<IpRange, Country>();
 
 
