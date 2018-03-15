@@ -1,43 +1,219 @@
 ﻿
 // https://www.codeproject.com/Tips/785014/UInt-Division-Modulus
 
+using System.Linq;
+
+
 namespace iCaramba
 {
+    
+    
+    [System.Diagnostics.DebuggerDisplay("Rand: {nameof(m_rand)}")]
+    public class BigRandom
+    {
+        protected System.Random m_rand;
+        
+        
+        public BigRandom()
+        {
+            this.m_rand = new System.Random();
+        }
+        
+        
+        public double NextDouble()
+        {
+            return this.m_rand.NextDouble();
+        }
+        
+        
+        public byte[] NextBytes(int length)
+        {
+            byte[] buf = new byte[length];
+            this.m_rand.NextBytes(buf);
+            return buf;
+        }
+        
+        
+        public int NextInt()
+        {
+            byte[] buf = new byte[4];
+            this.m_rand.NextBytes(buf);
+            return System.BitConverter.ToInt32(buf, 0);
+        }
+        
+        
+        public int NextInt(int min, int max)
+        {
+            int intRand = this.NextInt();
+            
+            return (System.Math.Abs(intRand % (max - min)) + min);
+        }
+        
+        
+        public uint NextUInt()
+        {
+            byte[] buf = new byte[4];
+            this.m_rand.NextBytes(buf);
+            return System.BitConverter.ToUInt32(buf, 0);
+        }
+        
+        
+        public uint NextUInt(uint min, uint max) 
+        {
+            uint uintRand = this.NextUInt();
+            
+            return (uintRand % (max - min) + min);
+        }
+        
+        
+        public long NextLong()
+        {
+            byte[] buf = new byte[8];
+            this.m_rand.NextBytes(buf);
+            return System.BitConverter.ToInt64(buf, 0);
+        }
+        
+        
+        public long NextLong(long min, long max) 
+        {
+            long longRand = this.NextLong();
+            return (System.Math.Abs(longRand % (max - min)) + min);
+        }
+        
+        
+        public ulong NextULong()
+        {
+            byte[] buf = new byte[8];
+            this.m_rand.NextBytes(buf);
+            return System.BitConverter.ToUInt64(buf, 0);
+        }
+
+
+        public ulong NextULong(ulong min, ulong max) 
+        {
+            ulong ulongRand = this.NextULong();
+            
+            return (ulongRand % (max - min) + min);
+        }
+        
+        
+        public UInt128 NextUInt128()
+        {
+            byte[] buf1 = new byte[8];
+            byte[] buf2 = new byte[8];
+            
+            this.m_rand.NextBytes(buf1);
+            this.m_rand.NextBytes(buf2);
+            
+            ulong ulong1 = System.BitConverter.ToUInt64(buf1, 0);
+            ulong ulong2 = System.BitConverter.ToUInt64(buf2, 0);
+            
+            return new UInt128(ulong1, ulong2);
+        }
+        
+        
+        public UInt128 NextUInt128(UInt128 min, UInt128 max) 
+        {
+            UInt128 uintRand = this.NextUInt128();
+            
+            return (uintRand % (max - min) + min);
+        }
+        
+        
+    }
+
+
 
     public class TestClass 
     {
-
-
+        
+        
         public static void Test()
         {
-            System.Collections.Generic.List<System.Guid> ls = new System.Collections.Generic.List<System.Guid>();
-            for(int i = 0; i < 100; ++i)
-                ls.Add(System.Guid.NewGuid());
-
+            BigRandom rand = new BigRandom();
+            
+            System.Collections.Generic.List<System.Guid> ls = 
+                new System.Collections.Generic.List<System.Guid>();
+            
+            System.Collections.Generic.List<UInt128> lsUint = 
+                new System.Collections.Generic.List<UInt128>();
+            
+            
+            for (int i = 0; i < 100; ++i)
+            {
+                UInt128 ui = rand.NextUInt128();
+                lsUint.Add(ui);             
+                ls.Add(ui.MyGuid());
+            }
+            
             ls.Sort(Compare);
+            
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            
+            sb.AppendLine(";WITH CTE AS (");
+
+            int padLen = UInt128.MaxValue.ToString().Length;
+            
+            for (int i = 0; i < ls.Count; ++i)
+            {
+                if(i==0)
+                    sb.Append("          ");
+                else
+                    sb.Append("UNION ALL ");
+                
+                sb.Append("SELECT CAST('");
+                sb.Append(ls[i].ToString());
+                sb.Append("' AS uniqueidentifier) AS uid, '");
+                
+                sb.Append(lsUint[i].ToString().PadLeft(padLen, '0'));
+                sb.Append("' AS num ");
+                
+                sb.AppendLine(System.Environment.NewLine);
+            }
+
+
+            sb.AppendLine(@"
+) 
+SELECT 
+     * 
+    ,ROW_NUMBER() OVER(ORDER BY uid) AS rnUid 
+    ,ROW_NUMBER() OVER(ORDER BY num) AS rnNum 
+FROM CTE 
+ORDER BY uid 
+-- ORDER BY num 
+");
+            
+            
+            
+            string s = sb.ToString();
+            sb.Clear();
+            sb = null;
+            
+            System.Console.WriteLine(ls);
+            System.Console.WriteLine(s);
         }
         
-
+        
         public static int Compare(System.Guid x, System.Guid y)
         {
             const int NUM_BYTES_IN_GUID = 16;
             byte byte1, byte2;
-
+            
             byte[] xBytes = new byte[NUM_BYTES_IN_GUID];
             byte[] yBytes = new byte[NUM_BYTES_IN_GUID];
-
+            
             x.ToByteArray().CopyTo(xBytes, 0);
             y.ToByteArray().CopyTo(yBytes, 0);
-
+            
             int[] byteOrder = new int[16] // 16 Bytes = 128 Bit 
                 {10, 11, 12, 13, 14, 15, 8, 9, 6, 7, 4, 5, 0, 1, 2, 3};
-
-
-            //Swap to the correct order to be compared
+            
+            // Swap to the correct order to be compared
             for (int i = 0; i < NUM_BYTES_IN_GUID; i++)
             {
                 byte1 = xBytes[byteOrder[i]];
                 byte2 = yBytes[byteOrder[i]];
+                
                 if (byte1 != byte2)
                 {
                     int num = (byte1 < byte2) ? -1 : 1;
@@ -45,7 +221,8 @@ namespace iCaramba
                     yBytes = null;
                     byteOrder = null;
                     return num;
-                }
+                } // End if (byte1 != byte2) 
+                
             } // Next i 
 
             xBytes = null;
@@ -139,12 +316,12 @@ namespace iCaramba
             EQ = 0, // itemA occurs in the same position as itemB in the sort order.
             GT = 1 // itemA follows itemB in the sort order.
         }
-
-
+        
+        
         public int Compare(SqlGuid x, SqlGuid y)
         {
             byte byte1, byte2;
-
+            
             //Swap to the correct order to be compared
             for (int i = 0; i < NUM_BYTES_IN_GUID; i++)
             {
@@ -153,17 +330,17 @@ namespace iCaramba
                 if (byte1 != byte2)
                     return (byte1 < byte2) ?  (int) EComparison.LT : (int) EComparison.GT;
             } // Next i 
-
+            
             return (int) EComparison.EQ;
         }
         
-
+        
         int System.Collections.Generic.IComparer<SqlGuid>.Compare(SqlGuid x, SqlGuid y)
         {
             return this.Compare(x, y);
         }
-
-
+        
+        
         public bool Equals(SqlGuid other)
         {
             return Compare(this, other) == 0;
@@ -182,14 +359,14 @@ namespace iCaramba
 
     public class UInt128
         : System.IComparable
-        , System.IComparable<UInt128>
-        , System.Collections.Generic.IComparer<UInt128>
-        , System.IEquatable<UInt128>
+            , System.IComparable<UInt128>
+            , System.Collections.Generic.IComparer<UInt128>
+            , System.IEquatable<UInt128>
     {
-        
+
         private ulong Low;
         private ulong High;
-        
+
 
         public UInt128(ulong high, ulong low)
         {
@@ -199,159 +376,125 @@ namespace iCaramba
 
 
         public UInt128(UInt128 number)
-            :this(number.High, number.Low)
+            : this(number.High, number.Low)
         { } // End Constructor 
-
-
+        
+        
         public UInt128(ulong low)
             : this(0, low)
-        { } //
-
+        { } //End Constructor 
+        
 
         public UInt128(uint low)
             : this(0, low)
         { } //End Constructor 
-
+        
+        
+        public UInt128(int low)
+            : this(0, (uint)low)
+        { } //End Constructor 
+        
+        public UInt128(long low)
+            : this(0, (ulong) low)
+        { } //End Constructor 
+        
+        
         public UInt128()
             : this(0, 0)
         { } // End Constructor 
-
-        // https://github.com/eteran/cpp-utilities/blob/master/uint128.h
-        public UInt128(string sz, uint radix) 
-            : this(0, 0)
+        
+        
+        private static int CharToInt(char ch, uint radix)
         {
-
-            // do we have at least one character?
-            if (sz != string.Empty)
+            int n = -1;
+            
+            if (ch >= 'A' && ch <= 'Z')
             {
-                bool minus = false;
-
-                // auto i = sz.begin();
-                int i = 0;
-
-                // check for minus sign, i suppose technically this should only apply
-                // to base 10, but who says that -0x1 should be invalid?
-                if (sz[i] == '-')
+                if (((ch - 'A') + 10) < radix)
                 {
-                    ++i;
-                    minus = true;
+                    n = ( ch - 'A') + 10;
                 }
-
-                // check if there is radix changing prefix (0 or 0x)
-                //if(i != sz.end()) {
-                if (i != sz.Length)
+                else
                 {
-                    if (sz[i] == '0')
-                    {
-                        radix = 8;
-                        ++i;
-                        //if(i != sz.end()) {
-                        if (i != sz.Length)
-                        {
-                            if (sz[i] == 'x')
-                            {
-                                radix = 16;
-                                ++i;
-                            }
-                        }
-                    }
-
-                    //while(i != sz.end()) {
-                    while (i != sz.Length)
-                    {
-                        uint n;
-                        char ch = sz[i];
-
-                        if (ch >= 'A' && ch <= 'Z')
-                        {
-                            if (((ch - 'A') + 10) < radix)
-                            {
-                                n = ((uint)ch - 'A') + 10;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        else if (ch >= 'a' && ch <= 'z')
-                        {
-                            if (((ch - 'a') + 10) < radix)
-                            {
-                                n = ((uint)ch - 'a') + 10;
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        else if (ch >= '0' && ch <= '9')
-                        {
-                            if ((ch - '0') < radix)
-                            {
-                                n = ((uint)ch - '0');
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            // completely invalid character
-                            break;
-                        }
-
-                        // // (*this) *= radix;
-                        // this = this * (UInt128)radix;
-                        UInt128 copy1 = this * (UInt128)radix;
-                        this.Low = copy1.Low;
-                        this.High = copy1.High;
-                        
-                        // //(*this) += n;
-                        // this = this + n;
-                        UInt128 copy2 = this * n;
-                        this.Low = copy2.Low;
-                        this.High = copy2.High;
-
-                        ++i;
-                    }
-                }
-
-                // if this was a negative number, do that two's compliment madness :-P
-                if (minus)
-                {
-                    //*this = -*this;
-                    // this = -this;
-                    throw new System.Exception("UInt doesn't allow negative numbers.");
+                    throw new System.InvalidOperationException("Char c ∈ [A, Z] but radix < c");
                 }
             }
-
-        } // End UInt128 - constructor 
-
-
+            else if (ch >= 'a' && ch <= 'z')
+            {
+                if (((ch - 'a') + 10) < radix)
+                {
+                    n = (ch - 'a') + 10;
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("Char c ∈ [a, z] but radix < c");
+                }
+            }
+            else if (ch >= '0' && ch <= '9')
+            {
+                if ((ch - '0') < radix)
+                {
+                    n = (ch - '0');
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("Char c ∈ [0, 9] but radix < c");
+                }
+            }
+            else
+            {
+                throw new System.InvalidOperationException("Completely invalid character");
+            }
+            
+            return n;
+        } // End Function CharToInt 
+        
+        
+        public UInt128(string sz, uint radix)
+            : this(0, 0)
+        {
+            sz = sz.TrimStart(' ', '\t', '0');
+            sz = sz.TrimEnd(' ', '\t');
+            
+            if (sz[sz.Length-1] == '-')
+            {
+                throw new System.Exception("UInt128 doesn't allow negative numbers.");
+            } // End if (sz[sz.Length-1] == '-')
+            
+            UInt128 value = new UInt128();
+            
+            uint j = 0;
+            for (int i = sz.Length - 1; i > -1; --i)
+            {
+                int d = CharToInt(sz[i], radix);
+                UInt128 digitValue = d * Power(radix, j);
+                value += digitValue;
+                j++;
+            } // Next i 
+            
+            this.Low = value.Low;
+            this.High = value.High;
+        } // End Constructor 
+        
+        
         public UInt128(string sz)
             : this(sz, 10)
-        { }
+        {
+        }
 
 
         public static UInt128 MaxValue
         {
-            get
-            {
-                return new UInt128(ulong.MaxValue, ulong.MaxValue);
-            }
+            get { return new UInt128(ulong.MaxValue, ulong.MaxValue); }
         }
 
 
         public static UInt128 MinValue
         {
-            get
-            {
-                return new UInt128(ulong.MinValue, ulong.MinValue);
-            }
+            get { return new UInt128(ulong.MinValue, ulong.MinValue); }
         }
-
-
+        
+        
         // http://stackoverflow.com/questions/11656241/how-to-print-uint128-t-number-using-gcc#answer-11659521
         public override string ToString()
         {
@@ -360,7 +503,7 @@ namespace iCaramba
             uint i, j, m = 39;
             for (i = 64; i-- > 0;)
             {
-                int usi = (int)i;
+                int usi = (int) i;
                 // UInt128 n = value;
                 // int carry = !!(n & ((UInt128)1 << i));
                 ulong carry = (this.High & (1UL << usi));
@@ -372,14 +515,15 @@ namespace iCaramba
                 {
                     ulong d = 2 * buf[j] + carry;
                     carry = d > 9 ? 1UL : 0UL;
-                    buf[j] = carry != 0 ? (char)(d - 10) : (char)d;
+                    buf[j] = carry != 0 ? (char) (d - 10) : (char) d;
                 } // Next j 
+
                 m = j;
             } // Next i 
 
             for (i = 64; i-- > 0;)
             {
-                int usi = (int)i;
+                int usi = (int) i;
                 ulong carry = (this.Low & (1UL << usi));
                 carry = carry != 0 ? 1UL : 0UL; // ToBool
                 carry = carry == 0 ? 1UL : 0UL; // ! 
@@ -389,8 +533,9 @@ namespace iCaramba
                 {
                     ulong d = 2 * buf[j] + carry;
                     carry = d > 9 ? 1UL : 0UL;
-                    buf[j] = carry != 0 ? (char)(d - 10) : (char)d;
+                    buf[j] = carry != 0 ? (char) (d - 10) : (char) d;
                 } // Next j 
+
                 m = j;
             } // Next i 
 
@@ -416,45 +561,44 @@ namespace iCaramba
             sb = null;
             return s;
         } // End Function ToString 
-
-
+        
+        
         public string ToAnyBase(ulong @base)
         {
             UInt128 num = new UInt128(this);
-
+            
             string retValue = null;
             string latinBase = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            if ((int)@base > latinBase.Length)
+            if ((int) @base > latinBase.Length)
                 throw new System.ArgumentException("Base value not supported.");
-
+            
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
+            
             do
             {
-                char c = latinBase[(int)(num % @base)];
+                char c = latinBase[(int) (num % @base)];
                 sb.Insert(0, c);
                 num = num / @base;
             } while (num > 0);
-
+            
             retValue = sb.ToString();
             sb.Clear();
             sb = null;
-
+            
             return retValue;
         }
-
-
-
+        
+        
         public string ToGuidString(bool ascending)
         {
             ulong @base = 16;
             UInt128 num = new UInt128(this);
-
+            
             string retValue = null;
             string latinBase = "0123456789ABCDEF";
             
             char[] result = new char[36];
-
+            
             
             if (ascending)
             {
@@ -464,11 +608,11 @@ namespace iCaramba
                     {
                         result[i] = '-';
                         continue;
-                    }
+                    } // End if 
 
-                    result[i] = latinBase[(int)(num % @base)];
+                    result[i] = latinBase[(int) (num % @base)];
                     num = num / @base;
-                }
+                } // Next i 
             }
             else
             {
@@ -480,19 +624,18 @@ namespace iCaramba
                     {
                         result[i] = '-';
                         continue;
-                    }
-
-                    if(count < hexString.Length)
+                    } // End if 
+                    
+                    if (count < hexString.Length)
                         result[i] = hexString[count];
                     else
                         result[i] = '0';
-
+                    
                     count++;
-                }
+                } // Next i 
 
-                
             }
-            
+
             ////for (int i = 35; i > -1; --i)
             //// for (int i = 0; i < 36; ++i)
             //{
@@ -509,13 +652,14 @@ namespace iCaramba
             retValue = new string(result);
             return retValue;
         }
-
+        
+        
         public string ToGuidString()
         {
             return this.ToGuidString(true);
         }
-
-
+        
+        
         public System.Guid ToGuid(bool ascending)
         {
             return new System.Guid(this.ToGuidString(ascending));
@@ -528,7 +672,128 @@ namespace iCaramba
         }
 
 
+        public byte[] ToByteArray()
+        {
+            byte[] bytes = new byte[16];
+            
+            byte[] upperBytes = System.BitConverter.GetBytes(this.High)
+                // .Reverse().ToArray()
+            ;
+            
+            byte[] lowerBytes = System.BitConverter.GetBytes(this.Low)
+                // .Reverse().ToArray()
+            ;
+            
+            System.Array.Copy(upperBytes, 0, bytes, 0, 8);
+            System.Array.Copy(lowerBytes, 0, bytes, 8, 8);
+            
+            bytes = bytes
+                .Reverse().ToArray();
+            
+            return bytes;
+        }
+        
+        
+        public byte[] ToGuidBytes()
+        {
+            byte[] ba = this.ToByteArray();
+            int[] guidByteOrder = new int[16] // 16 Bytes = 128 Bit 
+            {10, 11, 12, 13, 14, 15,  8,  9,  6,  7,  4,  5,  0,  1,  2,  3};
+         // {00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15}
+            int[] reverseByteOrder = new int[16]
+            {12, 13, 14, 15, 10, 11, 08, 09, 06, 07, 00, 01, 02, 03, 04, 05};          
 
+
+            byte[] guidBytes = new byte[16];
+
+            for (int i = 0; i < guidByteOrder.Length; ++i)
+            {
+                guidBytes[i] = ba[guidByteOrder[i]];
+                // guidBytes[i] = ba[reverseByteOrder[i]];
+            }
+
+            // System.Guid.NewGuid().ToString();
+            
+            return guidBytes;
+        }
+
+
+        public System.Guid MyGuid()
+        {
+            UInt128 num = new UInt128(this);
+            uint @base = 256;
+            
+            byte[] lowToHigh = new byte[16];
+            int i = 0;
+            do
+            {
+                lowToHigh[i] = (byte) (num % @base);        
+                num = num / @base;
+                ++i;
+            } while (num > 0);
+
+            for (; i < 16; ++i)
+            {
+                lowToHigh[i] = 0;
+            }
+            
+            int[] guidByteOrder = new int[16] // 16 Bytes = 128 Bit 
+               {10, 11, 12, 13, 14, 15,  8,  9,  6,  7,  4,  5,  0,  1,  2,  3};
+            // "00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15"
+                
+            // int[] inverseByteOrder = new int[16]
+               // {12, 13, 14, 15, 10, 11, 08, 09, 06, 07, 00, 01, 02, 03, 04, 05};
+               // "00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15"
+            
+            // int[] reverseByteOrder = new int[16]
+            //     { 3,  2,  1,  0,  5,  4,  7,  6,  9,  8, 15, 14, 13, 12, 11, 10};
+            //     "00, 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15"
+            
+            
+            // lowToHigh = new byte[]
+            // {
+                //     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+            // };
+            
+            
+            byte[] guidBytes = new byte[16];
+            
+            for (i = 15; i > -1; --i)
+            {
+                guidBytes[guidByteOrder[i]] = lowToHigh[15-i];
+            }
+            
+            lowToHigh = null;
+            guidByteOrder = null;
+            System.Guid g = new System.Guid(guidBytes);
+            byte[] guidBytes2 = g.ToByteArray();
+            System.Console.WriteLine(guidBytes);
+            System.Console.WriteLine(guidBytes2);
+            
+            //guidBytes = null;
+            return g;
+        }
+        
+        
+        public System.Guid ToGuid2()
+        {
+            return new System.Guid(this.ToGuidBytes());
+        }
+        
+        /*
+        public static System.Guid ToGuid(UInt128 ui)
+        {
+            byte[] bytes = new byte[16];
+            byte[] upperBytes = System.BitConverter.GetBytes(ui.High);
+            byte[] lowerBytes = System.BitConverter.GetBytes(ui.Low);
+            
+            System.Array.Copy(upperBytes, 0, bytes, 0, 8);
+            System.Array.Copy(lowerBytes, 0, bytes, 8, 8);
+            
+            return new System.Guid(bytes);
+        }
+        */
+        
         public string ToIpV6()
         {
             string ipString = "";
@@ -623,13 +888,23 @@ namespace iCaramba
         {
             return Multiply(left, right);
         }
-
+        
         public static UInt128 operator *(UInt128 left, uint right)
         {
             return Multiply(left, right);
         }
 
-
+        public static UInt128 operator *(int left, UInt128 right)
+        {
+            return Multiply((uint)left, right);
+        }
+        
+        public static UInt128 operator *(long left, UInt128 right)
+        {
+            return Multiply((ulong)left, right);
+        }
+        
+        
         public static UInt128 operator *(uint left, UInt128 right)
         {
             return Multiply(left, right);
@@ -786,8 +1061,15 @@ namespace iCaramba
         {
             return (int)num.Low;
         }
-
-
+        
+        
+        // User-defined conversion from UInt128 to byte 
+        public static explicit operator byte(UInt128 num)
+        {
+            return (byte)num.Low;
+        }
+        
+        
         // User-defined conversion from UInt128 to uint 
         public static explicit operator uint(UInt128 num)
         {
@@ -800,8 +1082,8 @@ namespace iCaramba
         {
             return (long)num.Low;
         }
-
-
+        
+        
         // User-defined conversion from UInt128 to ulong 
         public static explicit operator ulong(UInt128 num)
         {
@@ -822,7 +1104,21 @@ namespace iCaramba
             return new UInt128(num);
         }
 
-
+        
+        // User-defined conversion from long to UInt128 
+        public static explicit operator UInt128(long num)
+        {
+            return new UInt128((ulong)num);
+        }
+        
+        
+        // User-defined conversion from ulong to UInt128 
+        public static explicit operator UInt128(int num)
+        {
+            return new UInt128((uint)num);
+        }
+        
+        
         int CompareTo(object obj)
         {
             if (obj == null)
@@ -939,23 +1235,37 @@ namespace iCaramba
             return Ans;
         }
 
-        // ?
+        
         public static UInt128 Square(UInt128 R)
         {
             UInt128 Ans = new UInt128();
-
+            
             sqr128(R, ref Ans);
             return Ans;
         }
-
+        
+        
+        public UInt128 Power(UInt128 @base, uint power)
+        {
+            UInt128 num = new UInt128(1);
+            
+            for (int i = 0; i < power; ++i)
+            {
+                num = num * @base;
+            }
+            
+            return num;
+        }
+        
+        
         public static UInt128 Div(UInt128 M, UInt128 N)
         {
             UInt128 Q = new UInt128();
             div128(M, N, ref Q);
             return Q;
         }
-
-
+        
+        
         public static UInt128 Mod(UInt128 M, UInt128 N)
         {
             UInt128 R = new UInt128();
@@ -969,7 +1279,7 @@ namespace iCaramba
             UInt128 Q = new UInt128();
             UInt128 R = new UInt128();
             bindivmod128(M, N, ref Q, ref R);
-
+            
             return (Q, R);
         }
 
@@ -981,63 +1291,70 @@ namespace iCaramba
             not128(N, ref A);
             return A;
         }
-
+        
+        
         public static UInt128 Or(UInt128 N1, UInt128 N2)
         {
             UInt128 A = new UInt128();
             or128(N1, N2, ref A);
             return A;
         }
-
+        
+        
         public static UInt128 And(UInt128 N1, UInt128 N2)
         {
             UInt128 A = new UInt128();
             and128(N1, N2, ref A);
             return A;
         }
-
+        
+        
         public static UInt128 XOR(UInt128 N1, UInt128 N2)
         {
             UInt128 A = new UInt128();
             xor128(N1, N2, ref A);
             return A;
         }
-
-
+        
+        
         public static UInt128 ShiftLeft(UInt128 N, uint S)
         {
             UInt128 A = new UInt128();
             shiftleft128(N, S, ref A);
             return A;
         }
-
+        
+        
         public static UInt128 ShiftRight(UInt128 N, uint S)
         {
             UInt128 A = new UInt128();
             shiftright128(N, S, ref A);
             return A;
         }
-
-
+        
+        
         private static void inc128(UInt128 N, ref UInt128 A)
         {
             A.Low = (N.Low + 1);
             A.High = N.High + (((N.Low ^ A.Low) & N.Low) >> 63);
         }
-
+        
+        
         private static void dec128(UInt128 N, ref UInt128 A)
         {
             A.Low = N.Low - 1;
             A.High = N.High - (((A.Low ^ N.Low) & A.Low) >> 63);
         }
-
+        
+        
         private static void add128(UInt128 N, UInt128 M, ref UInt128 A)
         {
             ulong C = (((N.Low & M.Low) & 1) + (N.Low >> 1) + (M.Low >> 1)) >> 63;
             A.High = N.High + M.High + C;
             A.Low = N.Low + M.Low;
         }
-
+        
+        
         private static void sub128(UInt128 N, UInt128 M, ref UInt128 A)
         {
             A.Low = N.Low - M.Low;
@@ -1141,19 +1458,22 @@ namespace iCaramba
             A.High = ~N.High;
             A.Low = ~N.Low;
         }
-
+        
+        
         private static void or128(UInt128 N1, UInt128 N2, ref UInt128 A)
         {
             A.High = N1.High | N2.High;
             A.Low = N1.Low | N2.Low;
         }
-
+        
+        
         private static void and128(UInt128 N1, UInt128 N2, ref UInt128 A)
         {
             A.High = N1.High & N2.High;
             A.Low = N1.Low & N2.Low;
         }
-
+        
+        
         private static void xor128(UInt128 N1, UInt128 N2, ref UInt128 A)
         {
             A.High = N1.High ^ N2.High;
@@ -1166,7 +1486,8 @@ namespace iCaramba
         {
             return (N.High == 0) ? nlz64(N.Low) + 64 : nlz64(N.High);
         }
-
+        
+        
         private static ulong nlz64(ulong N)
         {
             ulong I;
@@ -1206,6 +1527,7 @@ namespace iCaramba
             return (N.Low == 0) ? ntz64(N.High) + 64 : ntz64(N.Low);
         }
 
+        
         private static ulong ntz64(ulong N)
         {
             ulong I = ~N;
@@ -1241,7 +1563,8 @@ namespace iCaramba
         {
             return popcnt64(N.High) + popcnt64(N.Low);
         }
-
+        
+        
         private static ulong popcnt64(ulong V)
         {
             // http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetParallel
@@ -1249,17 +1572,18 @@ namespace iCaramba
             V = (V & 0x3333333333333333) + ((V >> 2) & 0x3333333333333333);
             return ((V + (V >> 4) & 0xF0F0F0F0F0F0F0F) * 0x101010101010101) >> 56;
         }
-
-
-
+        
+        
         public static int compare128(UInt128 N1, UInt128 N2)
         {
             return (((N1.High > N2.High) || ((N1.High == N2.High) && (N1.Low > N2.Low))) ? 1 : 0)
                  - (((N1.High < N2.High) || ((N1.High == N2.High) && (N1.Low < N2.Low))) ? 1 : 0);
         }
+        
+        
         // End Of Bitwise
-
-
+        
+        
         // MultSqr
         private static void mult64to128(ulong u, ulong v, ref ulong h, ref ulong l)
         {
@@ -1282,7 +1606,7 @@ namespace iCaramba
             l = (t << 32) + w3;
         }
         
-
+        
         private static void mult128(UInt128 N, UInt128 M, ref UInt128 Ans)
         {
             //PRINTVAR(N.High);
@@ -1294,7 +1618,8 @@ namespace iCaramba
             //PRINTVAR(Ans.Low);
             Ans.High += (N.High * M.Low) + (N.Low * M.High);
         }
-
+        
+        
         private static void mult128to256(UInt128 N, UInt128 M, ref UInt128 H, ref UInt128 L)
         {
             mult64to128(N.High, M.High, ref H.High, ref H.Low);
@@ -1325,9 +1650,8 @@ namespace iCaramba
                 ++H.High;
             }
         }
-
-
-
+        
+        
         private static void sqr64to128(ulong r, ref ulong h, ref ulong l)
         {
             ulong r1 = (r & 0xffffffff);
@@ -1346,7 +1670,8 @@ namespace iCaramba
             h = (r * r) + w1 + k;
             l = (t << 32) + w3;
         }
-
+        
+        
         private static void sqr128(UInt128 R, ref UInt128 Ans)
         {
             sqr64to128(R.Low, ref Ans.High, ref Ans.Low);
@@ -1378,13 +1703,12 @@ namespace iCaramba
                 ++H.High;
             }
         }
-
-
-
-
-
+        
+        
+        
         // divmod 
-
+        
+        
         private static void div128(UInt128 M, UInt128 N, ref UInt128 Q)
         {
             UInt128 R = new UInt128();
@@ -1397,7 +1721,8 @@ namespace iCaramba
             UInt128 Q = new UInt128();
             divmod128(M, N, ref Q, ref R);
         }
-
+        
+        
         private static void divmod128(UInt128 M, UInt128 N, ref UInt128 Q, ref UInt128 R)
         {
             ulong Nlz, Mlz, Ntz;
@@ -1455,7 +1780,8 @@ namespace iCaramba
                 bindivmod128(M, N, ref Q, ref R);
             }
         }
-
+        
+        
         private static void divmod128by128(UInt128 M, UInt128 N, ref UInt128 Q, ref UInt128 R)
         {
             if (N.High == 0)
@@ -1510,8 +1836,8 @@ namespace iCaramba
                 return;
             }
         }
-
-
+        
+        
         private static void div128by64(ulong u1, ulong u0, ulong v, ref ulong q)
         {
             const ulong b = 1UL << 32;
@@ -1580,7 +1906,8 @@ namespace iCaramba
 
             q = (q1 << 32) | q0;
         }
-
+        
+        
         private static void divmod128by64(ulong u1, ulong u0, ulong v, ref ulong q, ref ulong r)
         {
             const ulong b = 1UL << 32;
@@ -1647,8 +1974,8 @@ namespace iCaramba
             r = ((un21 << 32) + (un0 - (q0 * v))) >> (int)s;
             q = (q1 << 32) | q0;
         }
-
-
+        
+        
         private static void bindivmod128(UInt128 M, UInt128 N, ref UInt128 Q, ref UInt128 R)
         {
             Q.High = Q.Low = 0;
@@ -1666,12 +1993,12 @@ namespace iCaramba
 
                 shiftright128(N, 1, ref N);
             } while (Shift-- != 0);
-
+            
             R = M;
         }
         
-
+        
     }
-
-
+    
+    
 }
