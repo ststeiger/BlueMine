@@ -81,6 +81,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BluemineContextExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\BigRandom.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\CsvParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\LinqDynamicOrdering.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\Number.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\SqlGuid.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\UInt128.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\RSS\aaaaaaaa.cs" />
