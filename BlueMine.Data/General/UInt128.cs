@@ -77,7 +77,6 @@ namespace BlueMine.Data
         }
         
         
-        
         public long LowSigned
         {
             get { return MapULongToLong(this.Low); }
