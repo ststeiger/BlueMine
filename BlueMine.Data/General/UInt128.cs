@@ -466,6 +466,69 @@ namespace BlueMine.Data
         } // End Function FromGuid 
 
 
+        public static UInt128 FromRandom(System.Random rand)
+        {
+            UInt128 retVal = null;
+
+            byte[] bytes = new byte[16];
+            rand.NextBytes(bytes);
+            ulong lower = System.BitConverter.ToUInt64(bytes, 0);
+            ulong upper = System.BitConverter.ToUInt64(bytes, 8);
+            bytes = null;
+
+            retVal = new UInt128(lower, upper);
+
+            return retVal;
+        } // End Function FromGuid 
+
+
+        public static UInt128 FromRandom()
+        {
+            System.Random provider = new System.Random();
+            UInt128 retVal = FromRandom(provider);
+            
+            return retVal;
+        }
+
+
+        public static UInt128 FromSecureRandom(
+            System.Security.Cryptography.RandomNumberGenerator provider)
+        {
+            UInt128 retVal = null;
+
+            byte[] bytes = new byte[16];
+            provider.GetBytes(bytes);
+            ulong lower = System.BitConverter.ToUInt64(bytes, 0);
+            ulong upper = System.BitConverter.ToUInt64(bytes, 8);
+            bytes = null;
+
+            retVal = new UInt128(lower, upper);
+
+            return retVal;
+        } // End Function FromGuid 
+
+
+        public static UInt128 FromSecureRandom()
+        {
+            UInt128 retVal = null;
+
+            using (System.Security.Cryptography.RandomNumberGenerator provider = System.Security.Cryptography.RandomNumberGenerator.Create())
+            {
+                retVal = FromSecureRandom(provider);
+            } // End Using provider
+
+            return retVal;
+        }
+
+
+        public static System.Guid SecureRandomGuid()
+        {
+            UInt128 nummy = FromSecureRandom();
+
+            return nummy.ToGuid();
+        }
+
+
         public string ToIpV6()
         {
             string ipString = "";
