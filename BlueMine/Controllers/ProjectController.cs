@@ -32,27 +32,28 @@ namespace BlueMine.Controllers
 
 
         public ProjectController(BlueMine.Db.BlueMineRepository repo
-            ,Db.BlueMineContext context
+            // ,Db.BlueMineContext context
             , Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             this.m_repo = repo;
             this.m_env = env;
-            
-            
-            var crud = new BlueMine.Data.CRUD(context);
-            crud.TestDynamicOrderBy();
+
+
+            // BlueMine.Data.CRUD crud = new BlueMine.Data.CRUD(context);
+            // crud.TestDynamicOrderBy();
             // crud.TestSqlGeneration("");
         }
-        
-        
+
+
         [HttpGet("/TestImage")]
-        public async Task<IActionResult> GetTestImage()
+        //public Task<IActionResult> GetTestImage()
+        public IActionResult GetTestImage()
         {
             string dir = System.IO.Path.Combine(this.m_env.WebRootPath, "images");
             string file = System.IO.Path.Combine(dir, "Waterfall.png");
 
             System.IO.Stream image = System.IO.File.OpenRead(file);
-            return File(image, "image/jpeg");
+            return this.File(image, "image/jpeg");
         }
         
         

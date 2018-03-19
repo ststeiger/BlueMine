@@ -8,15 +8,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BlueMine.Db;
 
 
-using System.Linq.Dynamic;
-using Sharpen;
-
 namespace BlueMine.Data
 {
     
     
     public class CRUD
     {
+
         private readonly BlueMineContext _context;
         
         
@@ -30,19 +28,36 @@ namespace BlueMine.Data
         public void TestDynamicOrderBy()
         {
             IQueryable<T_projects> query = this._context.Set<T_projects>();
-            // query.ElementType
-            
+
+            // var query2 = (from project in _context.projects
+            //               join issue in _context.issues on project.id equals issue.project_id into projectIssueJoin
+            //               select projectIssueJoin);
+
+
+            // var query3 = query.OrderBy(delegate (T_projects x) { return (object) x.id; });
+            // query3 = query3.OrderBy(x => x.created_on);
+            // string sql3 = query.ToSql();
+            // System.Console.WriteLine(sql3);
+
+            // query = query.OrderBy(x => x.id);
+            // query = query.OrderBy(delegate(T_projects a) { return a.id; }); // fubar ....
+
             // query = query.OrderBy("id AsC, name DESC, parent_id dEsC");
-            query = query.OrderBy("id DEsc, name DESC, parent_id dEsC");
-            query.OrderBy(x => x.created_on);
-            
-            
+            // query = query.OrderBy("id DEsc, name DESC, parent_id dEsC");
+            query = query.OrderByString("id DEsc, name aSc, parent_id dEsC");
+
             string sql = query.ToSql();
-            
+            // string sql2 = query2.OrderBy("issue.id, project.id").ToSql();
+            // string sql2 = query2.OrderBy("id").ToSql();
+            // string sql2 = query2.OrderByString("id").ToSql();
+            // string sql2 = query2.OrderBy("id").ToSql();
+            // System.Console.WriteLine(sql2);
+
+            System.Console.WriteLine(sql);
         }
-        
-        
-        
+
+
+
         public string TestSqlGeneration(string uri)
         {
             List<T_projects> ls = _context.projects.ToList();
@@ -68,7 +83,7 @@ namespace BlueMine.Data
             _context.SaveChanges();
             */
 
-            int pproj = 6;
+            // int pproj = 6;
             string projName = "bla";
 
             var lol2 = (

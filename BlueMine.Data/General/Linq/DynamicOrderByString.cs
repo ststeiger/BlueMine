@@ -2,33 +2,36 @@
 namespace System.Linq
 {
     
-    public class DynamicOrdering
+    internal class OrderByLinqExpression
     {
         public System.Linq.Expressions.Expression Selector;
         public bool Ascending;
 
 
-        public DynamicOrdering()
+        internal OrderByLinqExpression()
         { }
-        
-        public DynamicOrdering(string expr, System.Type type)
+
+
+        internal OrderByLinqExpression(string expr, System.Linq.Expressions.ParameterExpression instance)
         {
             string[] parts = expr.Split(new char[]{' ', '\t', '\r', '\n'},
                 System.StringSplitOptions.RemoveEmptyEntries
             );
             
-            this.Selector = GetSelector(parts[0], type);
+            this.Selector = System.Linq.Expressions.Expression.PropertyOrField(instance, parts[0]);
             this.Ascending = System.StringComparer
-                .InvariantCultureIgnoreCase.Equals(parts[1], "asc");
+                .InvariantCultureIgnoreCase.Equals(parts[1], "ASC");
         }
 
 
-        public System.Linq.Expressions.Expression GetSelector(
+        private static System.Linq.Expressions.Expression GetSelector_old(
             string member,
             System.Type entityType
             )
         {
-            
+            // Note: entityType = typeof(T);
+
+
             System.Linq.Expressions.ParameterExpression arg =
                 System.Linq.Expressions.Expression.Parameter(entityType, "x");
             System.Linq.Expressions.Expression expr = arg;
@@ -41,7 +44,6 @@ namespace System.Linq
                 | System.Reflection.BindingFlags.Static;
             System.Type type = null;
             
-            // use reflection (not ComponentModel) to mirror LINQ
             System.Reflection.PropertyInfo pi = entityType.GetProperty(member, bf);
             if (pi == null)
             {
@@ -54,59 +56,59 @@ namespace System.Linq
                 expr = System.Linq.Expressions.Expression.Property(expr, pi);
                 type = pi.PropertyType;    
             }
-            
+
             Type delegateType = typeof(Func<,>).MakeGenericType(entityType, type);
-            
+
             System.Linq.Expressions.LambdaExpression lambda =
                 System.Linq.Expressions.Expression.Lambda(delegateType, expr, arg);
-            
+
             return lambda;
         }
         
     }
     
     
-    public static class aaaaaa
+    public static class DynamicOrderByString
     {
 
-        public static IQueryable<T> OrderBy<T>(
+        public static IQueryable<T> OrderByString<T>(
             this IQueryable<T> source, string sortString)
         {
-            System.Type t = typeof(T);
+            System.Linq.Expressions.ParameterExpression[] parameters =
+                new System.Linq.Expressions.ParameterExpression[] {
+                System.Linq.Expressions.Expression.Parameter(source.ElementType, "")
+            };
+
             string[] expressions = sortString.Split(new char[] {',', ';'},
                 System.StringSplitOptions.RemoveEmptyEntries
             );
             
-            System.Collections.Generic.List<DynamicOrdering> ls = 
-                new System.Collections.Generic.List<DynamicOrdering>();
+            System.Collections.Generic.List<OrderByLinqExpression> ls = 
+                new System.Collections.Generic.List<OrderByLinqExpression>();
             
             for (int i = 0; i < expressions.Length; ++i)
             {
                 expressions[i] = expressions[i].Trim();
-                ls.Add(new DynamicOrdering(expressions[i], t));
+                ls.Add(new OrderByLinqExpression(expressions[i], parameters[0]));
             }
-            
-            return (IQueryable<T>) OrderBy<T>(source, ls);
+
+            return (IQueryable<T>)OrderByString<T>(source, ls, parameters);
         }
         
         
-        public static IQueryable OrderBy<T>(
+        private static IQueryable OrderByString<T>(
             this IQueryable source,
-            System.Collections.Generic.IEnumerable<DynamicOrdering> orderings
+            System.Collections.Generic.IEnumerable<OrderByLinqExpression> orderings,
+            System.Linq.Expressions.ParameterExpression[] parameters
             )
         {
             Type type = typeof(T);
             Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
 
-            System.Linq.Expressions.ParameterExpression[] parameters = 
-                new System.Linq.Expressions.ParameterExpression[] {
-                System.Linq.Expressions.Expression.Parameter(source.ElementType, "") 
-            };
-            
             System.Linq.Expressions.Expression queryExpr = source.Expression;
             string methodAsc = "OrderBy";
             string methodDesc = "OrderByDescending";
-            foreach (DynamicOrdering o in orderings) 
+            foreach (OrderByLinqExpression o in orderings) 
             {
                 queryExpr = System.Linq.Expressions.Expression.Call(
                     typeof(Queryable), o.Ascending ? methodAsc : methodDesc,
@@ -114,8 +116,8 @@ namespace System.Linq
                     queryExpr, System.Linq.Expressions.Expression
                         .Quote(System.Linq.Expressions.Expression
                             .Lambda(o.Selector, parameters)));
-                // methodAsc = "ThenBy";
-                // methodDesc = "ThenByDescending";
+                 methodAsc = "ThenBy";
+                 methodDesc = "ThenByDescending";
             }
             
             return source.Provider.CreateQuery(queryExpr);

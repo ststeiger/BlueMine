@@ -1,7 +1,9 @@
 ﻿
-//Copyright (C) Microsoft Corporation.  All rights reserved.
+// Copyright (C) Microsoft Corporation.  
+// All rights reserved.
 
-namespace System.Linq.Dynamic
+//namespace System.Linq.Dynamic
+namespace System.Linq
 {
 
 
@@ -188,7 +190,7 @@ namespace System.Linq.Dynamic
         public System.Linq.Expressions.Expression Selector;
         public bool Ascending;
     }
-
+    
     internal class Signature : IEquatable<Signature>
     {
         public DynamicProperty[] properties;
@@ -220,7 +222,8 @@ namespace System.Linq.Dynamic
             return true;
         }
     }
-
+    
+    
     internal class ClassFactory
     {
         public static readonly ClassFactory Instance = new ClassFactory();
@@ -366,6 +369,7 @@ namespace System.Linq.Dynamic
             gen.Emit(System.Reflection.Emit.OpCodes.Ret);
         }
     }
+    
 
     public sealed class ParseException : Exception
     {

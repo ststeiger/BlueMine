@@ -17,14 +17,14 @@ namespace BlueMine.Controllers
     {
 
         private readonly BlueMine.Db.BlueMineContext m_BlueMineContext;
-        private readonly BlueMine.Data.CRUD m_Repo;
+        // private readonly BlueMine.Data.CRUD m_Repo;
         private readonly BlueMine.Data.Dapper.CRUD m_DapperRepo;
 
 
         public ValuesController(BlueMine.Db.BlueMineContext dbContext)
         {
             this.m_BlueMineContext = dbContext;
-            this.m_Repo = new BlueMine.Data.CRUD(dbContext);
+            // this.m_Repo = new BlueMine.Data.CRUD(dbContext);
             this.m_DapperRepo = new BlueMine.Data.Dapper.CRUD();
         }
         
