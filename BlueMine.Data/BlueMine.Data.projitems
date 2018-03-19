@@ -79,8 +79,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\GenericEntityFramworkRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\IQueryableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BluemineContextExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\aaaaaa.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\BigRandom.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\CsvParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)General\fooq.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\LinqDynamicOrdering.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\Number.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)General\SqlGuid.cs" />

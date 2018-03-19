@@ -32,18 +32,19 @@ namespace BlueMine.Controllers
 
 
         public ProjectController(BlueMine.Db.BlueMineRepository repo
-            // ,Db.BlueMineContext context
+            ,Db.BlueMineContext context
             , Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             this.m_repo = repo;
             this.m_env = env;
             
-            // var crud = new BlueMine.Data.CRUD(context);
+            
+            var crud = new BlueMine.Data.CRUD(context);
+            crud.TestDynamicOrderBy();
             // crud.TestSqlGeneration("");
         }
-
-
-
+        
+        
         [HttpGet("/TestImage")]
         public async Task<IActionResult> GetTestImage()
         {
@@ -53,11 +54,8 @@ namespace BlueMine.Controllers
             System.IO.Stream image = System.IO.File.OpenRead(file);
             return File(image, "image/jpeg");
         }
-
-
-
-
-
+        
+        
         [HttpGet("Image/{id}")]
         public IActionResult Image(int? id)
         {
@@ -72,7 +70,8 @@ namespace BlueMine.Controllers
                 return File(imagen, "image/jpeg");
             }
         }
-
+        
+        
         // http://localhost:55337/Image/Resize/400/400
         [HttpGet("Image/Resize/{width:int}/{height:int?}")]
         public ResizeImageResult ResizeImageImage(int width, int? height)
@@ -85,8 +84,8 @@ namespace BlueMine.Controllers
 
             return new ResizeImageResult(SaveFormat.Png, file, new System.Drawing.Size(width, height.Value));
         }
-
-
+        
+        
         [Route("/TestRepo")]
         public System.Collections.Generic.List<SelectListItem> LuL()
         {
@@ -174,12 +173,12 @@ namespace BlueMine.Controllers
             // SELECT * FROM custom_fields WHERE id = '' 
             string csv = "2,1016,7/31/2008 14:22,Geoff Dalgas,6/5/2011 22:21,http://stackoverflow.com,\"Corvallis, OR\",7679,351,81,b437f461b3fd27387c5d8ab47a293d35,34";
             csv = "--- - INTERN - \"------\" - BKB - Campus Sursee - Helvetia - Julius Bär - Post - Raiffeisen - Rockwell - RSI - SauterFM - SNB - Sonova (Phonak) - SRGSSR - Swisscom - Swisslife - SwissRe - Wincasa - Zürich";
-
+            
             List<string> ls = this.m_repo.GetValues(csv);
-          System.Console.WriteLine(ls);
-
+            System.Console.WriteLine(ls);
+            
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
-
+            
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem1", im);
         }

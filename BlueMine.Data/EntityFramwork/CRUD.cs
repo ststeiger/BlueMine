@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BlueMine.Db;
 
 
+using System.Linq.Dynamic;
+using Sharpen;
+
 namespace BlueMine.Data
 {
     
@@ -21,6 +24,23 @@ namespace BlueMine.Data
         {
             _context = context;
         }
+        
+        
+        
+        public void TestDynamicOrderBy()
+        {
+            IQueryable<T_projects> query = this._context.Set<T_projects>();
+            // query.ElementType
+            
+            // query = query.OrderBy("id AsC, name DESC, parent_id dEsC");
+            query = query.OrderBy("id DEsc, name DESC, parent_id dEsC");
+            query.OrderBy(x => x.created_on);
+            
+            
+            string sql = query.ToSql();
+            
+        }
+        
         
         
         public string TestSqlGeneration(string uri)

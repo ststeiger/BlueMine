@@ -1,10 +1,27 @@
-﻿
+﻿#if false 
+
 namespace System.Linq
 {
 
 
     public static class LinqDynamicOrdering
     {
+
+        /*
+        public static IQueryable<T> 
+            OrderBy1<T>(this IQueryable<T> source, string order)
+        {
+            if (order == null)
+                return source;
+            
+            source = source.OrderBy(x => x.ToString());
+            
+            string[] sortExpressions = order.Split(",");
+            
+            
+            
+        }
+        */
 
         // https://stackoverflow.com/questions/41244/dynamic-linq-orderby-on-ienumerablet/233505#233505
         private static void Test()
@@ -14,8 +31,8 @@ namespace System.Linq
 
             ls.AsQueryable().OrderBy("a, b asc, c desc");
         } // End Sub Test 
-
-
+        
+        
         public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string property)
         {
             return ApplyOrder<T>(source, property, "OrderBy");
@@ -47,7 +64,9 @@ namespace System.Linq
             string property,
             string methodName)
         {
-            string[] props = property.Split('.');
+            ;
+            
+            string[] props = property.Split(new char[] {',', ';'});
             Type type = typeof(T);
 
             Expressions.ParameterExpression arg =
@@ -58,8 +77,18 @@ namespace System.Linq
             {
                 // use reflection (not ComponentModel) to mirror LINQ
                 Reflection.PropertyInfo pi = type.GetProperty(prop);
-                expr = Expressions.Expression.Property(expr, pi);
-                type = pi.PropertyType;
+                if (pi == null)
+                {
+                    Reflection.FieldInfo fi = type.GetField(prop);
+                    expr = Expressions.Expression.Field(expr, fi);
+                    type = fi.FieldType;
+                }
+                else
+                {
+                    expr = Expressions.Expression.Property(expr, pi);
+                    type = pi.PropertyType;    
+                }
+                
             } // Next prop 
 
             Type delegateType = typeof(Func<,>).MakeGenericType(typeof(T), type);
@@ -83,3 +112,5 @@ namespace System.Linq
 
 
 } // End Namespace System.Linq
+
+#endif 

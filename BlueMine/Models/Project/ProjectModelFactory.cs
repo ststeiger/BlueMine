@@ -6,6 +6,8 @@ using System.Collections.Generic;
 
 namespace BlueMine.Models.Project
 {
+    
+    
     public class ProjectModelFactory
     {
         protected BlueMineRepository m_repo;
@@ -123,5 +125,9 @@ WHERE enabled_modules.project_id = @0;
 
             //, N'@0 int', @0 = 153   
         }
+        
+        
     }
+    
+    
 }

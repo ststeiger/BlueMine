@@ -1,8 +1,8 @@
 
 namespace BlueMine.Data
 {
-
-
+    
+    
     public class SqlGuid
         : System.IComparable
         , System.IComparable<SqlGuid>
@@ -32,15 +32,21 @@ namespace BlueMine.Data
         {
             m_bytes = g.ToByteArray();
         }
-
-
+        
+        
+        public SqlGuid(string format)
+        :this(new System.Guid(format))
+        { }
+        
+        
         public byte[] ToByteArray()
         {
             byte[] ret = new byte[NUM_BYTES_IN_GUID];
             m_bytes.CopyTo(ret, 0);
             return ret;
         }
-
+        
+        
         int CompareTo(object obj)
         {
             if (obj == null)
@@ -102,8 +108,8 @@ namespace BlueMine.Data
 
             return (int)EComparison.EQ;
         }
-
-
+        
+        
         int System.Collections.Generic.IComparer<SqlGuid>.Compare(SqlGuid x, SqlGuid y)
         {
             return this.Compare(x, y);
@@ -114,15 +120,15 @@ namespace BlueMine.Data
         {
             return Compare(this, other) == 0;
         }
-
-
+        
+        
         bool System.IEquatable<SqlGuid>.Equals(SqlGuid other)
         {
             return this.Equals(other);
         }
-
-
+        
+        
     }
-
-
+    
+    
 }
