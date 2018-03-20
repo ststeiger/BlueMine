@@ -1,0 +1,13 @@
+﻿
+<select disabled="disabled" name="custom_field[field_format]" id="custom_field_field_format">
+<option value="user">Benutzer</option> "label_user": "Benutzer",
+<option value="bool">Boolean</option> "label_boolean": "Boolean",
+<option value="date">Datum</option> "label_date": "Datum",
+<option value="enumeration">Eigenschaft/Wert-Paare</option> "label_field_format_enumeration": "Eigenschaft/Wert-Paare",
+<option value="float">Fließkommazahl</option> "label_float": "Fließkommazahl",
+<option value="text">Langer Text</option> "label_text": "Langer Text",
+<option value="link">Link</option>  "label_link": "Link",
+<option selected="selected" value="list">Liste</option> "label_list": "Liste",
+<option value="string">Text</option> "label_string": "Text",
+<option value="version">Version</option> "label_version": "Version",
+<option value="int">Zahl</option></select>"label_integer": "Zahl",
