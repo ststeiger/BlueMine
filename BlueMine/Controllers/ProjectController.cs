@@ -169,14 +169,7 @@ namespace BlueMine.Controllers
 
             // @model List<SelectListItem>
             // @model BlueMine.Models.Issue.IssueModel
-            
-            List<string> lsKundennamen = this.m_repo.FetchCustomFieldEntries("Kundenname");
-            List<string> lsVerrechenbar = this.m_repo.FetchCustomFieldEntries("verrechenbar");
-            List<string> lsKundeInformieren = this.m_repo.FetchCustomFieldEntries("Kunden informieren");
-            System.Console.WriteLine(lsKundennamen);
-            System.Console.WriteLine(lsVerrechenbar);
-            System.Console.WriteLine(lsKundeInformieren);
-
+           
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
             
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");

@@ -19,6 +19,32 @@ namespace BlueMine.Models.Issue
         }
 
 
+        public void foo()
+        {
+             System.Collections.Generic.
+            List<string> lsKundennamen = this.m_repo
+                     .FetchCustomFieldEntries("Kundenname");
+            
+            System.Collections.Generic.
+            List<string> lsVerrechenbar = this.m_repo
+                    .FetchCustomFieldEntries("verrechenbar");
+            
+            System.Collections.Generic.
+            List<string> lsKundeInformieren = this.m_repo
+                    .FetchCustomFieldEntries("Kunden informieren");
+            
+            
+            this.m_repo.GetAsSelectList()
+            
+            System.Console.WriteLine(lsKundennamen);
+            System.Console.WriteLine(lsVerrechenbar);
+            System.Console.WriteLine(lsKundeInformieren);
+        }
+        
+        
+
+
+
         public IssueModel Create(int? issueId)
         {
             IssueModel im = new IssueModel();

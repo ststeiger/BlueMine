@@ -393,8 +393,49 @@ namespace BlueMine.Db
             return GetAsSelectList(predicate, value, text, selected, null, null,
                 (Expression<System.Func<TEntity, System.IComparable>>[])null);
         }
-        
-        
+
+
+        public List<SelectListItem> GetAsSelectList<TEntity>(
+              System.Collections.Generic.IEnumerable<TEntity> listToProcess
+            , System.Func<TEntity, string> value
+            , System.Func<TEntity, string> text
+            , System.Func<TEntity, bool> selected
+        ) where TEntity : class
+        {
+            return GetAsSelectList<TEntity>(
+                listToProcess,
+                value, text, selected, null, null
+            );
+        }
+
+
+        public List<SelectListItem> GetAsSelectList<TEntity>(
+            System.Collections.Generic.IEnumerable<TEntity> listToProcess
+            , System.Func<TEntity, string> value
+            , System.Func<TEntity, string> text
+            , System.Func<TEntity, bool> selected
+            , System.Func<TEntity, SelectListGroup> group
+            , System.Func<TEntity, bool> disabled
+        ) where TEntity : class
+        {
+            List<SelectListItem> ls = new List<SelectListItem> ();
+            
+            foreach (TEntity item in listToProcess)
+            {
+                ls.Add(new SelectListItem()
+                    {
+                        Value = value != null ? value(item) : text(item),
+                        Text = text != null ? text(item) : value(item),
+                        Selected = selected != null ? selected(item) : false,
+                        Group = group != null ? group(item) : null,
+                        Disabled = disabled != null ? disabled(item) : false,
+                    }
+                );
+            }
+            
+            return ls;
+        }
+
         public List<SelectListItem> GetAsSelectList<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , System.Func<TEntity, string> value
