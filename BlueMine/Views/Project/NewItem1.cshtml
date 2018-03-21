@@ -4,7 +4,6 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 
-
 @{
     Layout = null;
 }
@@ -32,52 +31,54 @@
     -->
 
     <style type="text/css">
-        html, body 
-        {
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
         }
-        
-        
-        ul 
-        {
+
+
+        ul {
             list-style-type: none;
         }
     </style>
-    
+
+
+
     <!--
     <script src="@Url.Content("/GeneratedScripts/AsyncAjax.js")"></script>
     -->
-    
+
 </head>
 <body>
     <h1>Hello New Item</h1>
+
+    <input type="text" asp-for="Issue.id" />
     
     <label for="issue_tracker_id">Tracker<span class="required"> *</span></label>
-    <select id="issue_tracker_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')" >
+    <select id="issue_tracker_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
         <option>--- Please select ---</option>
     </select>
-    
+
+
     <label for="issue_subject">Thema<span class="required"> *</span></label>
-    <input id="issue_subject" name="issue[subject]" size="80" maxlength="255" type="text" value="" >
-    
+    <input asp-for="Issue.subject" size="80" maxlength="255" id="issue_subject"  name="issue[subject]" type="text" />
+
     <label for="issue_description">Beschreibung</label>
-    <textarea id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit" ></textarea>
-    
+    <textarea asp-for="Issue.description"  id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit"></textarea>
+
     <label for="issue_status_id">Status<span class="required"> *</span></label>
-    <select id="issue_status_id" asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')"  >
+    <select id="issue_status_id" asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')">
         <option>--- Please select ---</option>
     </select>
-    
+
     <label for="issue_priority_id">Priorität<span class="required"> *</span></label>
-    <select id="issue_priority_id" asp-items="Model.Priorities" name="issue[priority_id]" >
-    </select>
-    
-    
+    <select id="issue_priority_id" asp-items="Model.Priorities" name="issue[priority_id]"></select>
+
+
     <label for="issue_assigned_to_id">Zugewiesen an</label>
-    <select id="issue_assigned_to_id" asp-items="Model.Users" name="issue[assigned_to_id]" >
+    <select id="issue_assigned_to_id" asp-items="Model.AssignedTo" name="issue[assigned_to_id]">
         <option value="">&nbsp;</option>
         <option value="5">&lt;&lt; ich &gt;&gt;</option>
     </select>
@@ -85,49 +86,33 @@
 
 
 
-<label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
-    <input size="10" type="text" name="issue[parent_issue_id]" id="issue_parent_issue_id" class="ui-autocomplete-input autocomplete" autocomplete="off">
-
+    <label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
+    <input asp-for="Issue.parent_id"  id="issue_parent_issue_id" name="issue[parent_issue_id]" size="10" type="text" class="ui-autocomplete-input autocomplete" autocomplete="off">
 
     <label for="issue_start_date">Beginn</label>
-    <input size="10" type="text" name="issue[start_date]" id="issue_start_date" class="date hasDatepicker">
-
+    <input asp-for="Issue.start_date" size="10" type="text" name="issue[start_date]" id="issue_start_date" class="date hasDatepicker">
 
     <label for="issue_due_date">Abgabedatum</label>
-    <input size="10" type="text" name="issue[due_date]" id="issue_due_date" class="date hasDatepicker">
+    <input asp-for="Issue.due_date" size="10" type="text" name="issue[due_date]" id="issue_due_date" class="date hasDatepicker">
 
     <label for="issue_estimated_hours">Geschätzter Aufwand</label>
-    <input size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours">
+    <input asp-for="Issue.estimated_hours" size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours">
 
     <label for="issue_done_ratio">% erledigt</label>
-    <select name="issue[done_ratio]" id="issue_done_ratio">
-        <option selected="selected" value="0">0 %</option>
-        <option value="10">10 %</option>
-        <option value="20">20 %</option>
-        <option value="30">30 %</option>
-        <option value="40">40 %</option>
-        <option value="50">50 %</option>
-        <option value="60">60 %</option>
-        <option value="70">70 %</option>
-        <option value="80">80 %</option>
-        <option value="90">90 %</option>
-        <option value="100">100 %</option>
-    </select>
-
+    <select id="issue_done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
 
     <p>
         <label for="issue_custom_field_values_3">
-        <span title="verrechenbar Ja oder Nein" class="field-description">verrechenbar</span> 
-        <span class="required">*</span></label>
+            <span title="verrechenbar Ja oder Nein" class="field-description">verrechenbar</span>
+            <span class="required">*</span>
+        </label>
         <span class="list_cf check_box_group">
-            <label><input type="radio" id="issue_custom_field_values_3" name="issue[custom_field_values][3]" value="Ja"> Ja</label>
-            <label><input type="radio" name="issue[custom_field_values][3]" value="Nein" checked="checked"> Nein</label>
-            
             @for (int i = 0; i < Model.CustomFields[3].Count; ++i)
             {
-                <input />
-                
-                <label>@Model.CustomFields[3][i].Text</label>  
+                <label>
+                    <input type="radio" id="issue_custom_field_values_@i" name="issue[custom_field_values][3]" value="@Model.CustomFields[3][i].Text">
+                    @Model.CustomFields[3][i].Text
+                </label>
             }
         </span>
     </p>
@@ -136,25 +121,23 @@
     <label for="issue_custom_field_values_1"><span>gemeldet von</span></label>
     <input type="text" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" value="" class="string_cf">
 
-
     <label for="issue_custom_field_values_2">
         <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
     </label>
 
-    <select name="issue[custom_field_values][2]" 
-        asp-items="Model.CustomFields[2]"
-        id="issue_custom_field_values_2" class="list_cf">
+    <select name="issue[custom_field_values][2]"
+            asp-items="Model.CustomFields[2]"
+            id="issue_custom_field_values_2" class="list_cf">
         <option value="">--- Bitte auswählen ---</option>
     </select>
 
-
     <p>
         <label for="issue_custom_field_values_5">
-        <span title="Sollen Kunden über dieses Ticket beim nächsten Update informiert werden?" class="field-description">
-            Kunden informieren
-        </span>
+            <span title="Sollen Kunden über dieses Ticket beim nächsten Update informiert werden?" class="field-description">
+                Kunden informieren
+            </span>
         </label>
-        <select name="issue[custom_field_values][5]" 
+        <select name="issue[custom_field_values][5]"
                 asp-items="Model.CustomFields[5]"
                 id="issue_custom_field_values_5" class="list_cf">
             <option value="">&nbsp;</option>
@@ -163,20 +146,17 @@
     </p>
 
 
-
     <script type="text/javascript">
-        
-        function onDomReady()
-        {
+
+        function onDomReady() {
             console.log("dom ready");
         }
-        
+
         if (document.addEventListener) document.addEventListener("DOMContentLoaded", onDomReady, false);
         else if (document.attachEvent) document.attachEvent("onreadystatechange", onDomReady);
         else window.onload = onDomReady;
-        
-        function onPageLoaded()
-        {
+
+        function onPageLoaded() {
             console.log("page loaded");
         }
 
@@ -186,5 +166,8 @@
 
     </script>
 
+    Powered by
+    <a href="https://www.blue.mine">blue-mine.rocks .technology http://know.how/</a>
+    https://www.name.com/domains
 </body>
 </html>

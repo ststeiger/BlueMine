@@ -1,0 +1,56 @@
+﻿https://softwareengineering.stackexchange.com/questions/194083/why-should-i-use-listt-over-ienumerablet
+
+Return IEnumerable(Of Student)
+vs
+
+Return New List(Of Student)
+People are telling me to use List and not IEnumerable, 
+because lists force the query to be executed and IEumerable does not.
+
+
+
+https://www.davepaquette.com/archive/2015/05/13/mvc6-input-tag-helper-deep-dive.aspx
+https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
+http://www.tutorialsteacher.com/mvc/htmlhelper-validationmessage
+https://stackoverflow.com/questions/17474823/how-to-customize-validation-attribute-error-message
+https://www.registry.google/
+
+https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/requestlimits/
+
+
+Titles are limited to 512 total characters in internet explorer according to MSDN.
+
+
+
+https://www.quora.com/How-long-can-a-URL-be?share=1
+ The 2,083 limit is only present in Internet Explorer (all versions up to 7.0). 
+The max length in Firefox and Safari seems to be unlimited, 
+
+Browser     Address bar   document.location  
+                          or anchor tag
+------------------------------------------
+Chrome          32779           >64k      
+Android          8192           >64k                         
+Firefox          >64k           >64k      
+Safari           >64k           >64k      
+IE11             2047           5120   
+Edge 16          2047          10240   
+2083 (copy paste)
+
+
+asp.items = options
+asp-for = selected index
+
+
+
+    <input type="text" asp-for="Issue.id" />
+    
+
+    <select asp-for="Trackers[3].Value"  id="issue_track1er_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
+        <option>--- Please select ---</option>
+    </select>
+
+
+2083
+10240
+10240

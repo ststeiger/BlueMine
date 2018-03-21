@@ -169,8 +169,10 @@ namespace BlueMine.Controllers
 
             // @model List<SelectListItem>
             // @model BlueMine.Models.Issue.IssueModel
-            
-            Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
+
+            int issue = 2;
+
+            Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, issue);
             
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem1", im);

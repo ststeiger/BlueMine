@@ -18,6 +18,8 @@ namespace BlueMine.Models.Issue
         public IssueModel()
         { }
 
+        // public T_issues Issue { get; set; }
+        public T_issues Issue;
 
         public System.Collections.Generic.List<
             System.Collections.Generic.List<
@@ -38,7 +40,11 @@ namespace BlueMine.Models.Issue
 
         public System.Collections.Generic.List<
             Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-        > Users; // OK
+        > AssignedTo; // OK
+
+        public System.Collections.Generic.List<
+            Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+        > PercentComplete;
 
 
         public static IssueModel FromFactory(BlueMineRepository repository, int? issueId)
