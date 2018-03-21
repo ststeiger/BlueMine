@@ -18,6 +18,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 // http://httpjunkie.com/2014/430/custom-routing-in-mvc5-with-attributes/
 namespace BlueMine.Controllers
 {
+
+    /*
+-- Constraint "is integer"
+SUBSTRING(id,1,1) = 'a' 
+AND ISNUMERIC(SUBSTRING(id, 2, 20)) -- '-1.0e+5'
+AND id not like '%-%'
+AND id not like '%+%'
+AND id not like '%.%' 
+AND id not like '%,%'
+AND id not like '%e%' 
+    */
     
     
     // template: "{controller=Home}/{action=Index}/{id?}");
@@ -162,6 +173,9 @@ namespace BlueMine.Controllers
         [Route("projects/{uri}/issues/new1")]
         public IActionResult NewIssue1ForProject(string uri)
         {
+            // Referrer:
+            // http://localhost:3000/projects/xxx/issues?set_filter=1&tracker_id=3
+            
             // https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro
             // https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
             // @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
