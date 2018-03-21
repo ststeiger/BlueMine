@@ -1,7 +1,11 @@
 ﻿
+using System;
 using System.Linq;
 using BlueMine.Db;
-using Microsoft.AspNetCore.Mvc.Rendering;
+
+// using Microsoft.AspNetCore.Mvc.Rendering;
+// using Microsoft.AspNetCore.Mvc.ViewFeatures;
+// using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 
 
 namespace BlueMine.Models.Issue
@@ -15,6 +19,11 @@ namespace BlueMine.Models.Issue
         { }
 
 
+        public System.Collections.Generic.List<
+            System.Collections.Generic.List<
+                Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            >> CustomFields;
+        
         public System.Collections.Generic.List<
             Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
         > Trackers;

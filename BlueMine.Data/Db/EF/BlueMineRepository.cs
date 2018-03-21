@@ -1,5 +1,7 @@
 ﻿
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
 //using System.Collections.Generic;
 //using Microsoft.EntityFrameworkCore;
 //using Microsoft.AspNetCore.Mvc.Rendering;
@@ -97,7 +99,18 @@ namespace BlueMine.Db
         } // End Function FetchCustomFieldsValues 
 
 
-        public System.Collections.Generic.List<string> FetchCustomFieldEntries(string fieldName)
+        public System.Collections.Generic.List<SelectListItem> 
+            CustomFieldAsSelectList(string fieldName)
+        {
+            System.Collections.Generic.
+            List<string> ls = this.FetchCustomFieldEntries(fieldName);
+            return this.GetAsSelectList(ls);
+        }
+        
+
+
+        public System.Collections.Generic.List<string> 
+            FetchCustomFieldEntries(string fieldName)
         {
             System.Collections.Generic.List<string> lsFields = null;
 

@@ -84,7 +84,8 @@
 
 
 
-    <label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
+
+<label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
     <input size="10" type="text" name="issue[parent_issue_id]" id="issue_parent_issue_id" class="ui-autocomplete-input autocomplete" autocomplete="off">
 
 
@@ -121,6 +122,13 @@
         <span class="list_cf check_box_group">
             <label><input type="radio" id="issue_custom_field_values_3" name="issue[custom_field_values][3]" value="Ja"> Ja</label>
             <label><input type="radio" name="issue[custom_field_values][3]" value="Nein" checked="checked"> Nein</label>
+            
+            @for (int i = 0; i < Model.CustomFields[3].Count; ++i)
+            {
+                <input />
+                
+                <label>@Model.CustomFields[3][i].Text</label>  
+            }
         </span>
     </p>
 
@@ -130,29 +138,13 @@
 
 
     <label for="issue_custom_field_values_2">
-    <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
+        <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
     </label>
-    <select name="issue[custom_field_values][2]" id="issue_custom_field_values_2" class="list_cf">
+
+    <select name="issue[custom_field_values][2]" 
+        asp-items="Model.CustomFields[2]"
+        id="issue_custom_field_values_2" class="list_cf">
         <option value="">--- Bitte auswählen ---</option>
-        <option value="INTERN">INTERN</option>
-        <option value="------">------</option>
-        <option value="BKB">BKB</option>
-        <option value="Campus Sursee">Campus Sursee</option>
-        <option value="Helvetia">Helvetia</option>
-        <option value="Julius Bär">Julius Bär</option>
-        <option value="Post">Post</option>
-        <option value="Raiffeisen">Raiffeisen</option>
-        <option value="Rockwell">Rockwell</option>
-        <option value="RSI">RSI</option>
-        <option value="SauterFM">SauterFM</option>
-        <option value="SNB">SNB</option>
-        <option value="Sonova (Phonak)">Sonova (Phonak)</option>
-        <option value="SRGSSR">SRGSSR</option>
-        <option value="Swisscom">Swisscom</option>
-        <option value="Swisslife">Swisslife</option>
-        <option value="SwissRe">SwissRe</option>
-        <option value="Wincasa">Wincasa</option>
-        <option value="Zürich">Zürich</option>
     </select>
 
 
@@ -162,11 +154,11 @@
             Kunden informieren
         </span>
         </label>
-        <select name="issue[custom_field_values][5]" id="issue_custom_field_values_5" class="list_cf">
+        <select name="issue[custom_field_values][5]" 
+                asp-items="Model.CustomFields[5]"
+                id="issue_custom_field_values_5" class="list_cf">
             <option value="">&nbsp;</option>
             <option selected="selected" value="--- Bitte auswählen ---">--- Bitte auswählen ---</option>
-            <option value="Ja">Ja</option>
-            <option value="Nein">Nein</option>
         </select>
     </p>
 

@@ -396,6 +396,20 @@ namespace BlueMine.Db
 
 
         public List<SelectListItem> GetAsSelectList<TEntity>(
+            System.Collections.Generic.IEnumerable<TEntity> listToProcess
+        ) where TEntity : class
+        {
+            return GetAsSelectList<TEntity>(
+                listToProcess,
+                  x => (string)(object) x
+                , y => (string)(object) y
+                , z => (bool)(object) false
+                , null, null
+            );
+        }
+        
+        
+        public List<SelectListItem> GetAsSelectList<TEntity>(
               System.Collections.Generic.IEnumerable<TEntity> listToProcess
             , System.Func<TEntity, string> value
             , System.Func<TEntity, string> text
@@ -407,8 +421,8 @@ namespace BlueMine.Db
                 value, text, selected, null, null
             );
         }
-
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
             System.Collections.Generic.IEnumerable<TEntity> listToProcess
             , System.Func<TEntity, string> value
@@ -435,7 +449,8 @@ namespace BlueMine.Db
             
             return ls;
         }
-
+        
+        
         public List<SelectListItem> GetAsSelectList<TEntity>(
               Expression<System.Func<TEntity, bool>> predicate
             , System.Func<TEntity, string> value

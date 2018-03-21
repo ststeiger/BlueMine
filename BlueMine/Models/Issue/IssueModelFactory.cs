@@ -3,6 +3,7 @@
 using System.Linq;
 using BlueMine.Db;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 
 
 namespace BlueMine.Models.Issue
@@ -19,36 +20,32 @@ namespace BlueMine.Models.Issue
         }
 
 
-        public void foo()
+        public void InitCustomFields(IssueModel im)
         {
-             System.Collections.Generic.
-            List<string> lsKundennamen = this.m_repo
-                     .FetchCustomFieldEntries("Kundenname");
+            im.CustomFields = new System.Collections.Generic.List<
+                System.Collections.Generic.List<
+                    Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+                >>();
             
-            System.Collections.Generic.
-            List<string> lsVerrechenbar = this.m_repo
-                    .FetchCustomFieldEntries("verrechenbar");
+            var a = this.m_repo.CustomFieldAsSelectList("Kundenname");
+            var b = this.m_repo.CustomFieldAsSelectList("verrechenbar");
+            var c = this.m_repo.CustomFieldAsSelectList("Kunden informieren");
             
-            System.Collections.Generic.
-            List<string> lsKundeInformieren = this.m_repo
-                    .FetchCustomFieldEntries("Kunden informieren");
-            
-            
-            this.m_repo.GetAsSelectList()
-            
-            System.Console.WriteLine(lsKundennamen);
-            System.Console.WriteLine(lsVerrechenbar);
-            System.Console.WriteLine(lsKundeInformieren);
+            im.CustomFields.Add(null); // 0
+            im.CustomFields.Add(null); // 1
+            im.CustomFields.Add(a); // 2
+            im.CustomFields.Add(b); // 3
+            im.CustomFields.Add(null); // 4
+            im.CustomFields.Add(c); // 5
         }
         
         
-
-
-
         public IssueModel Create(int? issueId)
         {
             IssueModel im = new IssueModel();
 
+            InitCustomFields(im);
+            
             im.Users = this.m_repo.GetAsSelectList<Db.T_users>(
                 predicate: user => user.status == 1 && user.type == "User"
                 , value: x => x.id.ToString()

@@ -169,7 +169,7 @@ namespace BlueMine.Controllers
 
             // @model List<SelectListItem>
             // @model BlueMine.Models.Issue.IssueModel
-           
+            
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, null);
             
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
