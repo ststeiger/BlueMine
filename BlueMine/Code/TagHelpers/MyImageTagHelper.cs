@@ -16,7 +16,8 @@ namespace BlueMine.TagHelpers
     // [HtmlTargetElement(Attributes = "bold")]
     //[HtmlTargetElement(tag : "image")]
     [Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElement(tag: "img", Attributes = "src")]
-    public class MyImageTagHelper : Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper
+    public class MyImageTagHelper 
+        : Microsoft.AspNetCore.Mvc.Razor.TagHelpers.UrlResolutionTagHelper
     {
 
         private Microsoft.AspNetCore.Mvc.TagHelpers.Internal.FileVersionProvider m_fileVersionProvider;
@@ -239,6 +240,7 @@ namespace BlueMine.TagHelpers
             , Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput output)
         {
             EnsureFileVersionProvider();
+            
 
             Microsoft.AspNetCore.Mvc.IUrlHelper urlHelper =
                 base.UrlHelperFactory.GetUrlHelper(this.ActionContext);

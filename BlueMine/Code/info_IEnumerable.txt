@@ -1,0 +1,9 @@
+﻿https://softwareengineering.stackexchange.com/questions/194083/why-should-i-use-listt-over-ienumerablet
+
+Return IEnumerable(Of Student)
+vs
+
+Return New List(Of Student)
+People are telling me to use List and not IEnumerable, 
+because lists force the query to be executed and IEumerable does not.
+

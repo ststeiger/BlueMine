@@ -1,0 +1,24 @@
+﻿
+https://www.davepaquette.com/archive/2015/05/13/mvc6-input-tag-helper-deep-dive.aspx
+https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
+http://www.tutorialsteacher.com/mvc/htmlhelper-validationmessage
+https://stackoverflow.com/questions/17474823/how-to-customize-validation-attribute-error-message
+
+
+asp.items = options
+asp-for = selected index
+
+
+
+<input type="text" asp-for="Issue.id" />
+    
+select-tag: 
+<select asp-for="Trackers[3].Value"  id="issue_track1er_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
+	<option>--- Please select ---</option>
+</select>
+
+input-radio:
+<input asp-for="NotChecked" type="radio" 
+The helper sets the radio button to checked if its value is equal to the model value (asp-for). 
+In your case they match as the value is set to the model value. 
+You should set the value, to what you want the post back value to be if checked, not the current model value.

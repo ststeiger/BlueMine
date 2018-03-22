@@ -2,7 +2,7 @@
 @model BlueMine.Models.Issue.IssueModel
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
+@addTagHelper *, BlueMine
 
 @{
     Layout = null;
@@ -53,6 +53,10 @@
 </head>
 <body>
     <h1>Hello New Item</h1>
+
+
+    <radios asp-for="Checked" asp-items="CustomFields[3]" />
+
 
     <input type="text" asp-for="Issue.id" />
     
@@ -110,7 +114,7 @@
             @for (int i = 0; i < Model.CustomFields[3].Count; ++i)
             {
                 <label>
-                    <input type="radio" id="issue_custom_field_values_@i" 
+                    <input asp-for="NotChecked" type="radio" id="issue_custom_field_values_@i" 
                            name="issue[custom_field_values][3]" 
                            value="@Model.CustomFields[3][i].Text">
                     @Model.CustomFields[3][i].Text

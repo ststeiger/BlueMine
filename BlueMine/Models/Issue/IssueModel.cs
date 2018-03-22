@@ -18,6 +18,11 @@ namespace BlueMine.Models.Issue
         public IssueModel()
         { }
 
+
+        public string Checked = "Ja";
+        public string NotChecked = "Nein";
+
+
         // public T_issues Issue { get; set; }
         public T_issues Issue;
 
