@@ -19,18 +19,17 @@ namespace BlueMine.TagHelpers
         [Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeName("asp-for")]
         public Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExpression AspFor { get; set; }
 
+        // [Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeName("asp-items")]
+        // public Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExpression AspItems { get; set; }
+        
         [Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeName("asp-items")]
-        public Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExpression AspItems { get; set; }
-
-
-
+        public System.Collections.Generic.IEnumerable<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Items { get; set; }
+        
         [Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeName("id")]
         public string Id { get; set; }
         
         [Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeName("name")]
         public string Name { get; set; }
-        
-        
         
         // [Microsoft.AspNetCore.Razor.TagHelpers.HtmlAttributeName("data-lol")]
         // public string Fsck { get; set; }
@@ -90,47 +89,48 @@ namespace BlueMine.TagHelpers
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
 
-            System.Collections.Generic.List<
-                Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                > items = (
-                System.Collections.Generic.List<
-                Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
-                >)AspItems.Model;
+            //System.Collections.Generic.List<
+            //    Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //    > items = (
+            //    System.Collections.Generic.List<
+            //    Microsoft.AspNetCore.Mvc.Rendering.SelectListItem
+            //    >)AspItems.Model;
             
             
             string id = this.Id;
             string name = this.Name ?? id;
             
             string checkedValue = (string) 
-                System.Convert.ChangeType(AspFor.Model, typeof(string));
+                System.Convert.ChangeType(AspFor.Model, typeof(string), System.Globalization.CultureInfo.InvariantCulture);
             
             int i = 0;
-            foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem 
-                item in items)
+            //foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem item in items)
+            foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem item in Items)
             {
                 i++;
                 sb.AppendLine("<label>");
 
-                sb.Append("<input type=\"radio\" ");
-                //sb.Append("id=\"issue_custom_field_values_");
-                sb.Append("id=\"");
-                sb.Append(id);
+                sb.Append("<input type=\"radio\"");
+                //sb.Append(" id=\"issue_custom_field_values_");
+                sb.Append(" id=\"");
+                sb.Append(System.Web.HttpUtility.HtmlAttributeEncode(id));
                 sb.Append("_");
                 sb.Append(i);
-                sb.Append("\" ");
-                
-                //sb.Append("name =\"issue[custom_field_values][3]\"");
-                sb.Append("name=\"");
-                sb.Append(name);
                 sb.Append("\"");
                 
-                sb.Append("value=\"");
-                sb.Append(item.Value);
-                sb.Append("\" ");
+                //sb.Append(" name =\"issue[custom_field_values][3]\"");
+                sb.Append(" name=\"");
+                sb.Append(System.Web.HttpUtility.HtmlAttributeEncode(name));
+                sb.Append("\"");
+                
+                sb.Append(" value=\"");
+                sb.Append(System.Web.HttpUtility.HtmlAttributeEncode(item.Value));
+                sb.Append("\"");
                 if (string.Equals(checkedValue, item.Value, System.StringComparison.InvariantCultureIgnoreCase))
-                    sb.Append("checked=\"checked\" ");
+                    sb.Append(" checked=\"checked\" ");
                 sb.Append(">");
-                sb.AppendLine(item.Text);
+
+                sb.AppendLine(System.Web.HttpUtility.HtmlEncode(item.Text));
                 sb.AppendLine("</label>");
             } // Next item 
 
