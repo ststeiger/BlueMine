@@ -21,7 +21,7 @@ namespace BlueMine.Data
         public CRUD(BlueMineContext context)
         {
             _context = context;
-        }
+        } // End Constuctor 
         
         
         
@@ -54,10 +54,9 @@ namespace BlueMine.Data
             // System.Console.WriteLine(sql2);
 
             System.Console.WriteLine(sql);
-        }
-
-
-
+        } // End Sub TestDynamicOrderBy 
+        
+        
         public string TestSqlGeneration(string uri)
         {
             List<T_projects> ls = _context.projects.ToList();
@@ -115,17 +114,19 @@ namespace BlueMine.Data
             string sql = lol2.ToSql();
             
             return $"<html><body><span>{sql}</span></body></html>";
-        }
+        } // End Function TestSqlGeneration 
         
         
-        public BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?> GetProjectTree(string uri)
+        public BlueMine.Data.GenericRecursor<
+            BlueMine.Db.T_projects, long?> 
+            GetProjectTree(string uri)
         {
             var lsProjects = GetProjects(uri);
             return new BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>(
                   lsProjects
                 , x => x.parent_id
                 , x => x.id);
-        }
+        } // End Function GetProjectTree 
         
 
         public List<BlueMine.Db.T_projects> GetProjects(string uri)
@@ -140,9 +141,9 @@ namespace BlueMine.Data
             ;
             
             return lsProjects;
-        }
+        } // End Function GetProjects 
         
-
+        
         public List<SelectListItem> GetTrackers(string uri)
         {
             var trackerz = (
@@ -211,10 +212,10 @@ namespace BlueMine.Data
             */
             
             return trackerz;
-        }
+        } // End Function GetTrackers 
         
         
-    }
+    } // End Class CRUD 
     
     
-}
+} // End Namespace BlueMine.Data

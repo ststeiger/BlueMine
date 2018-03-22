@@ -54,14 +54,29 @@
 <body>
     <h1>Hello New Item</h1>
 
+<style>
+    
+    input[type="checkbox"] {
+        clear: both;
+        display: table;
+    }
+    
+</style>
 
-    <radios asp-for="Checked" asp-items="CustomFields[3]" />
+
+<checkboxes id="mytrackers" 
+        name="blubb" 
+        asp-for="Issue.tracker_id" 
+        asp-items="Trackers" /> 
 
 
-    <input type="text" asp-for="Issue.id" />
+
+
+
+<input type="text" asp-for="Issue.id" />
     
     <label for="issue_tracker_id">Tracker<span class="required"> *</span></label>
-    <select id="issue_tracker_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
+    <select id="issue_tracker_id" asp-for="Issue.tracker_id"  asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
         <option>--- Please select ---</option>
     </select>
 
@@ -73,16 +88,21 @@
     <textarea asp-for="Issue.description"  id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit"></textarea>
 
     <label for="issue_status_id">Status<span class="required"> *</span></label>
-    <select id="issue_status_id" asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')">
+    <select id="issue_status_id" asp-for="Issue.status_id"
+        asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')">
         <option>--- Please select ---</option>
     </select>
 
     <label for="issue_priority_id">Priorität<span class="required"> *</span></label>
-    <select id="issue_priority_id" asp-items="Model.Priorities" name="issue[priority_id]"></select>
+    <select id="issue_priority_id" 
+        asp-for="Issue.priority_id"
+        asp-items="Model.Priorities" name="issue[priority_id]"></select>
 
 
     <label for="issue_assigned_to_id">Zugewiesen an</label>
-    <select id="issue_assigned_to_id" asp-items="Model.AssignedTo" name="issue[assigned_to_id]">
+    <select id="issue_assigned_to_id" 
+        asp-for="Issue.assigned_to_id" 
+        asp-items="Model.AssignedTo" name="issue[assigned_to_id]">
         <option value="">&nbsp;</option>
         <option value="5">&lt;&lt; ich &gt;&gt;</option>
     </select>
@@ -104,25 +124,19 @@
 
     <label for="issue_done_ratio">% erledigt</label>
     <select id="issue_done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
-
+    
     <p>
         <label for="issue_custom_field_values_3">
             <span title="verrechenbar Ja oder Nein" class="field-description">verrechenbar</span>
             <span class="required">*</span>
-        </label>
+        </label>        
+            
         <span class="list_cf check_box_group">
-            @for (int i = 0; i < Model.CustomFields[3].Count; ++i)
-            {
-                <label>
-                    <input asp-for="NotChecked" type="radio" id="issue_custom_field_values_@i" 
-                           name="issue[custom_field_values][3]" 
-                           value="@Model.CustomFields[3][i].Text">
-                    @Model.CustomFields[3][i].Text
-                </label>
-            }
+            <radios id="issue_custom_field_values_" 
+                    name="issue[custom_field_values][3]" 
+                    asp-for="Checked" asp-items="CustomFields[3]" />    
         </span>
     </p>
-
 
     <label for="issue_custom_field_values_1"><span>gemeldet von</span></label>
     <input type="text" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" value="" class="string_cf">
