@@ -35,6 +35,7 @@ namespace BlueMine.Models.Issue
             issue.updated_on = System.DateTime.Now;
 
             im.Issue = issue;
+            // im.CustomValues = new System.Collections.Generic.List<T_custom_values>();
         }
 
 
@@ -45,6 +46,7 @@ namespace BlueMine.Models.Issue
             if (issueId.HasValue)
             {
                 im.Issue = m_repo.FindById<T_issues>(issueId.Value);
+                im.CustomValues = this.m_repo.GetIssueCustomFieldsValues(issueId.Value);
             }
             else
                 SetDefaults(im);
@@ -55,6 +57,9 @@ namespace BlueMine.Models.Issue
             InitPriorities(im);
             InitStati(im);
             InitTrackers(im);
+
+            
+
 
             // im.issue.estimated_hours
 

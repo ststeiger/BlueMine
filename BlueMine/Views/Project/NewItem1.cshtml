@@ -48,7 +48,7 @@
 
 </head>
 <body>
-<h1>Hello New Item</h1>
+<h1>@Model.Issue.subject</h1>
 
 <style>
     
@@ -110,7 +110,7 @@
 <input asp-for="Issue.estimated_hours" size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours">
 
 <label for="issue_done_ratio">% erledigt</label>
-<select id="issue_done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
+<select id="issue_done_ratio" asp-for="Issue.done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
 
 <p>
     <label for="issue_custom_field_values_3">
@@ -121,21 +121,22 @@
     <span class="list_cf check_box_group">
         <radios id="issue_custom_field_values"
                 name="issue[custom_field_values][3]"
-                asp-for="Checked" asp-items="Model.CustomFields[3]"/>
+                asp-for="CustomValues[3].value"
+                asp-items="Model.CustomFields[3]"/>
     </span>
 </p>
 
 <label for="issue_custom_field_values_1">
     <span>gemeldet von</span>
 </label>
-<input type="text" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" value="" class="string_cf">
+<input type="text" asp-for="CustomValues[1].value" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" class="string_cf">
 
 <label for="issue_custom_field_values_2">
     <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
 </label>
-
 <select name="issue[custom_field_values][2]"
         asp-items="Model.CustomFields[2]"
+        asp-for="CustomValues[2].value"
         id="issue_custom_field_values_2" class="list_cf">
     <option value="">--- Bitte auswählen ---</option>
 </select>
@@ -148,6 +149,7 @@
     </label>
     <select name="issue[custom_field_values][5]"
             asp-items="Model.CustomFields[5]"
+            asp-for="CustomValues[5].value"
             id="issue_custom_field_values_5" class="list_cf">
         <option value="">&nbsp;</option>
         <option selected="selected" value="--- Bitte auswählen ---">--- Bitte auswählen ---</option>

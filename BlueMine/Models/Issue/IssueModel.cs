@@ -25,6 +25,8 @@ namespace BlueMine.Models.Issue
 
         // public T_issues Issue { get; set; }
         public T_issues Issue;
+        public System.Collections.Generic.List<T_custom_values> CustomValues;
+
 
         public System.Collections.Generic.List<
             System.Collections.Generic.List<

@@ -41,12 +41,9 @@ namespace BlueMine.TagHelpers
 
             string id = this.Id;
             string name = this.Name ?? id;
-            
-            string checkedValue = (string) System.Convert.ChangeType(
-                AspFor.Model, 
-                typeof(string),
-                System.Globalization.CultureInfo.InvariantCulture
-            );
+            string checkedValue = (AspFor == null) ? null : (string)
+                System.Convert.ChangeType(AspFor.Model, typeof(string), System.Globalization.CultureInfo.InvariantCulture);
+
 
             int i = 0;
             foreach (Microsoft.AspNetCore.Mvc.Rendering.SelectListItem item in Items)

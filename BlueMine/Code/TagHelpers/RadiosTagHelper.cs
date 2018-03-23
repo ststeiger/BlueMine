@@ -100,8 +100,7 @@ namespace BlueMine.TagHelpers
             
             string id = this.Id;
             string name = this.Name ?? id;
-            
-            string checkedValue = (string) 
+            string checkedValue = (AspFor == null) ? null : (string) 
                 System.Convert.ChangeType(AspFor.Model, typeof(string), System.Globalization.CultureInfo.InvariantCulture);
             
             int i = 0;

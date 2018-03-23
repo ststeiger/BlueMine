@@ -1,6 +1,7 @@
 ﻿
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 //using System.Collections.Generic;
 //using Microsoft.EntityFrameworkCore;
@@ -72,22 +73,83 @@ namespace BlueMine.Db
         }
 
 
+        private void test()
+        {
+            string query = @"SELECT * FROM Users WHERE SomeProp = {0} 
+                AND SomeId IN (SELECT id FROM fn_myfunc({1})";
+
+            string someProp = "'5'";
+            int someId = 3;
+
+
+            var users = this.m_ctx.issues.FromSql(query, someProp, someId)
+                .Include(u => u.closed_on)
+                .AsNoTracking()
+                .ToList();
+
+            var books = this.m_ctx.issues.FromSql("EXEC GetAllBooks").ToList();
+
+            var authorId = new System.Data.SqlClient.SqlParameter("@AuthorId", 1);
+            var books2 = this.m_ctx.issues
+                .FromSql("EXEC GetBooksByAuthor @AuthorId", authorId)
+                .ToList();
+
+            // this.m_ctx.Database.ProviderName
+            // this.m_ctx.Database.createpa
+
+            // This is EF6...
+            // https://weblogs.asp.net/Dixin/EntityFramework.Functions
+
+
+            using (System.Data.Common.DbConnection con = this.m_ctx.Database.GetDbConnection())
+            {
+                using (var cmd = con.CreateCommand())
+                {
+                    var p = cmd.CreateParameter();
+                }
+            }
+
+        }
 
 
         private System.Collections.Generic.List<T_custom_values>
             FetchCustomFieldsValues(string customized_type, int id)
         {
-            //SELECT* FROM custom_values
-            //WHERE customized_type = 'Issue'
-            //AND customized_id = 1
+            // SELECT* FROM custom_values
+            // WHERE customized_type = 'Issue'
+            // AND customized_id = 1
+            
+            // var max = this.m_ctx.custom_fields.OrderByDescending(x => x.id).FirstOrDefault();
+            int max = this.m_ctx.custom_fields.Max(x => x.id);
 
             System.Collections.Generic.List<T_custom_values> custom_values = (
-               from custom_value in this.m_ctx.custom_values
+               from custom_field in this.m_ctx.custom_fields
+               join custom_value in this.m_ctx.custom_values 
+                on custom_field.id equals custom_value.custom_field_id  
                where custom_value.customized_type == customized_type
-               && custom_value.id == id
-               select custom_value
-           ).ToList();
+               && custom_value.customized_id == id
 
+               select new T_custom_values() {
+                   id = custom_value.id,
+                   customized_type = custom_value.customized_type,
+                   customized_id = custom_value.customized_id,
+                   custom_field_id = custom_value.custom_field_id,
+                   value = custom_value.value ?? custom_field.default_value
+               }
+
+           ).ToList().OrderBy(x => x.custom_field_id).ToList();
+
+            // TODO: use default-values where applicable 
+            // Fill it up... 
+            max += 1;
+            for (int i = 0; i < max; ++i)
+            {
+                if (i < custom_values.Count && custom_values[i].custom_field_id == i)
+                    continue;
+
+                custom_values.Insert(i, new T_custom_values());
+            } // Next i 
+            
             return custom_values;
         } // End Function FetchCustomFieldsValues 
 

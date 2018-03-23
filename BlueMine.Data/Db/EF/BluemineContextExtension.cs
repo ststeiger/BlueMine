@@ -8,8 +8,8 @@ namespace BlueMine.Db
 
     public partial class BlueMineContext : DbContext
     {
-        
-        
+
+
         public BlueMineContext(DbContextOptions<BlueMineContext> options)
             : base(options)
         {
