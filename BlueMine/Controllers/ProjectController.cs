@@ -166,8 +166,8 @@ AND id not like '%e%'
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem");
         }
-
-
+        
+        
         // http://localhost:55337/projects/abc/issues/new
         // http://localhost:55337/projects/abc/issues/new1
         [Route("projects/{uri}/issues/new1")]
@@ -180,19 +180,19 @@ AND id not like '%e%'
             // https://docs.microsoft.com/en-us/aspnet/core/mvc/views/working-with-forms
             // @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
             // @addTagHelper *, AuthoringTagHelpers
-
+            
             // @model List<SelectListItem>
             // @model BlueMine.Models.Issue.IssueModel
-
+            
             int issue = 2;
-
+            
             Models.Issue.IssueModel im = Models.Issue.IssueModel.FromFactory(this.m_repo, issue);
             
             // return this.Content($"<html><body><h1>New issue for project {uri}</h1></body></html>", "text/html");
             return View("NewItem1", im);
         }
-
-
+        
+        
         [Route("projects/{uri}/issues/gantt")]
         public IActionResult GanttForProject(string uri)
         {

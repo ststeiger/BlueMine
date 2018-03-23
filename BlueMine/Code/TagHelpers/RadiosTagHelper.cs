@@ -1,8 +1,9 @@
 ﻿
 namespace BlueMine.TagHelpers
 {
-
-
+    
+    
+    // <radios id="issue_custom_field_values" name="issue[custom_field_values][3]" asp-for="Checked" asp-items="Model.CustomFields[3]"/>
     [Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElement("radios")]
     public class RadiosTagHelper 
         : Microsoft.AspNetCore.Razor.TagHelpers.TagHelper

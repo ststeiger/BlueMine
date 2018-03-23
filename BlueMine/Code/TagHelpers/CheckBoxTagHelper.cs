@@ -1,8 +1,10 @@
 ﻿
 namespace BlueMine.TagHelpers
 {
-
-
+    
+    
+    // Also, check out radioChecbox.ts
+    // <checkboxes id="mytrackers" name="trackerz" asp-for="Issue.tracker_id" asp-items="Model.Trackers"/>
     [Microsoft.AspNetCore.Razor.TagHelpers.HtmlTargetElement("checkboxes")]
     public class CheckBoxTagHelper 
         : Microsoft.AspNetCore.Razor.TagHelpers.TagHelper

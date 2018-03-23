@@ -1,5 +1,4 @@
-﻿
-@model BlueMine.Models.Issue.IssueModel
+﻿@model BlueMine.Models.Issue.IssueModel
 
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, BlueMine
@@ -11,18 +10,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <meta charset="utf-8"/>
 
-    <meta http-equiv="cache-control" content="max-age=0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="cache-control" content="max-age=0"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="expires" content="0"/>
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
+    <meta http-equiv="pragma" content="no-cache"/>
 
     <title>New Item</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00"/>
 
     <!--
     <link rel="stylesheet" type="text/css" href="ruler.min.css">
@@ -39,11 +38,8 @@
         }
 
 
-        ul {
-            list-style-type: none;
-        }
+        ul { list-style-type: none; }
     </style>
-
 
 
     <!--
@@ -52,11 +48,12 @@
 
 </head>
 <body>
-    <h1>Hello New Item</h1>
+<h1>Hello New Item</h1>
 
 <style>
     
-    input[type="checkbox"] {
+    input[type="checkbox"] 
+    {
         clear: both;
         display: table;
     }
@@ -64,239 +61,126 @@
 </style>
 
 
-<checkboxes id="mytrackers" 
-        name="blubb" 
-        asp-for="Issue.tracker_id" 
-        asp-items="Model.Trackers" /> 
+<input type="text" asp-for="Issue.id"/>
+
+<label for="issue_tracker_id">Tracker<span class="required"> *</span></label>
+<select id="issue_tracker_id" asp-for="Issue.tracker_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
+    <option>--- Please select ---</option>
+</select>
 
 
+<label for="issue_subject">Thema<span class="required"> *</span></label>
+<input asp-for="Issue.subject" size="80" maxlength="255" id="issue_subject" name="issue[subject]" type="text"/>
 
+<label for="issue_description">Beschreibung</label>
+<textarea asp-for="Issue.description"  id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit"></textarea>
 
-
-<input type="text" asp-for="Issue.id" />
-    
-    <label for="issue_tracker_id">Tracker<span class="required"> *</span></label>
-    <select id="issue_tracker_id" asp-for="Issue.tracker_id"  asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
-        <option>--- Please select ---</option>
-    </select>
-
-
-    <label for="issue_subject">Thema<span class="required"> *</span></label>
-    <input asp-for="Issue.subject" size="80" maxlength="255" id="issue_subject"  name="issue[subject]" type="text" />
-
-    <label for="issue_description">Beschreibung</label>
-    <textarea asp-for="Issue.description"  id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit"></textarea>
-
-    <label for="issue_status_id">Status<span class="required"> *</span></label>
-    <select id="issue_status_id" asp-for="Issue.status_id"
+<label for="issue_status_id">Status<span class="required"> *</span></label>
+<select id="issue_status_id" asp-for="Issue.status_id"
         asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')">
-        <option>--- Please select ---</option>
-    </select>
+    <option>--- Please select ---</option>
+</select>
 
-    <label for="issue_priority_id">Priorität<span class="required"> *</span></label>
-    <select id="issue_priority_id" 
+<label for="issue_priority_id">Priorität<span class="required"> *</span></label>
+<select id="issue_priority_id"
         asp-for="Issue.priority_id"
-        asp-items="Model.Priorities" name="issue[priority_id]"></select>
+        asp-items="Model.Priorities" name="issue[priority_id]">
+</select>
 
 
-    <label for="issue_assigned_to_id">Zugewiesen an</label>
-    <select id="issue_assigned_to_id" 
-        asp-for="Issue.assigned_to_id" 
+<label for="issue_assigned_to_id">Zugewiesen an</label>
+<select id="issue_assigned_to_id"
+        asp-for="Issue.assigned_to_id"
         asp-items="Model.AssignedTo" name="issue[assigned_to_id]">
-        <option value="">&nbsp;</option>
-        <option value="5">&lt;&lt; ich &gt;&gt;</option>
-    </select>
+    <option value="">&nbsp;</option>
+    <option value="5">&lt;&lt; ich &gt;&gt;</option>
+</select>
 
 
+<label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
+<input asp-for="Issue.parent_id" id="issue_parent_issue_id" name="issue[parent_issue_id]" size="10" type="text" class="ui-autocomplete-input autocomplete" autocomplete="off">
 
+<label for="issue_start_date">Beginn</label>
+<input asp-for="Issue.start_date" size="10" type="text" name="issue[start_date]" id="issue_start_date" class="date hasDatepicker">
 
-    <label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
-    <input asp-for="Issue.parent_id"  id="issue_parent_issue_id" name="issue[parent_issue_id]" size="10" type="text" class="ui-autocomplete-input autocomplete" autocomplete="off">
+<label for="issue_due_date">Abgabedatum</label>
+<input asp-for="Issue.due_date" size="10" type="text" name="issue[due_date]" id="issue_due_date" class="date hasDatepicker">
 
-    <label for="issue_start_date">Beginn</label>
-    <input asp-for="Issue.start_date" size="10" type="text" name="issue[start_date]" id="issue_start_date" class="date hasDatepicker">
+<label for="issue_estimated_hours">Geschätzter Aufwand</label>
+<input asp-for="Issue.estimated_hours" size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours">
 
-    <label for="issue_due_date">Abgabedatum</label>
-    <input asp-for="Issue.due_date" size="10" type="text" name="issue[due_date]" id="issue_due_date" class="date hasDatepicker">
+<label for="issue_done_ratio">% erledigt</label>
+<select id="issue_done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
 
-    <label for="issue_estimated_hours">Geschätzter Aufwand</label>
-    <input asp-for="Issue.estimated_hours" size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours">
-
-    <label for="issue_done_ratio">% erledigt</label>
-    <select id="issue_done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
-    
-    <p>
-        <label for="issue_custom_field_values_3">
-            <span title="verrechenbar Ja oder Nein" class="field-description">verrechenbar</span>
-            <span class="required">*</span>
-        </label>        
-        
-        <span class="list_cf check_box_group">
-            <radios id="issue_custom_field_values" 
-                    name="issue[custom_field_values][3]" 
-                    asp-for="Checked" asp-items="Model.CustomFields[3]" />    
-        </span>
-    </p>
-
-    <label for="issue_custom_field_values_1"><span>gemeldet von</span></label>
-    <input type="text" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" value="" class="string_cf">
-
-    <label for="issue_custom_field_values_2">
-        <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
+<p>
+    <label for="issue_custom_field_values_3">
+        <span title="verrechenbar Ja oder Nein" class="field-description">verrechenbar</span>
+        <span class="required">*</span>
     </label>
+    
+    <span class="list_cf check_box_group">
+        <radios id="issue_custom_field_values"
+                name="issue[custom_field_values][3]"
+                asp-for="Checked" asp-items="Model.CustomFields[3]"/>
+    </span>
+</p>
 
-    <select name="issue[custom_field_values][2]"
-            asp-items="Model.CustomFields[2]"
-            id="issue_custom_field_values_2" class="list_cf">
-        <option value="">--- Bitte auswählen ---</option>
+<label for="issue_custom_field_values_1">
+    <span>gemeldet von</span>
+</label>
+<input type="text" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" value="" class="string_cf">
+
+<label for="issue_custom_field_values_2">
+    <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
+</label>
+
+<select name="issue[custom_field_values][2]"
+        asp-items="Model.CustomFields[2]"
+        id="issue_custom_field_values_2" class="list_cf">
+    <option value="">--- Bitte auswählen ---</option>
+</select>
+
+<p>
+    <label for="issue_custom_field_values_5">
+        <span title="Sollen Kunden über dieses Ticket beim nächsten Update informiert werden?" class="field-description">
+            Kunden informieren
+        </span>
+    </label>
+    <select name="issue[custom_field_values][5]"
+            asp-items="Model.CustomFields[5]"
+            id="issue_custom_field_values_5" class="list_cf">
+        <option value="">&nbsp;</option>
+        <option selected="selected" value="--- Bitte auswählen ---">--- Bitte auswählen ---</option>
     </select>
-
-    <p>
-        <label for="issue_custom_field_values_5">
-            <span title="Sollen Kunden über dieses Ticket beim nächsten Update informiert werden?" class="field-description">
-                Kunden informieren
-            </span>
-        </label>
-        <select name="issue[custom_field_values][5]"
-                asp-items="Model.CustomFields[5]"
-                id="issue_custom_field_values_5" class="list_cf">
-            <option value="">&nbsp;</option>
-            <option selected="selected" value="--- Bitte auswählen ---">--- Bitte auswählen ---</option>
-        </select>
-    </p>
+</p>
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    
+    function onDomReady() 
+    {
+        console.log("dom ready");
+    }
 
+    if (document.addEventListener) document.addEventListener("DOMContentLoaded", onDomReady, false);
+    else if (document.attachEvent) document.attachEvent("onreadystatechange", onDomReady);
+    else window.onload = onDomReady;
 
-        /// attach an event handler, now or in the future, 
-        /// for all elements which match childselector,
-        /// within the child tree of the element maching parentSelector.
-        function subscribeEvent(parentSelector, eventName, childSelector, eventCallback) {
-            if (parentSelector == null)
-                throw new ReferenceError("Parameter parentSelector is NULL");
-            if (childSelector == null)
-                throw new ReferenceError("Parameter childSelector is NULL");
-            // nodeToObserve: the node that will be observed for mutations
-            var nodeToObserve = parentSelector;
-            if (typeof (parentSelector) === 'string')
-                nodeToObserve = document.querySelector(parentSelector);
-            var eligibleChildren = nodeToObserve.querySelectorAll(childSelector);
-            for (var i = 0; i < eligibleChildren.length; ++i) {
-                eligibleChildren[i].addEventListener(eventName, eventCallback, false);
-            } // Next i 
-            // https://stackoverflow.com/questions/2712136/how-do-i-make-this-loop-all-children-recursively
-            function allDescendants(node) {
-                if (node == null)
-                    return;
-                for (var i = 0; i < node.childNodes.length; i++) {
-                    var child = node.childNodes[i];
-                    allDescendants(child);
-                } // Next i 
-                // IE 11 Polyfill 
-                if (!Element.prototype.matches)
-                    Element.prototype.matches = Element.prototype.msMatchesSelector;
-                if (node.matches) {
-                    if (node.matches(childSelector)) {
-                        // console.log("match");
-                        node.addEventListener(eventName, eventCallback, false);
-                    } // End if ((<Element>node).matches(childSelector))
-                    // else console.log("no match");
-                } // End if ((<Element>node).matches) 
-                // else console.log("no matchfunction");
-            } // End Function allDescendants 
-            // Callback function to execute when mutations are observed
-            var callback = function (mutationsList, observer) {
-                for (var _i = 0, mutationsList_1 = mutationsList; _i < mutationsList_1.length; _i++) {
-                    var mutation = mutationsList_1[_i];
-                    // console.log("mutation.type", mutation.type);
-                    // console.log("mutation", mutation);
-                    if (mutation.type == 'childList') {
-                        for (var i = 0; i < mutation.addedNodes.length; ++i) {
-                            var thisNode = mutation.addedNodes[i];
-                            allDescendants(thisNode);
-                        } // Next i 
-                    } // End if (mutation.type == 'childList') 
-                    // else if (mutation.type == 'attributes') { console.log('The ' + mutation.attributeName + ' attribute was modified.');
-                } // Next mutation 
-            }; // End Function callback 
-            // Options for the observer (which mutations to observe)
-            var config = { attributes: false, childList: true, subtree: true };
-            // Create an observer instance linked to the callback function
-            var observer = new MutationObserver(callback);
-            // Start observing the target node for configured mutations
-            observer.observe(nodeToObserve, config);
-        } // End Function subscribeEvent 
-        
-        
-        function radioCheckbox_onClick() 
-        { 
-            // console.log("click", this);
-            let box = this;
-            if (box.checked) 
-            {
-                let name = box.getAttribute("name");
-                let pos = name.lastIndexOf("_");
-                if (pos !== -1) name = name.substr(0, pos);
+    function onPageLoaded() 
+    {
+        console.log("page loaded");
+    }
 
-                let group = 'input[type="checkbox"][name^="' + name + '"]';
-                // console.log(group);
-                let eles = document.querySelectorAll(group);
-                // console.log(eles);
-                for (let j = 0; j < eles.length; ++j) 
-                {
-                    eles[j].checked = false;
-                }
-                box.checked = true;
-            }
-            else
-                box.checked = false;
-        }
-        
-        
-        // https://stackoverflow.com/questions/9709209/html-select-only-one-checkbox-in-a-group
-        function radioCheckbox()
-        { 
-            // on instead of document...
-            let elements = document.querySelectorAll('input[type="checkbox"]')
+    if (window.addEventListener) window.addEventListener("load", onPageLoaded, false);
+    else if (window.attachEvent) window.attachEvent("onload", onPageLoaded);
+    else window.onload = onPageLoaded;
 
-            for (let i = 0; i < elements.length; ++i)
-            {
-                // console.log(elements[i]);
-                elements[i].addEventListener("click", radioCheckbox_onClick, false);
+</script>
 
-            } // Next i 
-
-        } // End Function radioCheckbox 
-
-
-        function onDomReady()
-        {
-            console.log("dom ready");
-            subscribeEvent(document, "click", 
-                'input[type="checkbox"]', 
-                radioCheckbox_onClick
-            ); 
-            
-            // radioCheckbox();
-        }
-
-        if (document.addEventListener) document.addEventListener("DOMContentLoaded", onDomReady, false);
-        else if (document.attachEvent) document.attachEvent("onreadystatechange", onDomReady);
-        else window.onload = onDomReady;
-
-        function onPageLoaded() {
-            console.log("page loaded");
-        }
-
-        if (window.addEventListener) window.addEventListener("load", onPageLoaded, false);
-        else if (window.attachEvent) window.attachEvent("onload", onPageLoaded);
-        else window.onload = onPageLoaded;
-
-    </script>
-
-    Powered by
-    <a href="https://www.blue.mine">blue-mine.rocks .technology http://know.how/</a>
-    https://www.name.com/domains
+Powered by
+<a href="https://www.blue.mine">blue-mine.rocks</a><br />
+<a href=".technology ">it.technology</a><br />
+<a href="http://know.how/">know.how</a><br />
+<a href="https://www.name.com/domains">Domains</a><br />
 </body>
 </html>
