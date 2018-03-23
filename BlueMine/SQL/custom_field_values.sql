@@ -35,3 +35,23 @@ LEFT JOIN custom_values
 
 
 ORDER BY CTE.id 
+
+
+
+
+
+SELECT 
+	 id
+	,subject
+	,description
+	,due_date
+     
+	,LEN(subject) AS subjlen
+	,LEN(description) AS desclen 
+
+	,done_ratio
+	,estimated_hours
+FROM issues
+WHERE id = 2 
+ORDER BY desclen DESC 
+
