@@ -72,6 +72,15 @@ namespace BlueMine.Db
             return ls;
         }
 
+        
+        
+        //[HttpGet]
+        public async System.Threading.Tasks.Task<
+            System.Collections.Generic.IEnumerable<T_issues>> Get()
+        {
+            return await this.m_ctx.issues.FromSql("usp_GetAllProducts").ToArrayAsync();
+        }
+        
 
         private void test()
         {
@@ -89,11 +98,15 @@ namespace BlueMine.Db
 
             var books = this.m_ctx.issues.FromSql("EXEC GetAllBooks").ToList();
 
+            
+            
+            
             var authorId = new System.Data.SqlClient.SqlParameter("@AuthorId", 1);
             var books2 = this.m_ctx.issues
                 .FromSql("EXEC GetBooksByAuthor @AuthorId", authorId)
                 .ToList();
-
+            
+            
             // this.m_ctx.Database.ProviderName
             // this.m_ctx.Database.createpa
 
