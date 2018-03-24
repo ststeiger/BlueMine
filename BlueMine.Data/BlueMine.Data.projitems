@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BlueMineRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\ProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BlueMineContext.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Db\ScaffoldingTest\Migrations\AcmeDataContextModelSnapshot.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\DbProviderFactories.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\SqlFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\StoredProcedureExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\GenericEntityFramworkRepository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\IQueryableExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BluemineContextExtension.cs" />

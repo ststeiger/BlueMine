@@ -19,10 +19,6 @@ namespace BlueMine.Models.Issue
         { }
 
 
-        public string Checked = "Ja";
-        public string NotChecked = "Nein";
-
-
         // public T_issues Issue { get; set; }
         public T_issues Issue;
         public System.Collections.Generic.List<T_custom_values> CustomValues;

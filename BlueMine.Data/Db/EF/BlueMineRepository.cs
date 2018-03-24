@@ -26,19 +26,19 @@ namespace BlueMine.Db
         public string Title { get; set; }
         public string UniqueId { get; set; }
     }
-    
-    
-    public class BlueMineRepository 
+
+
+    public class BlueMineRepository
         : GenericEntityFramworkRepository<BlueMineContext> // ,IRedmineRepository
     {
-        
-        
+
+
         public BlueMineRepository(BlueMineContext context)
             : base(context)
         { }
-        
-        
-        
+
+
+
         public System.Collections.Generic.List<BlogStory> GetStories()
         {
             System.Collections.Generic.List<BlogStory> ls =
@@ -55,8 +55,8 @@ namespace BlueMine.Db
                 Title = "This is NOT in any way a slug",
                 UniqueId = System.Guid.NewGuid().ToString()
             });
-            
-            
+
+
             ls.Add(new BlogStory()
             {
                 Id = 234,
@@ -68,19 +68,19 @@ namespace BlueMine.Db
                 Title = "This is NOT in any 234 way a slug",
                 UniqueId = System.Guid.NewGuid().ToString()
             });
-            
+
             return ls;
         }
 
-        
-        
+
+
         //[HttpGet]
         public async System.Threading.Tasks.Task<
             System.Collections.Generic.IEnumerable<T_issues>> Get()
         {
             return await this.m_ctx.issues.FromSql("usp_GetAllProducts").ToArrayAsync();
         }
-        
+
 
         private void test()
         {
@@ -98,21 +98,23 @@ namespace BlueMine.Db
 
             var books = this.m_ctx.issues.FromSql("EXEC GetAllBooks").ToList();
 
-            
-            
-            
+
+
+
             var authorId = new System.Data.SqlClient.SqlParameter("@AuthorId", 1);
             var books2 = this.m_ctx.issues
                 .FromSql("EXEC GetBooksByAuthor @AuthorId", authorId)
                 .ToList();
-            
-            
+
+
             // this.m_ctx.Database.ProviderName
             // this.m_ctx.Database.createpa
 
             // This is EF6...
             // https://weblogs.asp.net/Dixin/EntityFramework.Functions
 
+
+            this.m_ctx.Database.GetDbConnection();
 
             using (System.Data.Common.DbConnection con = this.m_ctx.Database.GetDbConnection())
             {
@@ -131,18 +133,35 @@ namespace BlueMine.Db
             // SELECT* FROM custom_values
             // WHERE customized_type = 'Issue'
             // AND customized_id = 1
-            
+
+            //using (var da = this.m_ctx.Database.ExecuteStoredProcedure("GetIssues", ("project", 5)))
+            //{
+            //    System.Console.WriteLine(da);
+            //}
+
+            //using (
+            var fo = this.m_ctx.Database.GetDbConnection();
+            {
+                System.Console.WriteLine(fo);
+            }
+
+
+            System.Console.WriteLine(this.m_ctx.custom_fields);
+
+
+
             // var max = this.m_ctx.custom_fields.OrderByDescending(x => x.id).FirstOrDefault();
             int max = this.m_ctx.custom_fields.Max(x => x.id);
 
             System.Collections.Generic.List<T_custom_values> custom_values = (
                from custom_field in this.m_ctx.custom_fields
-               join custom_value in this.m_ctx.custom_values 
-                on custom_field.id equals custom_value.custom_field_id  
+               join custom_value in this.m_ctx.custom_values
+                on custom_field.id equals custom_value.custom_field_id
                where custom_value.customized_type == customized_type
                && custom_value.customized_id == id
 
-               select new T_custom_values() {
+               select new T_custom_values()
+               {
                    id = custom_value.id,
                    customized_type = custom_value.customized_type,
                    customized_id = custom_value.customized_id,
@@ -162,29 +181,29 @@ namespace BlueMine.Db
 
                 custom_values.Insert(i, new T_custom_values());
             } // Next i 
-            
+
             return custom_values;
         } // End Function FetchCustomFieldsValues 
 
 
-        public System.Collections.Generic.List<T_custom_values> 
+        public System.Collections.Generic.List<T_custom_values>
             GetIssueCustomFieldsValues(int id)
         {
             return FetchCustomFieldsValues("Issue", id);
         } // End Function FetchCustomFieldsValues 
 
 
-        public System.Collections.Generic.List<SelectListItem> 
+        public System.Collections.Generic.List<SelectListItem>
             CustomFieldAsSelectList(string fieldName)
         {
             System.Collections.Generic.
             List<string> ls = this.FetchCustomFieldEntries(fieldName);
             return this.GetAsSelectList(ls);
         }
-        
 
 
-        public System.Collections.Generic.List<string> 
+
+        public System.Collections.Generic.List<string>
             FetchCustomFieldEntries(string fieldName)
         {
             System.Collections.Generic.List<string> lsFields = null;
@@ -216,7 +235,7 @@ namespace BlueMine.Db
 
         private System.Collections.Generic.List<string> GetDashSeparatedValues(string csv)
         {
-            System.Collections.Generic.List<string> ls = 
+            System.Collections.Generic.List<string> ls =
                 new System.Collections.Generic.List<string>();
 
             if (csv == null)
@@ -254,6 +273,6 @@ namespace BlueMine.Db
 
 
     } // End Class BlueMineRepository 
-    
-    
+
+
 } // End Namespace BlueMine.Db 
