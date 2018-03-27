@@ -67,7 +67,8 @@ namespace Microsoft.EntityFrameworkCore
         {
             System.Data.DataTable dt = new System.Data.DataTable();
 
-            using (System.Data.Common.DbConnection con = databaseFacade.GetDbConnection())
+            // using (System.Data.Common.DbConnection con = databaseFacade.GetDbConnection())
+            System.Data.Common.DbConnection con = databaseFacade.GetDbConnection();
             {
                 using (System.Data.Common.DbCommand cmd = con.CreateCommand())
                 {
