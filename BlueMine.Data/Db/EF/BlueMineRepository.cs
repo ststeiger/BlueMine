@@ -71,17 +71,16 @@ namespace BlueMine.Db
 
             return ls;
         }
-
-
-
+        
+        
         //[HttpGet]
         public async System.Threading.Tasks.Task<
             System.Collections.Generic.IEnumerable<T_issues>> Get()
         {
             return await this.m_ctx.issues.FromSql("usp_GetAllProducts").ToArrayAsync();
         }
-
-
+        
+        
         private void test()
         {
             string query = @"SELECT * FROM Users WHERE SomeProp = {0} 
