@@ -5,11 +5,7 @@
 // https://www.hanselman.com/blog/AddingACustomInlineRouteConstraintInASPNETCore10.aspx
 
 
-using System;
 using Microsoft.AspNetCore.Http.Extensions;
-using WilderMinds.RssSyndication;
-using Xml2CSharp;
-using Item = WilderMinds.RssSyndication.Item;
 
 
 namespace BlueMine.Controllers
@@ -30,11 +26,14 @@ namespace BlueMine.Controllers
         } // End Constructor 
 
 
+
+
+
         [Microsoft.AspNetCore.Mvc.HttpGet("WilderFeed")]
         public Microsoft.AspNetCore.Mvc.IActionResult WilderFeed()
         {
 
-            Feed feed = new Feed()
+            WilderMinds.RssSyndication.Feed feed = new WilderMinds.RssSyndication.Feed()
             {
                 Title = "Steve's Blog",
                 Description = "My Rants and Raves",
@@ -61,14 +60,15 @@ namespace BlueMine.Controllers
 
             foreach (Db.BlogStory entry in this.m_repo.GetStories())
             {
-                Item item = new Item()
+                WilderMinds.RssSyndication.Item item = new WilderMinds.RssSyndication.Item()
                 {
                     Title = entry.Title,
                     Body = string.Concat(entry.Body, license, ad),
                     Link = new System.Uri(new System.Uri(Request.GetEncodedUrl()), entry.Slug),
                     Permalink = new System.Uri(new System.Uri(Request.GetEncodedUrl()), entry.Slug).ToString(),
                     PublishDate = entry.DatePublished,
-                    Author = new Author() { Name = "Noobie Noob", Email = "noob@noobie.com" }
+                    Author = new WilderMinds.RssSyndication.Author()
+                    { Name = "Noobie Noob", Email = "noob@noobie.com" }
                 };
 
                 item.Categories.AddRange(entry.Categories.Split(','));
@@ -87,32 +87,28 @@ namespace BlueMine.Controllers
             Xml2CSharp.Rss rss2 = Tools.XML.Serialization.DeserializeXmlFromFile<Xml2CSharp.Rss>(fn);
             // System.Console.WriteLine(rss);
 
+            
+            Xml2CSharp.Rss rss = new Xml2CSharp.Rss();
 
-
-            Xml2CSharp.Rss rss = new Rss();
-
-            rss.Channel = new Channel();
+            rss.Channel = new Xml2CSharp.Channel();
             rss.Channel.Author = "FooFoo";
-            rss.Channel.Category = new Category();
+            rss.Channel.Category = new Xml2CSharp.Category();
             rss.Channel.Category.Text = "MyCategory";
             rss.Channel.Title = "MyChannel";
             rss.Channel.Subtitle = "How to channelize";
             rss.Channel.Description = "Describe";
             rss.Channel.Copyright = "2016 StS";
             rss.Channel.Generator = "BlueMine";
-            rss.Channel.Image = new Image();
+            rss.Channel.Image = new Xml2CSharp.Image();
             rss.Channel.Image.Url = "http://google.com";
             rss.Channel.Image.Title = "Alt Text?";
-            rss.Channel.Image.Link2 = "https.//google.com";
-            {
-            }
-
+            rss.Channel.Image.Link2 = "https://google.com";
+            
             rss.Channel.Items.Add(
                 new Xml2CSharp.Item()
                 {
                     PubDate = System.DateTime.Now,
-                    Title = "someTitle"
-                    ,
+                    Title = "someTitle",
                     Description = "",
                     CommentRss = "",
                 }

@@ -5,10 +5,23 @@
 using System.Xml.Serialization;
 
 
+// Atom 1.0
+// Atom is a relatively recent spec and is much more robust and feature-rich than RSS.
+// https://www.saksoft.com/rss-vs-atom/
+// http://www.intertwingly.net/wiki/pie/Rss20AndAtom10Compared
+// https://problogger.com/rss-vs-atom-whats-the-big-deal/
+// http://nullprogram.com/blog/2013/09/23/
+// https://www.ibm.com/developerworks/library/x-atom10/index.html
+// https://www.cambiaresearch.com/articles/71/easily-build-an-atom-or-rss-feed-with-csharp-and-the-syndication-namespace
+// https://rehansaeed.com/building-rssatom-feeds-for-asp-net-mvc/
+
+
+
 // https://www.nasa.gov/content/nasa-rss-feeds
 // https://github.com/joeaudette/cloudscribe.Syndication/blob/master/src/cloudscribe.Syndication/Models/Rss/RssChannel.cs
 namespace Xml2CSharp
 {
+
     [XmlRoot(ElementName = "link", Namespace = "http://www.w3.org/2005/Atom")]
     public class Link
     {
@@ -174,6 +187,17 @@ namespace Xml2CSharp
         public string Height { get; set; }
     }
 
+
+    [XmlRoot(ElementName = "rank", Namespace = "http://purl.org/atompub/rank/1.0")]
+    public class Rank
+    {
+        [XmlAttribute(AttributeName = "scheme")]
+        public string Scheme { get; set; }
+        [XmlText]
+        public string Text { get; set; }
+    }
+
+
     [XmlRoot(ElementName = "rating", Namespace = "http://search.yahoo.com/mrss/")]
     public class Rating
     {
@@ -258,7 +282,7 @@ namespace Xml2CSharp
 
 
         [XmlElement(ElementName = "encoded", Namespace = "http://purl.org/rss/1.0/modules/content/")]
-         public string Encoded { get; set; }
+        public string Encoded { get; set; }
 
         [XmlElement(ElementName = "commentRss", Namespace = "http://wellformedweb.org/CommentAPI/")]
         public string CommentRss { get; set; }
@@ -272,6 +296,7 @@ namespace Xml2CSharp
         [XmlElement(ElementName = "group", Namespace = "http://search.yahoo.com/mrss/")]
         public Group Group { get; set; }
     }
+
 
     [XmlRoot(ElementName = "channel")]
     public class Channel
@@ -356,32 +381,50 @@ namespace Xml2CSharp
             = new System.Collections.Generic.List<Item>();
     }
 
+
     //[XmlRoot(ElementName = "rss", Namespace = "urn:Abracadabra", IsNullable = true)]
     [XmlRoot(ElementName = "rss")]
-    public class Rss
+    public class Rss 
+        : Tools.XML.SerializableXml
     {
-        /*
-        [XmlNamespaceDeclarations]
-        public XmlSerializerNamespaces Namespaces
-        {
-            get { return this._namespaces; }
-        }
-        private XmlSerializerNamespaces _namespaces;
+
 
         public Rss()
         {
             this._namespaces = new XmlSerializerNamespaces(new System.Xml.XmlQualifiedName[] {
-            // Don't do this!! Microsoft's documentation explicitly says it's not supported.
-            // It doesn't throw any exceptions, but in my testing, it didn't always work.
+                // Don't do this!! Microsoft's documentation explicitly says it's not supported.
+                // It doesn't throw any exceptions, but in my testing, it didn't always work.
 
-            // new System.Xml.XmlQualifiedName(string.Empty, string.Empty),  // And don't do this:
-            
-            // DO THIS:
-            new System.Xml.XmlQualifiedName(string.Empty, "urn:Abracadabra") // Default Namespace
-            // Add any other namespaces, with prefixes, here.
-        });
+                // new System.Xml.XmlQualifiedName(string.Empty, string.Empty),  // And don't do this:
+
+                // DO THIS:
+                // new System.Xml.XmlQualifiedName(string.Empty, "urn:Abracadabra"), // Default Namespace
+                // Add any other namespaces, with prefixes, here.
+                
+                // new System.Xml.XmlQualifiedName("base", "http://www.nasa.gov/"), 
+                // new System.Xml.XmlQualifiedName("base", "http://www.w3.org/XML/1998/namespace"), 
+                new System.Xml.XmlQualifiedName("base", "https://www.nasa.gov/"), 
+
+                // <feed xmlns="http://www.w3.org/2005/Atom" 
+                new System.Xml.XmlQualifiedName("atom", "http://www.w3.org/2005/Atom"), 
+                new System.Xml.XmlQualifiedName("dc", "http://purl.org/dc/elements/1.1/"), 
+                new System.Xml.XmlQualifiedName("itunes", "http://www.itunes.com/dtds/podcast-1.0.dtd"), 
+                new System.Xml.XmlQualifiedName("media", "http://search.yahoo.com/mrss/"), 
+                
+                new System.Xml.XmlQualifiedName("wfw", "http://wellformedweb.org/CommentAPI/"), 
+                new System.Xml.XmlQualifiedName("sy", "http://purl.org/rss/1.0/modules/syndication/"), 
+                new System.Xml.XmlQualifiedName("slash", "http://purl.org/rss/1.0/modules/slash/"), 
+                new System.Xml.XmlQualifiedName("content", "http://purl.org/rss/1.0/modules/content/"), 
+
+                new System.Xml.XmlQualifiedName("creativeCommons", "http://backend.userland.com/creativeCommonsRssModule"), 
+                new System.Xml.XmlQualifiedName("re", "http://purl.org/atompub/rank/1.0"), 
+
+                new System.Xml.XmlQualifiedName("georss", "http://www.georss.org/georss"), 
+                new System.Xml.XmlQualifiedName("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#"), 
+                new System.Xml.XmlQualifiedName("nsb", "https://www.news.admin.ch/rss") 
+            });
         }
-        */
+        
         
         [XmlElement(ElementName = "channel")]
         public Channel Channel { get; set; }
@@ -432,6 +475,8 @@ namespace Xml2CSharp
         // https://en.wikipedia.org/wiki/RSS
         // https://nobillag.ch/feed/
         // https://en.blog.wordpress.com/feed/
+        // https://www.newsd.admin.ch/newsd/feeds/rss?lang=en&org-nr=1&topic=&keyword=&offer-nr=&catalogueElement=&kind=M,R&start_date=2015-01-01&end_date=
+        // https://stackoverflow.com/feeds/tag/+or+c+or+opengl+or+graphics+or+latex+or+android+or+wmii+or+glut+or+opencv+or+3d+or+3dgraphics+or+beamer+or+wiimote+or+beginner
         // xmlns:content="http://purl.org/rss/1.0/modules/content/"
         // xmlns:wfw="http://wellformedweb.org/CommentAPI/"
         // xmlns:dc="http://purl.org/dc/elements/1.1/"
