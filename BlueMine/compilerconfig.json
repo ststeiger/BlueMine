@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "TypeScript/slickGrid/slick.grid.css",
+    "inputFile": "TypeScript/slickGrid/slick.grid.less"
+  },
+  {
+    "outputFile": "TypeScript/slickGrid/slick-default-theme.css",
+    "inputFile": "TypeScript/slickGrid/slick-default-theme.less"
+  }
+]

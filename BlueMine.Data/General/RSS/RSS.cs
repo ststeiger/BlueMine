@@ -487,6 +487,4 @@ namespace Xml2CSharp
     }
 
 
-
-
 }

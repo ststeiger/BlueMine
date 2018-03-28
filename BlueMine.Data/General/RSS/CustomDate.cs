@@ -1,4 +1,8 @@
 ﻿
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+
 namespace BlueMine.Data.General.RSS
 {
 
@@ -284,6 +288,57 @@ namespace BlueMine.Data.General.RSS
 
 
     } // End Class CustomDate 
+
+
+
+
+    public class CData
+        : System.Xml.Serialization.IXmlSerializable
+    {
+        protected string m_content;
+
+        public CData()
+        { }
+
+        public CData(string content)
+        { this.m_content = content; }
+
+
+        // User-defined conversion from CData to string 
+        public static implicit operator string(CData data)
+        {
+            return data.m_content;
+        }
+
+        //  User-defined conversion from string to CData
+        public static implicit operator CData(string d)
+        {
+            return new CData(d);
+        }
+        
+        XmlSchema IXmlSerializable.GetSchema()
+        {
+            return null;
+        }
+
+        void IXmlSerializable.ReadXml(XmlReader reader)
+        {
+            switch (reader.NodeType)
+            {
+                case XmlNodeType.CDATA:
+                    this.m_content = reader.Value;
+                    break;
+            }
+        }
+
+        // https://stackoverflow.com/questions/1379888/how-do-you-serialize-a-string-as-cdata-using-xmlserializer
+        void IXmlSerializable.WriteXml(XmlWriter writer)
+        {
+            writer.WriteCData(this.m_content);
+            // var Content = "<![CDATA[ " + data.ToString() + " ]]>";
+            //CreateCDataSection(Content)
+        }
+    }
 
 
 } // End Namespace BlueMine.Data.General.RSS 

@@ -89,11 +89,14 @@ namespace BlueMine.Controllers
 
             
             Xml2CSharp.Rss rss = new Xml2CSharp.Rss();
+            rss.Version = "2.0";
 
             rss.Channel = new Xml2CSharp.Channel();
+            rss.Channel.Language = "en-US";
             rss.Channel.Author = "FooFoo";
             rss.Channel.Category = new Xml2CSharp.Category();
             rss.Channel.Category.Text = "MyCategory";
+            
             rss.Channel.Title = "MyChannel";
             rss.Channel.Subtitle = "How to channelize";
             rss.Channel.Description = "Describe";
@@ -104,13 +107,15 @@ namespace BlueMine.Controllers
             rss.Channel.Image.Title = "Alt Text?";
             rss.Channel.Image.Link2 = "https://google.com";
             
+
             rss.Channel.Items.Add(
                 new Xml2CSharp.Item()
                 {
+                    Id= System.Guid.NewGuid().ToString(),
                     PubDate = System.DateTime.Now,
-                    Title = "someTitle",
-                    Description = "",
-                    CommentRss = "",
+                    Title = "Some Title",
+                    Description = "Some Description",
+                    CommentRss = "Howdy",
                 }
             );
 

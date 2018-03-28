@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Db\EF\BlueMineRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\Atom.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\ProviderExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)EntityFramwork\CRUD.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dapper\CRUD.cs" />
