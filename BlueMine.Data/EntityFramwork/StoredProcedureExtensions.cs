@@ -11,7 +11,7 @@ namespace Microsoft.EntityFrameworkCore
         {
             if (obj == null)
                 return System.Data.DbType.Object;
-
+            
             System.Type type = obj.GetType();
 
             // http://social.msdn.microsoft.com/Forums/en/winforms/thread/c6f3ab91-2198-402a-9a18-66ce442333a6
@@ -67,7 +67,8 @@ namespace Microsoft.EntityFrameworkCore
         {
             System.Data.DataTable dt = new System.Data.DataTable();
 
-            using (System.Data.Common.DbConnection con = databaseFacade.GetDbConnection())
+            // using (System.Data.Common.DbConnection con = databaseFacade.GetDbConnection())
+            System.Data.Common.DbConnection con = databaseFacade.GetDbConnection();
             {
                 using (System.Data.Common.DbCommand cmd = con.CreateCommand())
                 {
