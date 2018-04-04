@@ -1,6 +1,6 @@
 import Slick from './slick.core';
 import flatpickr from 'flatpickr';
-import get = Reflect.get;
+// import get = Reflect.get;
 import {foobar} from "./___tests";
 // import 'flatpickr/dist/flatpickr.min.css';
 // import $ from 'jquery';
@@ -13,6 +13,8 @@ const { keyCode } = Slick;
  * @namespace Slick
  */
 
+
+
 const Editors = {
   Text: TextEditor,
   Integer: IntegerEditor,
@@ -22,6 +24,7 @@ const Editors = {
   Checkbox: CheckboxEditor,
   LongText: LongTextEditor
 };
+
 
 Slick.Editors = Editors;
 export default Editors;
@@ -164,7 +167,7 @@ function IntegerEditor(args){
 }
 
 function FloatEditor(args){
-  let $input;
+  var $input;
   let defaultValue;}
   let scope = this;
 
