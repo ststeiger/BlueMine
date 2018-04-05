@@ -1,37 +1,47 @@
 
-// jquery:
+// fix jquery.d.ts
 // css(elem: Element, unknown: any, x?:boolean): any;
 
+// fix jquery.d.ts
+// closest(selector: JQuery.Selector, context: Element | JQuery.Selector): this;
 
-// slick.dataview.ts
-// function recalc(_items, UNUSED?)
+// fix interact.d.ts
+// interface Interactable { allowFrom(className:string):Interactable;
 
 
-
-// slick.grid.ts
+// fix slick.grid.ts
 interface ISlickGrid
 {
     Grid:any;
 }
 
 
-// interact.d.ts
-// interface Interactable { allowFrom(className:string):Interactable;
 
-// jquery.d.ts
-// closest(selector: JQuery.Selector, context: Element | JQuery.Selector): this;
+// fix slick.grid.ts
+// jQueryNewWidthBehaviour = (<number><any>verArray[0] == 1 && <number><any>verArray[1] >= 8) || <number><any>verArray[0] >= 2;
 
-// slick.grid.ts
-//  jQueryNewWidthBehaviour = (<number><any>verArray[0] == 1 && <number><any>verArray[1] >= 8) || <number><any>verArray[0] >= 2;
+// fix slick.grid.ts
+// function queuePostProcessedRowForCleanup(cacheEntry, postProcessedRow, rowIdx, columnIdx?){
 
-// slick.grid.ts
-//function queuePostProcessedRowForCleanup(cacheEntry, postProcessedRow, rowIdx, columnIdx?){
+// fix slick.grid.ts
+// queuePostProcessedRowForCleanup(zombieRowCacheFromLastMouseWheelEvent, zombieRowPostProcessedFromLastMouseWheelEvent, null);
 
-// slick.grid.ts
-//queuePostProcessedRowForCleanup(zombieRowCacheFromLastMouseWheelEvent, zombieRowPostProcessedFromLastMouseWheelEvent, null);
+// fix slick.grid.ts
+interface IColumnDefaults
+{
+    name: string;
+    resizable: boolean;
+    sortable: boolean;
+    minWidth: number;
+    rerenderOnResize: boolean;
+    headerCssClass: string;
+    defaultSortAsc: boolean;
+    focusable: boolean;
+    selectable: boolean;
+}
 
 /*
-// slick.grid.ts & slick.frozen.grid.ts
+// fix slick.grid.ts & slick.frozen.grid.ts
 function toggleCellClass($cell, times, speed)
 {
     if (!times){
@@ -49,28 +59,14 @@ function toggleCellClass($cell, times, speed)
 function flashCell(row, cell, speed){
 */
 
-// slick.grid.ts
-interface IColumnDefaults  {
-    name: string;
-    resizable: boolean;
-    sortable: boolean;
-    minWidth: number;
-    rerenderOnResize: boolean;
-    headerCssClass: string;
-    defaultSortAsc: boolean;
-    focusable: boolean;
-    selectable: boolean;
-}
 
-
-
-// slick-frozen.grid.ts
+// fix slick-frozen.grid.ts
 interface Frozen
 {
     FrozenGrid: any;
 }
 
-// slick-frozen.grid.ts
+// fix slick-frozen.grid.ts
 interface IColumnDefaults
 {
     width?: number; // missing
@@ -88,47 +84,82 @@ interface IColumnDefaults
 
 
 
+// slick.dataview.ts
+// GroupItemMetadataProvider()
 
+// fix slick.dataview.ts
+// function recalc(_items, UNUSED?)
 
-interface Math
+// fix slick.dataview.ts
+interface IRefreshHint
 {
-    hypot: any;
-    
+    isFilterNarrowing: boolean;
+    isFilterExpanding: boolean;
+    isFilterUnchanged: boolean;
+    ignoreDiffsBefore: number;
+    ignoreDiffsAfter: number;
 }
 
+
+
+// fix slick.editors.ts 
+interface IEditor
+{
+    Editors: any;
+}
+
+
+/*
+// Doesn't work - use FunctionStatics instead
+declare var FloatEditor: {
+    // zEmbed can queue functions to be invoked when the asynchronous script has loaded.
+    //( callback: (args:any) => void ) : void;
+    
+    // ... and, once the asynchronous zEmbed script is loaded, the zEmbed object will
+    // expose the widget API.
+    // activate(): void;
+    // hide(): void;
+    // identify(): void;
+    // setHelpCenterSuggestions(): void;
+    // show(): void;
+    DefaultDecimalPlaces: number;
+};
+*/
+
+// slick.editors.ts
+interface FunctionStatics
+{
+    DefaultDecimalPlaces: number;
+}
+
+
+
+
+
+
+// Fix: other strange stuff 
+
+interface Window
+{
+    wrap: any;
+}
 
 interface Document
 {
     selection: any;
 }
 
-
-
-interface  Window
-{
-    wrap: any;
-}
-
-interface  Function
-{
-    displayName: string;
-}
-
-
 interface StyleSheet
 {
     owningElement: any;
 }
 
-
-
-interface  abc
+interface Function
 {
-    isFilterNarrowing: boolean;
-    isFilterExpanding:boolean;
-    isFilterUnchanged: boolean;
+    displayName: string;
 }
 
-
-// Data
-// GroupItemMetadataProvider()
+interface Math
+{
+    hypot: any;
+}

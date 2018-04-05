@@ -1,4 +1,4 @@
-import Slick from './slick.core';
+import Slick from './slick.core.js';
 Slick.FrozenGrid = SlickGrid;
 export default SlickGrid;
 var scrollbarDimensions;

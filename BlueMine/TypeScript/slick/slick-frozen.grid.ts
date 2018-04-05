@@ -19,7 +19,7 @@
 // import $ from 'jquery';
 // import interact from './interact.js';
 
-import Slick from './slick.core';
+import Slick from './slick.core.js';
 
 
 

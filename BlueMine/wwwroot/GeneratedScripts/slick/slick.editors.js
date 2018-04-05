@@ -1,4 +1,4 @@
-import Slick from './slick.core';
+import Slick from './slick.core.js';
 var keyCode = Slick.keyCode;
 var Editors = {
     Text: TextEditor,

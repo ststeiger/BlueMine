@@ -1,5 +1,5 @@
 
-import Slick from './slick.core';
+import Slick from './slick.core.js';
 // import flatpickr from 'flatpickr';
 // import get = Reflect.get;
 // import 'flatpickr/dist/flatpickr.min.css';
@@ -28,12 +28,8 @@ const Editors = {
 };
 
 
-interface E
-{
-    Editors: any;
-}
 
-(<E><any>Slick).Editors = Editors;
+(<IEditor><any>Slick).Editors = Editors;
 export default Editors;
 
 function TextEditor(args)
@@ -202,27 +198,6 @@ function IntegerEditor(args)
 }
 
 
-/*
-declare var FloatEditor: {
-    // zEmbed can queue functions to be invoked when the asynchronous script has loaded.
-    //( callback: (args:any) => void ) : void;
-    
-    // ... and, once the asynchronous zEmbed script is loaded, the zEmbed object will
-    // expose the widget API.
-    activate(): void;
-    hide(): void;
-    identify(): void;
-    setHelpCenterSuggestions(): void;
-    show(): void;  
-};
-*/
-
-interface F
-{
-    DefaultDecimalPlaces: number;
-
-}
-
 
 function FloatEditor(args)
 {
@@ -267,7 +242,7 @@ function FloatEditor(args)
         let rtn = args.column.editorFixedDecimalPlaces;
         if (typeof rtn == 'undefined')
         {
-            rtn = (<F><any>FloatEditor).DefaultDecimalPlaces;
+            rtn = (<FunctionStatics><any>FloatEditor).DefaultDecimalPlaces;
         }
         return (!rtn && rtn !== 0 ? null : rtn);
     }
@@ -342,7 +317,7 @@ function FloatEditor(args)
     this.init();
 }
 
-(<F><any>FloatEditor).DefaultDecimalPlaces = null;
+(<FunctionStatics><any>FloatEditor).DefaultDecimalPlaces = null;
 
 
 /**

@@ -1,5 +1,5 @@
-import Slick from './slick.core';
-import GroupMetaDataProvider from './slick.groupmetadataprovider';
+import Slick from './slick.core.js';
+import GroupMetaDataProvider from './slick.groupmetadataprovider.js';
 var Aggregators = {
     Avg: AvgAggregator,
     Min: MinAggregator,

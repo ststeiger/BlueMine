@@ -1,4 +1,4 @@
-import Slick from './slick.core';
+import Slick from './slick.core.js';
 export default GroupItemMetadataProvider;
 function GroupItemMetadataProvider(options) {
     var _grid;

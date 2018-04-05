@@ -6,5 +6,17 @@
   {
     "outputFile": "TypeScript/slickGrid/slick-default-theme.css",
     "inputFile": "TypeScript/slickGrid/slick-default-theme.less"
+  },
+  {
+    "outputFile": "TypeScript/styles/slick.grid.css",
+    "inputFile": "TypeScript/styles/slick.grid.less"
+  },
+  {
+    "outputFile": "TypeScript/styles/slick.grid.variables.css",
+    "inputFile": "TypeScript/styles/slick.grid.variables.less"
+  },
+  {
+    "outputFile": "TypeScript/styles/slick-default-theme.css",
+    "inputFile": "TypeScript/styles/slick-default-theme.less"
   }
 ]

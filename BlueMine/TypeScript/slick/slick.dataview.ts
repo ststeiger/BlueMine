@@ -1,8 +1,8 @@
 
-// import $                      from 'jquery';
+// import $ from 'jquery.js';
 
-import Slick from './slick.core';
-import GroupMetaDataProvider from './slick.groupmetadataprovider';
+import Slick from './slick.core.js';
+import GroupMetaDataProvider from './slick.groupmetadataprovider.js';
 
 const Aggregators = {
     Avg: AvgAggregator,
@@ -19,15 +19,6 @@ const Data = {
 
 export default Data;
 
-
-interface IRefreshHint
-{
-    isFilterNarrowing: boolean;
-    isFilterExpanding: boolean;
-    isFilterUnchanged: boolean;
-    ignoreDiffsBefore: number;
-    ignoreDiffsAfter: number;
-}
 
 
 /** *
