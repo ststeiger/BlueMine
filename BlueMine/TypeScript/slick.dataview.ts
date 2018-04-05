@@ -1,5 +1,6 @@
+
 import Slick                  from './slick.core';
-import $                      from 'jquery';
+// import $                      from 'jquery';
 import GroupMetaDataProvider  from './slick.groupmetadataprovider';
 
 const Aggregators = {
@@ -16,6 +17,17 @@ const Data = {
 };
 
 export default Data;
+
+
+interface IRefreshHint
+{
+    isFilterNarrowing:boolean;
+    isFilterExpanding:boolean;
+    isFilterUnchanged:boolean;
+    ignoreDiffsBefore:boolean;
+    ignoreDiffsAfter:boolean;
+}
+
 
 /** *
  * A sample Model implementation.
@@ -43,8 +55,8 @@ function DataView(options){
   let sortAsc = true;
   let fastSortField;
   let sortComparer;
-  let refreshHints = {};
-  let prevRefreshHints = {};
+  let refreshHints : IRefreshHint = <IRefreshHint> {};
+  let prevRefreshHints:IRefreshHint = <IRefreshHint>{};
   let filterArgs;
   let filteredItems = [];
   let compiledFilter;
@@ -828,10 +840,10 @@ function DataView(options){
 
     groups = [];
     if (groupingInfos.length){
-      groups = extractGroups(newRows);
+      groups = extractGroups(newRows, 0);
       if (groups.length){
-        addTotals(groups);
-        newRows = flattenGroupedRows(groups);
+        addTotals(groups, 0);
+        newRows = flattenGroupedRows(groups, 0);
       }
     }
 
@@ -861,7 +873,7 @@ function DataView(options){
 
     updated = null;
     prevRefreshHints = refreshHints;
-    refreshHints = {};
+    refreshHints = <IRefreshHint>{};
 
     if (totalRowsBefore !== totalRows){
       onPagingInfoChanged.notify(getPagingInfo(), null, self);
