@@ -18,7 +18,8 @@ interface ISlickGrid
 // interact.d.ts
 // interface Interactable { allowFrom(className:string):Interactable;
 
-
+// jquery.d.ts
+// closest(selector: JQuery.Selector, context: Element | JQuery.Selector): this;
 
 // slick.grid.ts
 //  jQueryNewWidthBehaviour = (<number><any>verArray[0] == 1 && <number><any>verArray[1] >= 8) || <number><any>verArray[0] >= 2;
@@ -26,8 +27,11 @@ interface ISlickGrid
 // slick.grid.ts
 //function queuePostProcessedRowForCleanup(cacheEntry, postProcessedRow, rowIdx, columnIdx?){
 
-/*
 // slick.grid.ts
+//queuePostProcessedRowForCleanup(zombieRowCacheFromLastMouseWheelEvent, zombieRowPostProcessedFromLastMouseWheelEvent, null);
+
+/*
+// slick.grid.ts & slick.frozen.grid.ts
 function toggleCellClass($cell, times, speed)
 {
     if (!times){

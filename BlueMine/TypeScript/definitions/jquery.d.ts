@@ -3488,7 +3488,7 @@ interface JQuery<TElement extends Node = HTMLElement> extends Iterable<TElement>
      * @see {@link https://api.jquery.com/closest/}
      * @since 1.4
      */
-    closest(selector: JQuery.Selector, context: Element): this;
+    closest(selector: JQuery.Selector, context: Element | JQuery.Selector): this;
     /**
      * For each element in the set, get the first element that matches the selector by testing the element
      * itself and traversing up through its ancestors in the DOM tree.

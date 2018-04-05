@@ -5,7 +5,7 @@ import Slick from './slick.core';
 // import 'flatpickr/dist/flatpickr.min.css';
 // import $ from 'jquery';
 
-const {keyCode} = Slick;
+const { keyCode } = Slick;
 
 /** *
  * Contains basic SlickGrid editors.
@@ -13,7 +13,7 @@ const {keyCode} = Slick;
  * @namespace Slick
  */
 
-declare var flatpickr:any;
+declare var flatpickr: any;
 
 
 
@@ -30,7 +30,7 @@ const Editors = {
 
 interface E
 {
-    Editors:any;
+    Editors: any;
 }
 
 (<E><any>Slick).Editors = Editors;

@@ -1,53 +1,10 @@
-/**
- * @license
- * (c) 2009-2013 Michael Leibman
- * michael{dot}leibman{at}gmail{dot}com
- * http://github.com/mleibman/slickgrid
- *
- * Distributed under MIT license.
- * All rights reserved.
- *
- * SlickGrid v2.2
- *
- * NOTES:
- *     Cell/row DOM manipulations are done directly bypassing jQuery's DOM manipulation methods.
- *     This increases the speed dramatically, but can only be done safely because there are no event handlers
- *     or data associated with any cell/row DOM nodes.  Cell editors must make sure they implement .destroy()
- *     and do proper cleanup.
- */
-
-// import $ from 'jquery';
-// import interact from './interact.js';
-
 import Slick from './slick.core';
-
-
-
-// Slick.Grid globals pretense
-(<Frozen><any>Slick).FrozenGrid = SlickGrid;
-
+Slick.FrozenGrid = SlickGrid;
 export default SlickGrid;
-
-// shared across all grids on the page
-let scrollbarDimensions;
-let maxSupportedCssHeight; // browser's breaking point
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-// SlickGrid class implementation (available as Slick.Grid)
-
-/**
- * Creates a new instance of the grid.
- * @class SlickGrid
- * @constructor
- * @param {Node}              container   Container node to create the grid in.
- * @param {Array,Object}      data        An array of objects for databinding.
- * @param {Array}             columns     An array of column definitions.
- * @param {Object}            options     Grid options.
- **/
-function SlickGrid(container, data, columns, options)
-{
-    // settings
-    let defaults = {
+var scrollbarDimensions;
+var maxSupportedCssHeight;
+function SlickGrid(container, data, columns, options) {
+    var defaults = {
         explicitInitialization: false,
         rowHeight: 25,
         defaultColumnWidth: 80,
@@ -86,10 +43,7 @@ function SlickGrid(container, data, columns, options)
         forceSyncScrolling: false,
         addNewRowCssClass: "new-row"
     };
-
-
-
-    let columnDefaults: IColumnDefaults = {
+    var columnDefaults = {
         name: "",
         resizable: true,
         sortable: false,
@@ -100,374 +54,249 @@ function SlickGrid(container, data, columns, options)
         focusable: true,
         selectable: true
     };
-
-    // scroller
-    let th; // virtual height
-    let h; // real scrollable height
-    let ph; // page height
-    let n; // number of pages
-    let cj; // "jumpiness" coefficient
-
-    let page = 0; // current page
-    let offset = 0; // current page offset
-    let vScrollDir = 1;
-
-    // private
-    let initialized = false;
-    let $container;
-    let uid = "slickgrid_" + Math.round(1000000 * Math.random());
-    let self = this;
-    let $focusSink, $focusSink2;
-    let $groupHeaders = $();
-    let $headerScroller;
-    let $headers;
-    let $headerRow, $headerRowScroller, $headerRowSpacerL, $headerRowSpacerR;
-    let $footerRow, $footerRowScroller, $footerRowSpacerL, $footerRowSpacerR;
-    let $topPanelScroller;
-    let $topPanel;
-    let $viewport;
-    let $canvas;
-    let $style;
-    let $boundAncestors;
-    let treeColumns;
-    let stylesheet, columnCssRulesL, columnCssRulesR;
-    let viewportH, viewportW;
-    let canvasWidth, canvasWidthL, canvasWidthR;
-    let headersWidth, headersWidthL, headersWidthR;
-    let viewportHasHScroll, viewportHasVScroll;
-    let headerColumnWidthDiff = 0,
-        headerColumnHeightDiff = 0, // border+padding
-        cellWidthDiff = 0,
-        cellHeightDiff = 0;
-    let absoluteColumnMinWidth;
-    let hasFrozenRows = false;
-    let frozenRowsHeight = 0;
-    let actualFrozenRow = -1;
-    let paneTopH = 0;
-    let paneBottomH = 0;
-    let viewportTopH = 0;
-    let viewportBottomH = 0;
-    let topPanelH = 0;
-    let headerRowH = 0;
-    let footerRowH = 0;
-
-    let tabbingDirection = 1;
-    let $activeCanvasNode;
-    let $activeViewportNode;
-    let activePosX;
-    let activeRow, activeCell;
-    let activeCellNode = null;
-    let currentEditor = null;
-    let serializedEditorValue;
-    let editController;
-
-    let rowsCache = {};
-    let renderedRows = 0;
-    let numVisibleRows = 0;
-    let prevScrollTop = 0;
-    let scrollTop = 0;
-    let lastRenderedScrollTop = 0;
-    let lastRenderedScrollLeft = 0;
-    let prevScrollLeft = 0;
-    let scrollLeft = 0;
-
-    let selectionModel;
-    let selectedRows = [];
-
-    let plugins = [];
-    let cellCssClasses = {};
-
-    let columnsById = {};
-    let sortColumns = [];
-    let columnPosLeft = [];
-    let columnPosRight = [];
-
-    // async call handles
-    let h_editorLoader = null;
-    let h_render = null;
-    let h_postrender = null;
-    let postProcessedRows = {};
-    let postProcessToRow = null;
-    let postProcessFromRow = null;
-
-    // perf counters
-    let counter_rows_rendered = 0;
-    let counter_rows_removed = 0;
-
-    // These two let iables work around a bug with inertial scrolling in Webkit/Blink on Mac.
-    // See http://crbug.com/312427.
-    let rowNodeFromLastMouseWheelEvent; // this node must not be deleted while inertial scrolling
-    let zombieRowNodeFromLastMouseWheelEvent; // node that was hidden instead of getting deleted
-
-    let $paneHeaderL;
-    let $paneHeaderR;
-    let $paneTopL;
-    let $paneTopR;
-    let $paneBottomL;
-    let $paneBottomR;
-
-    let $headerScrollerL;
-    let $headerScrollerR;
-
-    let $headerL;
-    let $headerR;
-
-    let $groupHeadersL;
-    let $groupHeadersR;
-
-    let $headerRowScrollerL;
-    let $headerRowScrollerR;
-
-    let $footerRowScrollerL;
-    let $footerRowScrollerR;
-
-    let $headerRowL;
-    let $headerRowR;
-
-    let $footerRowL;
-    let $footerRowR;
-
-    let $topPanelScrollerL;
-    let $topPanelScrollerR;
-
-    let $topPanelL;
-    let $topPanelR;
-
-    let $viewportTopL;
-    let $viewportTopR;
-    let $viewportBottomL;
-    let $viewportBottomR;
-
-    let $canvasTopL;
-    let $canvasTopR;
-    let $canvasBottomL;
-    let $canvasBottomR;
-
-    let $viewportScrollContainerX;
-    let $viewportScrollContainerY;
-    let $headerScrollContainer;
-    let $headerRowScrollContainer;
-    let $footerRowScrollContainer;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // Initialization
-
-    function init()
-    {
+    var th;
+    var h;
+    var ph;
+    var n;
+    var cj;
+    var page = 0;
+    var offset = 0;
+    var vScrollDir = 1;
+    var initialized = false;
+    var $container;
+    var uid = "slickgrid_" + Math.round(1000000 * Math.random());
+    var self = this;
+    var $focusSink, $focusSink2;
+    var $groupHeaders = $();
+    var $headerScroller;
+    var $headers;
+    var $headerRow, $headerRowScroller, $headerRowSpacerL, $headerRowSpacerR;
+    var $footerRow, $footerRowScroller, $footerRowSpacerL, $footerRowSpacerR;
+    var $topPanelScroller;
+    var $topPanel;
+    var $viewport;
+    var $canvas;
+    var $style;
+    var $boundAncestors;
+    var treeColumns;
+    var stylesheet, columnCssRulesL, columnCssRulesR;
+    var viewportH, viewportW;
+    var canvasWidth, canvasWidthL, canvasWidthR;
+    var headersWidth, headersWidthL, headersWidthR;
+    var viewportHasHScroll, viewportHasVScroll;
+    var headerColumnWidthDiff = 0, headerColumnHeightDiff = 0, cellWidthDiff = 0, cellHeightDiff = 0;
+    var absoluteColumnMinWidth;
+    var hasFrozenRows = false;
+    var frozenRowsHeight = 0;
+    var actualFrozenRow = -1;
+    var paneTopH = 0;
+    var paneBottomH = 0;
+    var viewportTopH = 0;
+    var viewportBottomH = 0;
+    var topPanelH = 0;
+    var headerRowH = 0;
+    var footerRowH = 0;
+    var tabbingDirection = 1;
+    var $activeCanvasNode;
+    var $activeViewportNode;
+    var activePosX;
+    var activeRow, activeCell;
+    var activeCellNode = null;
+    var currentEditor = null;
+    var serializedEditorValue;
+    var editController;
+    var rowsCache = {};
+    var renderedRows = 0;
+    var numVisibleRows = 0;
+    var prevScrollTop = 0;
+    var scrollTop = 0;
+    var lastRenderedScrollTop = 0;
+    var lastRenderedScrollLeft = 0;
+    var prevScrollLeft = 0;
+    var scrollLeft = 0;
+    var selectionModel;
+    var selectedRows = [];
+    var plugins = [];
+    var cellCssClasses = {};
+    var columnsById = {};
+    var sortColumns = [];
+    var columnPosLeft = [];
+    var columnPosRight = [];
+    var h_editorLoader = null;
+    var h_render = null;
+    var h_postrender = null;
+    var postProcessedRows = {};
+    var postProcessToRow = null;
+    var postProcessFromRow = null;
+    var counter_rows_rendered = 0;
+    var counter_rows_removed = 0;
+    var rowNodeFromLastMouseWheelEvent;
+    var zombieRowNodeFromLastMouseWheelEvent;
+    var $paneHeaderL;
+    var $paneHeaderR;
+    var $paneTopL;
+    var $paneTopR;
+    var $paneBottomL;
+    var $paneBottomR;
+    var $headerScrollerL;
+    var $headerScrollerR;
+    var $headerL;
+    var $headerR;
+    var $groupHeadersL;
+    var $groupHeadersR;
+    var $headerRowScrollerL;
+    var $headerRowScrollerR;
+    var $footerRowScrollerL;
+    var $footerRowScrollerR;
+    var $headerRowL;
+    var $headerRowR;
+    var $footerRowL;
+    var $footerRowR;
+    var $topPanelScrollerL;
+    var $topPanelScrollerR;
+    var $topPanelL;
+    var $topPanelR;
+    var $viewportTopL;
+    var $viewportTopR;
+    var $viewportBottomL;
+    var $viewportBottomR;
+    var $canvasTopL;
+    var $canvasTopR;
+    var $canvasBottomL;
+    var $canvasBottomR;
+    var $viewportScrollContainerX;
+    var $viewportScrollContainerY;
+    var $headerScrollContainer;
+    var $headerRowScrollContainer;
+    var $footerRowScrollContainer;
+    function init() {
         $container = $(container);
-        if ($container.length < 1)
-        {
+        if ($container.length < 1) {
             throw new Error("SlickGrid requires a valid container, " + container + " does not exist in the DOM.");
         }
-
-        // calculate these only once and share between grid instances
         maxSupportedCssHeight = maxSupportedCssHeight || getMaxSupportedCssHeight();
         scrollbarDimensions = scrollbarDimensions || measureScrollbar();
-
         options = $.extend({}, defaults, options);
         validateAndEnforceOptions();
         columnDefaults.width = options.defaultColumnWidth;
-
         treeColumns = new Slick.TreeColumns(columns);
         columns = treeColumns.extractColumns();
-
         columnsById = {};
-        for (let i = 0; i < columns.length; i++)
-        {
-            let m = columns[i] = $.extend({}, columnDefaults, columns[i]);
+        for (var i = 0; i < columns.length; i++) {
+            var m = columns[i] = $.extend({}, columnDefaults, columns[i]);
             columnsById[m.id] = i;
-            if (m.minWidth && m.width < m.minWidth)
-            {
+            if (m.minWidth && m.width < m.minWidth) {
                 m.width = m.minWidth;
             }
-            if (m.maxWidth && m.width > m.maxWidth)
-            {
+            if (m.maxWidth && m.width > m.maxWidth) {
                 m.width = m.maxWidth;
             }
         }
-
         editController = {
             "commitCurrentEdit": commitCurrentEdit,
             "cancelCurrentEdit": cancelCurrentEdit
         };
-
         $container.empty()
             .css("overflow", "hidden")
             .css("outline", 0)
             .addClass(uid)
             .addClass("ui-widget");
-
-        // set up a positioning container if needed
-        if (!/relative|absolute|fixed/.test($container.css("position")))
-        {
+        if (!/relative|absolute|fixed/.test($container.css("position"))) {
             $container.css("position", "relative");
         }
-
         $focusSink = $("<div tabIndex='0' hideFocus style='position:fixed;width:0;height:0;top:0;left:0;outline:0;'></div>").appendTo($container);
-
-        // Containers used for scrolling frozen columns and rows
         $paneHeaderL = $("<div class='slick-pane slick-pane-header slick-pane-left' tabIndex='0' />").appendTo($container);
         $paneHeaderR = $("<div class='slick-pane slick-pane-header slick-pane-right' tabIndex='0' />").appendTo($container);
         $paneTopL = $("<div class='slick-pane slick-pane-top slick-pane-left' tabIndex='0' />").appendTo($container);
         $paneTopR = $("<div class='slick-pane slick-pane-top slick-pane-right' tabIndex='0' />").appendTo($container);
         $paneBottomL = $("<div class='slick-pane slick-pane-bottom slick-pane-left' tabIndex='0' />").appendTo($container);
         $paneBottomR = $("<div class='slick-pane slick-pane-bottom slick-pane-right' tabIndex='0' />").appendTo($container);
-
-        // Append the header scroller containers
         $headerScrollerL = $("<div class='ui-state-default slick-header slick-header-left' />").appendTo($paneHeaderL);
         $headerScrollerR = $("<div class='ui-state-default slick-header slick-header-right' />").appendTo($paneHeaderR);
-
-        // Cache the header scroller containers
         $headerScroller = $().add($headerScrollerL).add($headerScrollerR);
-
-        if (treeColumns.hasDepth())
-        {
+        if (treeColumns.hasDepth()) {
             $groupHeadersL = [], $groupHeadersR = [];
-            for (let index = 0; index < treeColumns.getDepth() - 1; index++)
-            {
+            for (var index = 0; index < treeColumns.getDepth() - 1; index++) {
                 $groupHeadersL[index] = $("<div class='slick-group-header-columns slick-group-header-columns-left' style='left:-1000px' />").appendTo($headerScrollerL);
                 $groupHeadersR[index] = $("<div class='slick-group-header-columns slick-group-header-columns-right' style='left:-1000px' />").appendTo($headerScrollerR);
             }
-
             $groupHeaders = $().add($groupHeadersL).add($groupHeadersR);
         }
-
-        // Append the columnn containers to the headers
         $headerL = $("<div class='slick-header-columns slick-header-columns-left' style='left:-1000px' />").appendTo($headerScrollerL);
         $headerR = $("<div class='slick-header-columns slick-header-columns-right' style='left:-1000px' />").appendTo($headerScrollerR);
-
-        // Cache the header columns
         $headers = $().add($headerL).add($headerR);
-
         $headerRowScrollerL = $("<div class='ui-state-default slick-headerrow' />").appendTo($paneTopL);
         $headerRowScrollerR = $("<div class='ui-state-default slick-headerrow' />").appendTo($paneTopR);
-
         $headerRowScroller = $().add($headerRowScrollerL).add($headerRowScrollerR);
-
         $headerRowSpacerL = $("<div style='display:block;height:1px;position:absolute;top:0;left:0;'></div>")
             .css("width", getCanvasWidth() + scrollbarDimensions.width + "px")
             .appendTo($headerRowScrollerL);
         $headerRowSpacerR = $("<div style='display:block;height:1px;position:absolute;top:0;left:0;'></div>")
             .css("width", getCanvasWidth() + scrollbarDimensions.width + "px")
             .appendTo($headerRowScrollerR);
-
         $headerRowL = $("<div class='slick-headerrow-columns slick-headerrow-columns-left' />").appendTo($headerRowScrollerL);
         $headerRowR = $("<div class='slick-headerrow-columns slick-headerrow-columns-right' />").appendTo($headerRowScrollerR);
-
         $headerRow = $().add($headerRowL).add($headerRowR);
-
-        // Append the top panel scroller
         $topPanelScrollerL = $("<div class='ui-state-default slick-top-panel-scroller' />").appendTo($paneTopL);
         $topPanelScrollerR = $("<div class='ui-state-default slick-top-panel-scroller' />").appendTo($paneTopR);
-
         $topPanelScroller = $().add($topPanelScrollerL).add($topPanelScrollerR);
-
-        // Append the top panel
         $topPanelL = $("<div class='slick-top-panel' style='width:10000px' />").appendTo($topPanelScrollerL);
         $topPanelR = $("<div class='slick-top-panel' style='width:10000px' />").appendTo($topPanelScrollerR);
-
         $topPanel = $().add($topPanelL).add($topPanelR);
-
-        if (!options.showTopPanel)
-        {
+        if (!options.showTopPanel) {
             $topPanelScroller.hide();
         }
-
-        if (!options.showHeaderRow)
-        {
+        if (!options.showHeaderRow) {
             $headerRowScroller.hide();
         }
-
-        // Append the viewport containers
         $viewportTopL = $("<div class='slick-viewport slick-viewport-top slick-viewport-left' tabIndex='0' hideFocus />").appendTo($paneTopL);
         $viewportTopR = $("<div class='slick-viewport slick-viewport-top slick-viewport-right' tabIndex='0' hideFocus />").appendTo($paneTopR);
         $viewportBottomL = $("<div class='slick-viewport slick-viewport-bottom slick-viewport-left' tabIndex='0' hideFocus />").appendTo($paneBottomL);
         $viewportBottomR = $("<div class='slick-viewport slick-viewport-bottom slick-viewport-right' tabIndex='0' hideFocus />").appendTo($paneBottomR);
-
-        // Cache the viewports
         $viewport = $().add($viewportTopL).add($viewportTopR).add($viewportBottomL).add($viewportBottomR);
-
-        // Default the active viewport to the top left
         $activeViewportNode = $viewportTopL;
-
-        // Append the canvas containers
         $canvasTopL = $("<div class='grid-canvas grid-canvas-top grid-canvas-left' tabIndex='0' hideFocus />").appendTo($viewportTopL);
         $canvasTopR = $("<div class='grid-canvas grid-canvas-top grid-canvas-right' tabIndex='0' hideFocus />").appendTo($viewportTopR);
         $canvasBottomL = $("<div class='grid-canvas grid-canvas-bottom grid-canvas-left' tabIndex='0' hideFocus />").appendTo($viewportBottomL);
         $canvasBottomR = $("<div class='grid-canvas grid-canvas-bottom grid-canvas-right' tabIndex='0' hideFocus />").appendTo($viewportBottomR);
-
-        // Cache the canvases
         $canvas = $().add($canvasTopL).add($canvasTopR).add($canvasBottomL).add($canvasBottomR);
-
-        // Default the active canvas to the top left
         $activeCanvasNode = $canvasTopL;
-
-        // footer Row
         $footerRowScrollerR = $("<div class='ui-state-default slick-footerrow' />").appendTo($paneTopR);
         $footerRowScrollerL = $("<div class='ui-state-default slick-footerrow' />").appendTo($paneTopL);
-
         $footerRowScroller = $().add($footerRowScrollerL).add($footerRowScrollerR);
-
         $footerRowSpacerL = $("<div style='display:block;height:1px;position:absolute;top:0;left:0;'></div>")
             .css("width", getCanvasWidth() + scrollbarDimensions.width + "px")
             .appendTo($footerRowScrollerL);
         $footerRowSpacerR = $("<div style='display:block;height:1px;position:absolute;top:0;left:0;'></div>")
             .css("width", getCanvasWidth() + scrollbarDimensions.width + "px")
             .appendTo($footerRowScrollerR);
-
         $footerRowL = $("<div class='slick-footerrow-columns slick-footerrow-columns-left' />").appendTo($footerRowScrollerL);
         $footerRowR = $("<div class='slick-footerrow-columns slick-footerrow-columns-right' />").appendTo($footerRowScrollerR);
-
         $footerRow = $().add($footerRowL).add($footerRowR);
-
-        if (!options.showFooterRow)
-        {
+        if (!options.showFooterRow) {
             $footerRowScroller.hide();
         }
-
         $focusSink2 = $focusSink.clone().appendTo($container);
-
-        if (!options.explicitInitialization)
-        {
+        if (!options.explicitInitialization) {
             finishInitialization();
         }
     }
-
-    function finishInitialization()
-    {
-        if (!initialized)
-        {
+    function finishInitialization() {
+        if (!initialized) {
             initialized = true;
-
             getViewportWidth();
             getViewportHeight();
-
-            // header columns and cells may have different padding/border skewing width calculations (box-sizing, hello?)
-            // calculate the diff so we can set consistent sizes
             measureCellPaddingAndBorder();
-
-            // for usability reasons, all text selection in SlickGrid is disabled
-            // with the exception of input and textarea elements (selection must
-            // be enabled there so that editors work as expected); note that
-            // selection in grid cells (grid body) is already unavailable in
-            // all browsers except IE
-            disableSelection($headers); // disable all text selection in header (including input and textarea)
-
-            if (!options.enableTextSelectionOnCells)
-            {
-                // disable text selection in grid cells except in input and textarea elements
-                // (this is IE-specific, because selectstart event will only fire in IE)
-                $viewport.bind("selectstart.ui", function (event)
-                {
+            disableSelection($headers);
+            if (!options.enableTextSelectionOnCells) {
+                $viewport.bind("selectstart.ui", function (event) {
                     return $(event.target).is("input,textarea");
                 });
             }
-
             setFrozenOptions();
             setPaneVisibility();
             setScroller();
             setOverflow();
-
             updateColumnCaches();
             createColumnHeaders();
             createColumnGroupHeaders();
@@ -476,23 +305,17 @@ function SlickGrid(container, data, columns, options)
             createCssRules();
             resizeCanvas();
             bindAncestorScrollEvents();
-
             $container.bind("resize.slickgrid", resizeCanvas);
             $viewport.on("scroll", handleScroll);
-
-            if ($.fn.mousewheel && (options.frozenColumn > -1 || hasFrozenRows))
-            {
+            if ($.fn.mousewheel && (options.frozenColumn > -1 || hasFrozenRows)) {
                 $viewport.on("mousewheel", handleMouseWheel);
             }
-
             $headerScroller.bind("contextmenu", handleHeaderContextMenu)
                 .bind("click", handleHeaderClick)
                 .delegate(".slick-header-column", "mouseenter", handleHeaderMouseEnter)
                 .delegate(".slick-header-column", "mouseleave", handleHeaderMouseLeave);
             $headerRowScroller.bind("scroll", handleHeaderRowScroll);
-
             $footerRowScroller.bind("scroll", handleFooterRowScroll);
-
             $focusSink.add($focusSink2)
                 .bind("keydown", handleKeyDown);
             $canvas.bind("keydown", handleKeyDown)
@@ -501,41 +324,27 @@ function SlickGrid(container, data, columns, options)
                 .bind("contextmenu", handleContextMenu)
                 .delegate(".slick-cell", "mouseenter", handleMouseEnter)
                 .delegate(".slick-cell", "mouseleave", handleMouseLeave);
-
-            // legacy support for drag events // allowFrom: interact.js
             interact($canvas[0]).allowFrom('div.slick-cell').draggable({
                 onmove: handleDrag,
                 onstart: handleDragStart,
                 onend: handleDragEnd
             }).styleCursor(false);
-
-            // Work around http://crbug.com/312427.
-            if (navigator.userAgent.toLowerCase().match(/webkit/) && navigator.userAgent.toLowerCase().match(/macintosh/))
-            {
+            if (navigator.userAgent.toLowerCase().match(/webkit/) && navigator.userAgent.toLowerCase().match(/macintosh/)) {
                 $canvas.on("mousewheel", handleMouseWheel);
             }
         }
     }
-
-    function hasFrozenColumns()
-    {
+    function hasFrozenColumns() {
         return options.frozenColumn > -1;
     }
-
-    function registerPlugin(plugin)
-    {
+    function registerPlugin(plugin) {
         plugins.unshift(plugin);
         plugin.init(self);
     }
-
-    function unregisterPlugin(plugin)
-    {
-        for (let i = plugins.length; i >= 0; i--)
-        {
-            if (plugins[i] === plugin)
-            {
-                if (plugins[i].destroy)
-                {
+    function unregisterPlugin(plugin) {
+        for (var i = plugins.length; i >= 0; i--) {
+            if (plugins[i] === plugin) {
+                if (plugins[i].destroy) {
                     plugins[i].destroy();
                 }
                 plugins.splice(i, 1);
@@ -543,506 +352,342 @@ function SlickGrid(container, data, columns, options)
             }
         }
     }
-
-    function setSelectionModel(model)
-    {
-        if (selectionModel)
-        {
+    function setSelectionModel(model) {
+        if (selectionModel) {
             selectionModel.onSelectedRangesChanged.unsubscribe(handleSelectedRangesChanged);
-            if (selectionModel.destroy)
-            {
+            if (selectionModel.destroy) {
                 selectionModel.destroy();
             }
         }
-
         selectionModel = model;
-        if (selectionModel)
-        {
+        if (selectionModel) {
             selectionModel.init(self);
             selectionModel.onSelectedRangesChanged.subscribe(handleSelectedRangesChanged);
         }
     }
-
-    function getSelectionModel()
-    {
+    function getSelectionModel() {
         return selectionModel;
     }
-
-    function getCanvasNode()
-    {
+    function getCanvasNode() {
         return $canvas[0];
     }
-
-    function getActiveCanvasNode(element)
-    {
+    function getActiveCanvasNode(element) {
         setActiveCanvasNode(element);
-
         return $activeCanvasNode[0];
     }
-
-    function getCanvases()
-    {
+    function getCanvases() {
         return $canvas;
     }
-
-    function setActiveCanvasNode(element)
-    {
-        if (element)
-        {
+    function setActiveCanvasNode(element) {
+        if (element) {
             $activeCanvasNode = $(element.target).closest('.grid-canvas');
         }
     }
-
-    function getViewportNode()
-    {
+    function getViewportNode() {
         return $viewport[0];
     }
-
-
-    function setActiveViewportNode(element)
-    {
-        if (element)
-        {
+    function setActiveViewportNode(element) {
+        if (element) {
             $activeViewportNode = $(element.target).closest('.slick-viewport');
         }
     }
-
-    function getActiveViewportNode(element)
-    {
+    function getActiveViewportNode(element) {
         setActiveViewportNode(element);
-        //setActiveViewPortNode(element);
-
         return $activeViewportNode[0];
     }
-    function measureScrollbar()
-    {
-        let $c = $("<div class='scrollbar-fix' style='position:absolute; top:-10000px; left:-10000px; width:100px; height:100px; overflow:scroll;'></div>").appendTo(document.body);
-        let dim = {
+    function measureScrollbar() {
+        var $c = $("<div class='scrollbar-fix' style='position:absolute; top:-10000px; left:-10000px; width:100px; height:100px; overflow:scroll;'></div>").appendTo(document.body);
+        var dim = {
             width: $c.width() - $c[0].clientWidth,
             height: $c.height() - $c[0].clientHeight
         };
         $c.remove();
         return dim;
     }
-
-    function getHeadersWidth()
-    {
+    function getHeadersWidth() {
         headersWidth = headersWidthL = headersWidthR = 0;
-
-        for (let i = 0, ii = columns.length; i < ii; i++)
-        {
-            let width = columns[i].width;
-
-            if ((options.frozenColumn) > -1 && (i > options.frozenColumn))
-            {
+        for (var i = 0, ii = columns.length; i < ii; i++) {
+            var width = columns[i].width;
+            if ((options.frozenColumn) > -1 && (i > options.frozenColumn)) {
                 headersWidthR += width;
-            } else
-            {
+            }
+            else {
                 headersWidthL += width;
             }
         }
-
-        if (hasFrozenColumns())
-        {
+        if (hasFrozenColumns()) {
             headersWidthL = headersWidthL + 1000;
-
             headersWidthR = Math.max(headersWidthR, viewportW) + headersWidthL;
             headersWidthR += scrollbarDimensions.width;
-        } else
-        {
+        }
+        else {
             headersWidthL += scrollbarDimensions.width;
             headersWidthL = Math.max(headersWidthL, viewportW) + 1000;
         }
-
         headersWidth = headersWidthL + headersWidthR;
     }
-
-    function getHeadersWidthL()
-    {
+    function getHeadersWidthL() {
         headersWidthL = 0;
-
-        columns.forEach(function (column, i)
-        {
-            if (!((options.frozenColumn) > -1 && (i > options.frozenColumn))) headersWidthL += column.width;
+        columns.forEach(function (column, i) {
+            if (!((options.frozenColumn) > -1 && (i > options.frozenColumn)))
+                headersWidthL += column.width;
         });
-
-        if (hasFrozenColumns())
-        {
+        if (hasFrozenColumns()) {
             headersWidthL += 1000;
-        } else
-        {
+        }
+        else {
             headersWidthL += scrollbarDimensions.width;
             headersWidthL = Math.max(headersWidthL, viewportW) + 1000;
         }
-
         return headersWidthL;
     }
-
-    function getHeadersWidthR()
-    {
+    function getHeadersWidthR() {
         headersWidthR = 0;
-
-        columns.forEach(function (column, i)
-        {
-            if ((options.frozenColumn) > -1 && (i > options.frozenColumn)) headersWidthR += column.width;
+        columns.forEach(function (column, i) {
+            if ((options.frozenColumn) > -1 && (i > options.frozenColumn))
+                headersWidthR += column.width;
         });
-
-        if (hasFrozenColumns())
-        {
+        if (hasFrozenColumns()) {
             headersWidthR = Math.max(headersWidthR, viewportW) + getHeadersWidthL();
             headersWidthR += scrollbarDimensions.width;
         }
-
         return headersWidthR;
     }
-
-    function getCanvasWidth()
-    {
-        let availableWidth = viewportHasVScroll ? viewportW - scrollbarDimensions.width : viewportW;
-
-        let i = columns.length;
-
+    function getCanvasWidth() {
+        var availableWidth = viewportHasVScroll ? viewportW - scrollbarDimensions.width : viewportW;
+        var i = columns.length;
         canvasWidthL = canvasWidthR = 0;
-
-        while (i--)
-        {
-            if (hasFrozenColumns() && (i > options.frozenColumn))
-            {
+        while (i--) {
+            if (hasFrozenColumns() && (i > options.frozenColumn)) {
                 canvasWidthR += columns[i].width;
-            } else
-            {
+            }
+            else {
                 canvasWidthL += columns[i].width;
             }
         }
-
-        let totalRowWidth = canvasWidthL + canvasWidthR;
-
+        var totalRowWidth = canvasWidthL + canvasWidthR;
         return options.fullWidthRows ? Math.max(totalRowWidth, availableWidth) : totalRowWidth;
     }
-
-    function updateCanvasWidth(forceColumnWidthsUpdate?)
-    {
-        let oldCanvasWidth = canvasWidth;
-        let oldCanvasWidthL = canvasWidthL;
-        let oldCanvasWidthR = canvasWidthR;
-        let widthChanged;
+    function updateCanvasWidth(forceColumnWidthsUpdate) {
+        var oldCanvasWidth = canvasWidth;
+        var oldCanvasWidthL = canvasWidthL;
+        var oldCanvasWidthR = canvasWidthR;
+        var widthChanged;
         canvasWidth = getCanvasWidth();
-
         widthChanged = canvasWidth !== oldCanvasWidth || canvasWidthL !== oldCanvasWidthL || canvasWidthR !== oldCanvasWidthR;
-
-        if (widthChanged || hasFrozenColumns() || hasFrozenRows)
-        {
+        if (widthChanged || hasFrozenColumns() || hasFrozenRows) {
             $canvasTopL.width(canvasWidthL);
-
             getHeadersWidth();
-
             $headerL.width(headersWidthL);
             $headerR.width(headersWidthR);
-
-            if (hasFrozenColumns())
-            {
+            if (hasFrozenColumns()) {
                 $canvasTopR.width(canvasWidthR);
-
                 $paneHeaderL.width(canvasWidthL);
                 $paneHeaderR.css('left', canvasWidthL);
                 $paneHeaderR.css('width', viewportW - canvasWidthL);
-
                 $paneTopL.width(canvasWidthL);
                 $paneTopR.css('left', canvasWidthL);
                 $paneTopR.css('width', viewportW - canvasWidthL);
-
                 $headerRowScrollerL.width(canvasWidthL);
                 $headerRowScrollerR.width(viewportW - canvasWidthL);
-
                 $headerRowL.width(canvasWidthL);
                 $headerRowR.width(canvasWidthR);
-
                 $footerRowScrollerL.width(canvasWidthL);
                 $footerRowScrollerR.width(viewportW - canvasWidthL);
-
                 $footerRowL.width(canvasWidthL);
                 $footerRowR.width(canvasWidthR);
-
                 $viewportTopL.width(canvasWidthL);
                 $viewportTopR.width(viewportW - canvasWidthL);
-
-                if (hasFrozenRows)
-                {
+                if (hasFrozenRows) {
                     $paneBottomL.width(canvasWidthL);
                     $paneBottomR.css('left', canvasWidthL);
-
                     $viewportBottomL.width(canvasWidthL);
                     $viewportBottomR.width(viewportW - canvasWidthL);
-
                     $canvasBottomL.width(canvasWidthL);
                     $canvasBottomR.width(canvasWidthR);
                 }
-            } else
-            {
+            }
+            else {
                 $paneHeaderL.width('100%');
-
                 $paneTopL.width('100%');
-
                 $headerRowScrollerL.width('100%');
-
                 $headerRowL.width(canvasWidth);
-
                 $footerRowScrollerL.width('100%');
-
                 $footerRowL.width(canvasWidth);
-
                 $viewportTopL.width('100%');
-
-                if (hasFrozenRows)
-                {
+                if (hasFrozenRows) {
                     $viewportBottomL.width('100%');
                     $canvasBottomL.width(canvasWidthL);
                 }
             }
-
             viewportHasHScroll = (canvasWidth > viewportW - scrollbarDimensions.width);
         }
-
         $headerRowSpacerL.width(canvasWidth + (viewportHasVScroll ? scrollbarDimensions.width : 0));
         $headerRowSpacerR.width(canvasWidth + (viewportHasVScroll ? scrollbarDimensions.width : 0));
-
         $footerRowSpacerL.width(canvasWidth + (viewportHasVScroll ? scrollbarDimensions.width : 0));
         $footerRowSpacerR.width(canvasWidth + (viewportHasVScroll ? scrollbarDimensions.width : 0));
-
-        if (widthChanged || forceColumnWidthsUpdate)
-        {
+        if (widthChanged || forceColumnWidthsUpdate) {
             applyColumnWidths();
         }
     }
-
-    function disableSelection($target)
-    {
-        if ($target && $target.jquery)
-        {
+    function disableSelection($target) {
+        if ($target && $target.jquery) {
             $target.attr("unselectable", "on")
                 .css("MozUserSelect", "none")
-                .bind("selectstart.ui", function ()
-                {
-                    return false;
-                }); // from jquery:ui.core.js 1.7.2
+                .bind("selectstart.ui", function () {
+                return false;
+            });
         }
     }
-
-    function getMaxSupportedCssHeight()
-    {
-        let supportedHeight = 1000000;
-        // FF reports the height back but still renders blank after ~6M px
-        let testUpTo = navigator.userAgent.toLowerCase().match(/firefox/) ? 6000000 : 1000000000;
-        let div = $("<div style='display:none' />").appendTo(document.body);
-
-        while (true)
-        {
-            let test = supportedHeight * 2;
+    function getMaxSupportedCssHeight() {
+        var supportedHeight = 1000000;
+        var testUpTo = navigator.userAgent.toLowerCase().match(/firefox/) ? 6000000 : 1000000000;
+        var div = $("<div style='display:none' />").appendTo(document.body);
+        while (true) {
+            var test = supportedHeight * 2;
             div.css("height", test);
-            if (test > testUpTo || div.height() !== test)
-            {
+            if (test > testUpTo || div.height() !== test) {
                 break;
-            } else
-            {
+            }
+            else {
                 supportedHeight = test;
             }
         }
-
         div.remove();
         return supportedHeight;
     }
-
-    // TODO:  this is static.  need to handle page mutation.
-    function bindAncestorScrollEvents()
-    {
-        let elem = (hasFrozenRows && !options.frozenBottom) ? $canvasBottomL[0] : $canvasTopL[0];
-        while ((elem = elem.parentNode) != document.body && elem != null)
-        {
-            // bind to scroll containers only
-            if (elem == $viewportTopL[0] || elem.scrollWidth != elem.clientWidth || elem.scrollHeight != elem.clientHeight)
-            {
-                let $elem = $(elem);
-                if (!$boundAncestors)
-                {
+    function bindAncestorScrollEvents() {
+        var elem = (hasFrozenRows && !options.frozenBottom) ? $canvasBottomL[0] : $canvasTopL[0];
+        while ((elem = elem.parentNode) != document.body && elem != null) {
+            if (elem == $viewportTopL[0] || elem.scrollWidth != elem.clientWidth || elem.scrollHeight != elem.clientHeight) {
+                var $elem = $(elem);
+                if (!$boundAncestors) {
                     $boundAncestors = $elem;
-                } else
-                {
+                }
+                else {
                     $boundAncestors = $boundAncestors.add($elem);
                 }
                 $elem.bind("scroll." + uid, handleActiveCellPositionChange);
             }
         }
     }
-
-    function unbindAncestorScrollEvents()
-    {
-        if (!$boundAncestors)
-        {
+    function unbindAncestorScrollEvents() {
+        if (!$boundAncestors) {
             return;
         }
         $boundAncestors.unbind("scroll." + uid);
         $boundAncestors = null;
     }
-
-    function updateColumnHeader(columnId, title, toolTip)
-    {
-        if (!initialized)
-        {
+    function updateColumnHeader(columnId, title, toolTip) {
+        if (!initialized) {
             return;
         }
-        let idx = getColumnIndex(columnId);
-        if (idx == null)
-        {
+        var idx = getColumnIndex(columnId);
+        if (idx == null) {
             return;
         }
-
-        let columnDef = columns[idx];
-        let $header = $headers.children().eq(idx);
-        if ($header)
-        {
-            if (title !== undefined)
-            {
+        var columnDef = columns[idx];
+        var $header = $headers.children().eq(idx);
+        if ($header) {
+            if (title !== undefined) {
                 columns[idx].name = title;
             }
-            if (toolTip !== undefined)
-            {
+            if (toolTip !== undefined) {
                 columns[idx].toolTip = toolTip;
             }
-
             trigger(self.onBeforeHeaderCellDestroy, {
                 "node": $header[0],
                 "column": columnDef
             });
-
             $header.attr("title", toolTip || "")
                 .children().eq(0).html(title);
-
             trigger(self.onHeaderCellRendered, {
                 "node": $header[0],
                 "column": columnDef
             });
         }
     }
-
-    function getHeaderRow()
-    {
+    function getHeaderRow() {
         return hasFrozenColumns() ? $headerRow : $headerRow[0];
     }
-
-    function getHeaderRowColumn(columnId)
-    {
-        let idx = getColumnIndex(columnId);
-
-        let $headerRowTarget;
-
-        if (hasFrozenColumns())
-        {
-            if (idx <= options.frozenColumn)
-            {
+    function getHeaderRowColumn(columnId) {
+        var idx = getColumnIndex(columnId);
+        var $headerRowTarget;
+        if (hasFrozenColumns()) {
+            if (idx <= options.frozenColumn) {
                 $headerRowTarget = $headerRowL;
-            } else
-            {
+            }
+            else {
                 $headerRowTarget = $headerRowR;
-
                 idx -= options.frozenColumn + 1;
             }
-        } else
-        {
+        }
+        else {
             $headerRowTarget = $headerRowL;
         }
-
-        let $header = $headerRowTarget.children().eq(idx);
+        var $header = $headerRowTarget.children().eq(idx);
         return $header && $header[0];
     }
-
-    function getFooterRow()
-    {
+    function getFooterRow() {
         return hasFrozenColumns() ? $footerRow : $footerRow[0];
     }
-
-    function getFooterRowColumn(columnId)
-    {
-        let idx = getColumnIndex(columnId);
-
-        let $footerRowTarget;
-
-        if (hasFrozenColumns())
-        {
-            if (idx <= options.frozenColumn)
-            {
+    function getFooterRowColumn(columnId) {
+        var idx = getColumnIndex(columnId);
+        var $footerRowTarget;
+        if (hasFrozenColumns()) {
+            if (idx <= options.frozenColumn) {
                 $footerRowTarget = $footerRowL;
-            } else
-            {
+            }
+            else {
                 $footerRowTarget = $footerRowR;
-
                 idx -= options.frozenColumn + 1;
             }
-        } else
-        {
+        }
+        else {
             $footerRowTarget = $footerRowL;
         }
-
-        let $footer = $footerRowTarget.children().eq(idx);
+        var $footer = $footerRowTarget.children().eq(idx);
         return $footer && $footer[0];
     }
-
-    function createColumnFooter()
-    {
+    function createColumnFooter() {
         $footerRow.find(".slick-footerrow-column")
-            .each(function ()
-            {
-                let columnDef = $(this).data("column");
-                if (columnDef)
-                {
-                    trigger(self.onBeforeFooterRowCellDestroy, {
-                        "node": this,
-                        "column": columnDef
-                    });
-                }
-            });
-
+            .each(function () {
+            var columnDef = $(this).data("column");
+            if (columnDef) {
+                trigger(self.onBeforeFooterRowCellDestroy, {
+                    "node": this,
+                    "column": columnDef
+                });
+            }
+        });
         $footerRowL.empty();
         $footerRowR.empty();
-
-        for (let i = 0; i < columns.length; i++)
-        {
-            let m = columns[i];
-
-            let footerRowCell = $("<div class='ui-state-default slick-footerrow-column l" + i + " r" + i + "'></div>")
+        for (var i = 0; i < columns.length; i++) {
+            var m = columns[i];
+            var footerRowCell = $("<div class='ui-state-default slick-footerrow-column l" + i + " r" + i + "'></div>")
                 .data("column", m)
                 .addClass(hasFrozenColumns() && i <= options.frozenColumn ? 'frozen' : '')
                 .appendTo(hasFrozenColumns() && (i > options.frozenColumn) ? $footerRowR : $footerRowL);
-
             trigger(self.onFooterRowCellRendered, {
                 "node": footerRowCell[0],
                 "column": m
             });
         }
     }
-
-    function createColumnGroupHeaders()
-    {
-        let columnsLength = 0;
-        let frozenColumnsValid = false;
-
-        if (!treeColumns.hasDepth()) return;
-
-        for (let index = 0; index < $groupHeadersL.length; index++)
-        {
-
+    function createColumnGroupHeaders() {
+        var columnsLength = 0;
+        var frozenColumnsValid = false;
+        if (!treeColumns.hasDepth())
+            return;
+        for (var index = 0; index < $groupHeadersL.length; index++) {
             $groupHeadersL[index].empty();
             $groupHeadersR[index].empty();
-
-            let groupColumns = treeColumns.getColumnsInDepth(index);
-
-            for (let indexGroup in groupColumns)
-            {
-                let m = groupColumns[indexGroup];
-
+            var groupColumns = treeColumns.getColumnsInDepth(index);
+            for (var indexGroup in groupColumns) {
+                var m = groupColumns[indexGroup];
                 columnsLength += m.extractColumns().length;
-
-                if (hasFrozenColumns() && index == 0 && (columnsLength - 1) === options.frozenColumn) frozenColumnsValid = true;
-
+                if (hasFrozenColumns() && index == 0 && (columnsLength - 1) === options.frozenColumn)
+                    frozenColumnsValid = true;
                 $("<div class='ui-state-default slick-group-header-column' />")
                     .html("<span class='slick-column-name'>" + m.name + "</span>")
                     .attr("id", "" + uid + m.id)
@@ -1052,76 +697,54 @@ function SlickGrid(container, data, columns, options)
                     .addClass(hasFrozenColumns() && (columnsLength - 1) <= options.frozenColumn ? 'frozen' : '')
                     .appendTo(hasFrozenColumns() && (columnsLength - 1) > options.frozenColumn ? $groupHeadersR[index] : $groupHeadersL[index]);
             }
-
-            if (hasFrozenColumns() && index == 0 && !frozenColumnsValid)
-            {
+            if (hasFrozenColumns() && index == 0 && !frozenColumnsValid) {
                 $groupHeadersL[index].empty();
                 $groupHeadersR[index].empty();
                 alert("All columns of group should to be grouped!");
                 break;
             }
         }
-
         applyColumnGroupHeaderWidths();
     }
-
-    function createColumnHeaders()
-    {
-        function onMouseEnter()
-        {
+    function createColumnHeaders() {
+        function onMouseEnter() {
             $(this).addClass("ui-state-hover");
         }
-
-        function onMouseLeave()
-        {
+        function onMouseLeave() {
             $(this).removeClass("ui-state-hover");
         }
-
         $headers.find(".slick-header-column")
-            .each(function ()
-            {
-                let columnDef = $(this).data("column");
-                if (columnDef)
-                {
-                    trigger(self.onBeforeHeaderCellDestroy, {
-                        "node": this,
-                        "column": columnDef
-                    });
-                }
-            });
-
+            .each(function () {
+            var columnDef = $(this).data("column");
+            if (columnDef) {
+                trigger(self.onBeforeHeaderCellDestroy, {
+                    "node": this,
+                    "column": columnDef
+                });
+            }
+        });
         $headerL.empty();
         $headerR.empty();
-
         getHeadersWidth();
-
         $headerL.width(headersWidthL);
         $headerR.width(headersWidthR);
-
         $headerRow.find(".slick-headerrow-column")
-            .each(function ()
-            {
-                let columnDef = $(this).data("column");
-                if (columnDef)
-                {
-                    trigger(self.onBeforeHeaderRowCellDestroy, {
-                        "node": this,
-                        "column": columnDef
-                    });
-                }
-            });
-
+            .each(function () {
+            var columnDef = $(this).data("column");
+            if (columnDef) {
+                trigger(self.onBeforeHeaderRowCellDestroy, {
+                    "node": this,
+                    "column": columnDef
+                });
+            }
+        });
         $headerRowL.empty();
         $headerRowR.empty();
-
-        for (let i = 0; i < columns.length; i++)
-        {
-            let m = columns[i];
-
-            let $headerTarget = hasFrozenColumns() ? ((i <= options.frozenColumn) ? $headerL : $headerR) : $headerL;
-            let $headerRowTarget = hasFrozenColumns() ? ((i <= options.frozenColumn) ? $headerRowL : $headerRowR) : $headerRowL;
-
-            let header = $("<div class='ui-state-default slick-header-column' />")
+        for (var i = 0; i < columns.length; i++) {
+            var m = columns[i];
+            var $headerTarget = hasFrozenColumns() ? ((i <= options.frozenColumn) ? $headerL : $headerR) : $headerL;
+            var $headerRowTarget = hasFrozenColumns() ? ((i <= options.frozenColumn) ? $headerRowL : $headerRowR) : $headerRowL;
+            var header = $("<div class='ui-state-default slick-header-column' />")
                 .html("<span class='slick-column-name'>" + m.name + "</span>")
                 .width(m.width - headerColumnWidthDiff)
                 .attr("id", "" + uid + m.id)
@@ -1130,124 +753,90 @@ function SlickGrid(container, data, columns, options)
                 .addClass(m.headerCssClass || "")
                 .addClass(hasFrozenColumns() && i <= options.frozenColumn ? 'frozen' : '')
                 .appendTo($headerTarget);
-
-            if (options.enableColumnReorder || m.sortable)
-            {
+            if (options.enableColumnReorder || m.sortable) {
                 header.on('mouseenter', onMouseEnter)
                     .on('mouseleave', onMouseLeave);
             }
-
-            if (m.sortable)
-            {
+            if (m.sortable) {
                 header.addClass("slick-header-sortable");
                 header.append("<span class='slick-sort-indicator' />");
             }
-
             trigger(self.onHeaderCellRendered, {
                 "node": header[0],
                 "column": m
             });
-
-            if (options.showHeaderRow)
-            {
-                let headerRowCell = $("<div class='ui-state-default slick-headerrow-column l" + i + " r" + i + "'></div>")
+            if (options.showHeaderRow) {
+                var headerRowCell = $("<div class='ui-state-default slick-headerrow-column l" + i + " r" + i + "'></div>")
                     .data("column", m)
                     .appendTo($headerRowTarget);
-
                 trigger(self.onHeaderRowCellRendered, {
                     "node": headerRowCell[0],
                     "column": m
                 });
             }
         }
-
         setSortColumns(sortColumns);
         setupColumnResize();
-        if (options.enableColumnReorder)
-        {
+        if (options.enableColumnReorder) {
             setupColumnReorder();
         }
     }
-
-    function setupColumnSort()
-    {
-        $headers.click(function (e)
-        {
-            // temporary workaround for a bug in jQuery 1.7.1 (http://bugs.jquery.com/ticket/11328)
+    function setupColumnSort() {
+        $headers.click(function (e) {
             e.metaKey = e.metaKey || e.ctrlKey;
-
-            if ($(e.target).hasClass("slick-resizable-handle"))
-            {
+            if ($(e.target).hasClass("slick-resizable-handle")) {
                 return;
             }
-
-            let $col = $(e.target).closest(".slick-header-column");
-            if (!$col.length)
-            {
+            var $col = $(e.target).closest(".slick-header-column");
+            if (!$col.length) {
                 return;
             }
-
-            let column = $col.data("column");
-            if (column.sortable)
-            {
-                if (!getEditorLock().commitCurrentEdit())
-                {
+            var column = $col.data("column");
+            if (column.sortable) {
+                if (!getEditorLock().commitCurrentEdit()) {
                     return;
                 }
-
-                let sortOpts = null;
-                let i = 0;
-                for (; i < sortColumns.length; i++)
-                {
-                    if (sortColumns[i].columnId == column.id)
-                    {
+                var sortOpts = null;
+                var i = 0;
+                for (; i < sortColumns.length; i++) {
+                    if (sortColumns[i].columnId == column.id) {
                         sortOpts = sortColumns[i];
                         sortOpts.sortAsc = !sortOpts.sortAsc;
                         break;
                     }
                 }
-
-                if (e.metaKey && options.multiColumnSort)
-                {
-                    if (sortOpts)
-                    {
+                if (e.metaKey && options.multiColumnSort) {
+                    if (sortOpts) {
                         sortColumns.splice(i, 1);
                     }
-                } else
-                {
-                    if ((!e.shiftKey && !e.metaKey) || !options.multiColumnSort)
-                    {
+                }
+                else {
+                    if ((!e.shiftKey && !e.metaKey) || !options.multiColumnSort) {
                         sortColumns = [];
                     }
-
-                    if (!sortOpts)
-                    {
+                    if (!sortOpts) {
                         sortOpts = {
                             columnId: column.id,
                             sortAsc: column.defaultSortAsc
                         };
                         sortColumns.push(sortOpts);
-                    } else if (sortColumns.length == 0)
-                    {
+                    }
+                    else if (sortColumns.length == 0) {
                         sortColumns.push(sortOpts);
                     }
                 }
-
                 setSortColumns(sortColumns);
-
-                if (!options.multiColumnSort)
-                {
+                if (!options.multiColumnSort) {
                     trigger(self.onSort, {
                         multiColumnSort: false,
                         sortCol: column,
                         sortAsc: sortOpts.sortAsc
                     }, e);
-                } else
-                {
+                }
+                else {
                     trigger(self.onSort, {
                         multiColumnSort: true,
-                        sortCols: $.map(sortColumns, function (col)
-                        {
+                        sortCols: $.map(sortColumns, function (col) {
                             return {
                                 sortCol: columns[getColumnIndex(col.columnId)],
                                 sortAsc: col.sortAsc
@@ -1258,293 +847,205 @@ function SlickGrid(container, data, columns, options)
             }
         });
     }
-
-    function currentPositionInHeader(id)
-    {
-        let currentPosition = 0;
-        $headers.find('.slick-header-column').each(function (i)
-        {
-            if (this.id == id)
-            {
+    function currentPositionInHeader(id) {
+        var currentPosition = 0;
+        $headers.find('.slick-header-column').each(function (i) {
+            if (this.id == id) {
                 currentPosition = i;
                 return false;
             }
         });
-
         return currentPosition;
     }
-
-    function limitPositionInGroup(idColumn)
-    {
-        let groupColumnOfPreviousPosition,
-            startLimit = 0,
-            endLimit = 0;
-
+    function limitPositionInGroup(idColumn) {
+        var groupColumnOfPreviousPosition, startLimit = 0, endLimit = 0;
         treeColumns.getColumnsInDepth($groupHeadersL.length - 1)
-            .some(function (groupColumn)
-            {
-                startLimit = endLimit;
-                endLimit += groupColumn.columns.length;
-
-                groupColumn.columns.some(function (column)
-                {
-
-                    if (column.id === idColumn) groupColumnOfPreviousPosition = groupColumn;
-
-                    return groupColumnOfPreviousPosition;
-                });
-
+            .some(function (groupColumn) {
+            startLimit = endLimit;
+            endLimit += groupColumn.columns.length;
+            groupColumn.columns.some(function (column) {
+                if (column.id === idColumn)
+                    groupColumnOfPreviousPosition = groupColumn;
                 return groupColumnOfPreviousPosition;
             });
-
+            return groupColumnOfPreviousPosition;
+        });
         endLimit--;
-
         return {
             start: startLimit,
             end: endLimit,
             group: groupColumnOfPreviousPosition
-        }
+        };
     }
-
-    function remove(arr, elem)
-    {
-        let index = arr.lastIndexOf(elem);
-        if (index > -1)
-        {
+    function remove(arr, elem) {
+        var index = arr.lastIndexOf(elem);
+        if (index > -1) {
             arr.splice(index, 1);
             remove(arr, elem);
         }
     }
-
-    function columnPositionValidInGroup($item)
-    {
-        let currentPosition = currentPositionInHeader($item[0].id);
-        let limit = limitPositionInGroup($item.data('column').id);
-        let positionValid = limit.start <= currentPosition && currentPosition <= limit.end;
-
+    function columnPositionValidInGroup($item) {
+        var currentPosition = currentPositionInHeader($item[0].id);
+        var limit = limitPositionInGroup($item.data('column').id);
+        var positionValid = limit.start <= currentPosition && currentPosition <= limit.end;
         return {
             limit: limit,
             valid: positionValid,
             message: positionValid ? '' : 'Column "'.concat($item.text(), '" can be reordered only within the "', limit.group.name, '" group!')
         };
     }
-
-    function setupColumnReorder()
-    {
-        let x = 0;
-        let delta = 0;
-        let placeholder = document.createElement('div');
-
+    function setupColumnReorder() {
+        var x = 0;
+        var delta = 0;
+        var placeholder = document.createElement('div');
         placeholder.className = 'interact-placeholder';
-
         interact('.slick-header-column')
             .ignoreFrom('.slick-resizable-handle')
             .draggable({
-                inertia: true,
-                // keep the element within the area of it's parent
-                restrict: {
-                    restriction: 'parent',
-                    endOnly: true,
-                    elementRect: { top: 0, left: 0, bottom: 0, right: 0 }
-                },
-                // enable autoScroll
-                autoScroll: true,
-                axis: 'x',
-                onstart: event =>
-                {
-                    x = 0;
-                    delta = event.target.offsetWidth;
-
-                    // get old order
-                    $headers.find('.slick-header-column').each(function (index)
-                    {
-                        $(this).data('index', index);
-                    });
-
-                    placeholder.style.height = event.target.offsetHeight + 'px';
-                    placeholder.style.width = delta + 'px';
-
-                    $(event.target).after(placeholder).css({
-                        position: 'absolute',
-                        zIndex: 1000,
-                        marginLeft: $(event.target).position().left - 1000
-                    });
-                },
-
-                onmove: event =>
-                {
-                    x += event.dx;
-                    event.target.style.transform = `translate3d(${x}px, -3px, 100px)`;
-                    // event.target.style.marginLeft = x + 'px';
-                },
-
-                onend: event =>
-                {
-                    x = 0;
-                    delta = 0;
-
-                    let cancel:boolean = false;
-                    let limit:number = 0;
-
-                    if (treeColumns.hasDepth())
-                    {
-                        let validPositionInGroup = columnPositionValidInGroup($(event.target));
-                        limit = <number><any>validPositionInGroup.limit;
-                        cancel = !validPositionInGroup.valid;
-
-                        if (cancel)
-                            alert(validPositionInGroup.message);
-                    }
-
-                    placeholder.parentNode.removeChild(placeholder);
-
+            inertia: true,
+            restrict: {
+                restriction: 'parent',
+                endOnly: true,
+                elementRect: { top: 0, left: 0, bottom: 0, right: 0 }
+            },
+            autoScroll: true,
+            axis: 'x',
+            onstart: function (event) {
+                x = 0;
+                delta = event.target.offsetWidth;
+                $headers.find('.slick-header-column').each(function (index) {
+                    $(this).data('index', index);
+                });
+                placeholder.style.height = event.target.offsetHeight + 'px';
+                placeholder.style.width = delta + 'px';
+                $(event.target).after(placeholder).css({
+                    position: 'absolute',
+                    zIndex: 1000,
+                    marginLeft: $(event.target).position().left - 1000
+                });
+            },
+            onmove: function (event) {
+                x += event.dx;
+                event.target.style.transform = "translate3d(" + x + "px, -3px, 100px)";
+            },
+            onend: function (event) {
+                x = 0;
+                delta = 0;
+                var cancel = false;
+                var limit = 0;
+                if (treeColumns.hasDepth()) {
+                    var validPositionInGroup = columnPositionValidInGroup($(event.target));
+                    limit = validPositionInGroup.limit;
+                    cancel = !validPositionInGroup.valid;
                     if (cancel)
-                    {
-                        event.target.style.transform = 'none';
-                        setColumns(getColumns());
-                        return;
-                    }
-
-                    $(event.target).css({
-                        position: 'relative',
-                        zIndex: '',
-                        marginLeft: 0,
-                        transform: 'none'
-                    });
-
-                    const newColumns = [];
-                    $headers.find('.slick-header-column').each(function (index)
-                    {
-                        newColumns.push(columns[$(this).data('index')]);
-                        $(this).removeData('index');
-                    });
-
-                    setColumns(newColumns);
-
-                    trigger(self.onColumnsReordered, { impactedColumns: getImpactedColumns(limit), grid: self });
-                    setupColumnResize();
+                        alert(validPositionInGroup.message);
                 }
-            })
+                placeholder.parentNode.removeChild(placeholder);
+                if (cancel) {
+                    event.target.style.transform = 'none';
+                    setColumns(getColumns());
+                    return;
+                }
+                $(event.target).css({
+                    position: 'relative',
+                    zIndex: '',
+                    marginLeft: 0,
+                    transform: 'none'
+                });
+                var newColumns = [];
+                $headers.find('.slick-header-column').each(function (index) {
+                    newColumns.push(columns[$(this).data('index')]);
+                    $(this).removeData('index');
+                });
+                setColumns(newColumns);
+                trigger(self.onColumnsReordered, { impactedColumns: getImpactedColumns(limit), grid: self });
+                setupColumnResize();
+            }
+        })
             .dropzone({
-                accept: '.slick-header-column',
-
-                ondragenter: event =>
-                {
-                    event.target.classList.add('interact-drop-active');
-                    event.relatedTarget.classList.add('interact-can-drop');
-                },
-
-                ondragleave: event =>
-                {
-                    event.target.classList.remove('interact-drop-active');
-                    event.relatedTarget.classList.remove('interact-can-drop');
-                },
-
-                ondrop: event =>
-                {
-                    event.target.classList.remove('interact-drop-active');
-                    event.relatedTarget.classList.remove('interact-can-drop');
-                    $(event.target)[x > 0 ? 'after' : 'before'](event.relatedTarget);
-                }
-            }).styleCursor(false);
+            accept: '.slick-header-column',
+            ondragenter: function (event) {
+                event.target.classList.add('interact-drop-active');
+                event.relatedTarget.classList.add('interact-can-drop');
+            },
+            ondragleave: function (event) {
+                event.target.classList.remove('interact-drop-active');
+                event.relatedTarget.classList.remove('interact-can-drop');
+            },
+            ondrop: function (event) {
+                event.target.classList.remove('interact-drop-active');
+                event.relatedTarget.classList.remove('interact-can-drop');
+                $(event.target)[x > 0 ? 'after' : 'before'](event.relatedTarget);
+            }
+        }).styleCursor(false);
     }
-
-    function getImpactedColumns(limit)
-    {
-        let impactedColumns = [];
-
-        if (limit != undefined)
-        {
-
-            for (let i = limit.start; i <= limit.end; i++)
-            {
+    function getImpactedColumns(limit) {
+        var impactedColumns = [];
+        if (limit != undefined) {
+            for (var i = limit.start; i <= limit.end; i++) {
                 impactedColumns.push(columns[i]);
             }
-        } else
-        {
-
+        }
+        else {
             impactedColumns = columns;
         }
-
         return impactedColumns;
     }
-
-    function setupColumnResize()
-    {
-        let $col, j, c, pageX, columnElements, minPageX, maxPageX, firstResizable, lastResizable;
+    function setupColumnResize() {
+        var $col, j, c, pageX, columnElements, minPageX, maxPageX, firstResizable, lastResizable;
         columnElements = $headers.children();
         columnElements.find('.slick-resizable-handle').remove();
-        columnElements.each(function (i, e)
-        {
-            if (columns[i].resizable)
-            {
-                if (firstResizable === undefined)
-                {
+        columnElements.each(function (i, e) {
+            if (columns[i].resizable) {
+                if (firstResizable === undefined) {
                     firstResizable = i;
                 }
                 lastResizable = i;
             }
         });
-        if (firstResizable === undefined)
-        {
+        if (firstResizable === undefined) {
             return;
         }
-        columnElements.each(function (i, element)
-        {
-            if (i < firstResizable || (options.forceFitColumns && i >= lastResizable))
-            {
+        columnElements.each(function (i, element) {
+            if (i < firstResizable || (options.forceFitColumns && i >= lastResizable)) {
                 return;
             }
             $col = $(element);
-
-            const $handle = $("<div class='slick-resizable-handle' />");
+            var $handle = $("<div class='slick-resizable-handle' />");
             $handle.appendTo(element);
-
             if ($col.data('resizable'))
                 return;
-
-            const activeColumn = columns[i];
-            if (activeColumn.resizable)
-            {
+            var activeColumn = columns[i];
+            if (activeColumn.resizable) {
                 $col.data('resizable', true);
                 interact(element).resizable({
                     preserveAspectRatio: false,
                     edges: { left: true, right: true, bottom: false, top: false }
-                }).on('resizestart', function (event)
-                {
-                    if (!getEditorLock().commitCurrentEdit())
-                    {
+                }).on('resizestart', function (event) {
+                    if (!getEditorLock().commitCurrentEdit()) {
                         return false;
                     }
                     activeColumn.previousWidth = event.rect.width;
                     event.target.classList.add('slick-header-column-active');
-                }).on('resizemove', function (event)
-                {
-                    let x = event.dx;
-                    let width = activeColumn.width += x;
-
+                }).on('resizemove', function (event) {
+                    var x = event.dx;
+                    var width = activeColumn.width += x;
                     if (activeColumn.minWidth > 0 && activeColumn.minWidth > width)
                         width = activeColumn.minWidth;
                     else if (activeColumn.maxWidth > 0 && activeColumn.maxWidth < width)
                         width = activeColumn.maxWidth;
-
                     activeColumn.width = width;
-
-                    if (options.forceFitColumns)
-                    {
+                    if (options.forceFitColumns) {
                         autosizeColumns();
                     }
                     applyColumnHeaderWidths();
-                    if (options.syncColumnCellResize)
-                    {
+                    if (options.syncColumnCellResize) {
                         applyColumnWidths();
                     }
-                }).on('resizeend', function (event)
-                {
+                }).on('resizeend', function (event) {
                     event.target.classList.remove('slick-header-column-active');
                     if (treeColumns.hasDepth())
                         createColumnGroupHeaders();
-
                     invalidateAllRows();
                     updateCanvasWidth(true);
                     render();
@@ -1553,500 +1054,349 @@ function SlickGrid(container, data, columns, options)
             }
         });
     }
-
-    function getVBoxDelta($el)
-    {
-        let p = ["borderTopWidth", "borderBottomWidth", "paddingTop", "paddingBottom"];
-        let delta = 0;
-        $.each(p, function (n, val)
-        {
+    function getVBoxDelta($el) {
+        var p = ["borderTopWidth", "borderBottomWidth", "paddingTop", "paddingBottom"];
+        var delta = 0;
+        $.each(p, function (n, val) {
             delta += parseFloat($el.css(val)) || 0;
         });
         return delta;
     }
-
-    function setFrozenOptions()
-    {
+    function setFrozenOptions() {
         options.frozenColumn = (options.frozenColumn >= 0 && options.frozenColumn < columns.length) ? parseInt(options.frozenColumn) : -1;
-
         options.frozenRow = (options.frozenRow >= 0 && options.frozenRow < numVisibleRows) ? parseInt(options.frozenRow) : -1;
-
-        if (options.frozenRow > -1)
-        {
+        if (options.frozenRow > -1) {
             hasFrozenRows = true;
             frozenRowsHeight = (options.frozenRow) * options.rowHeight;
-
-            let dataLength = getDataLength() || this.data.length;
-
+            var dataLength = getDataLength() || this.data.length;
             actualFrozenRow = (options.frozenBottom) ? (dataLength - options.frozenRow) : options.frozenRow;
-        } else
-        {
+        }
+        else {
             hasFrozenRows = false;
         }
     }
-
-    function setPaneVisibility()
-    {
-        if (hasFrozenColumns())
-        {
+    function setPaneVisibility() {
+        if (hasFrozenColumns()) {
             $paneHeaderR.show();
             $paneTopR.show();
-
-            if (hasFrozenRows)
-            {
+            if (hasFrozenRows) {
                 $paneBottomL.show();
                 $paneBottomR.show();
-            } else
-            {
+            }
+            else {
                 $paneBottomR.hide();
                 $paneBottomL.hide();
             }
-        } else
-        {
+        }
+        else {
             $paneHeaderR.hide();
             $paneTopR.hide();
             $paneBottomR.hide();
-
-            if (hasFrozenRows)
-            {
+            if (hasFrozenRows) {
                 $paneBottomL.show();
-            } else
-            {
+            }
+            else {
                 $paneBottomR.hide();
                 $paneBottomL.hide();
             }
         }
     }
-
-    function setOverflow()
-    {
+    function setOverflow() {
         $viewportTopL.css({
             'overflow-x': (hasFrozenColumns()) ? (hasFrozenRows ? 'hidden' : 'scroll') : (hasFrozenRows ? 'hidden' : 'auto'),
             'overflow-y': (hasFrozenColumns()) ? (hasFrozenRows ? 'hidden' : 'hidden') : (hasFrozenRows ? 'scroll' : 'auto')
         });
-
         $viewportTopR.css({
             'overflow-x': (hasFrozenColumns()) ? (hasFrozenRows ? 'hidden' : 'scroll') : (hasFrozenRows ? 'hidden' : 'auto'),
             'overflow-y': (hasFrozenColumns()) ? (hasFrozenRows ? 'scroll' : 'auto') : (hasFrozenRows ? 'scroll' : 'auto')
         });
-
         $viewportBottomL.css({
             'overflow-x': (hasFrozenColumns()) ? (hasFrozenRows ? 'scroll' : 'auto') : (hasFrozenRows ? 'auto' : 'auto'),
             'overflow-y': (hasFrozenColumns()) ? (hasFrozenRows ? 'hidden' : 'hidden') : (hasFrozenRows ? 'scroll' : 'auto')
         });
-
         $viewportBottomR.css({
             'overflow-x': (hasFrozenColumns()) ? (hasFrozenRows ? 'scroll' : 'auto') : (hasFrozenRows ? 'auto' : 'auto'),
             'overflow-y': (hasFrozenColumns()) ? (hasFrozenRows ? 'auto' : 'auto') : (hasFrozenRows ? 'auto' : 'auto')
         });
     }
-
-    function setScroller()
-    {
-        if (hasFrozenColumns())
-        {
+    function setScroller() {
+        if (hasFrozenColumns()) {
             $headerScrollContainer = $headerScrollerR;
             $headerRowScrollContainer = $headerRowScrollerR;
-            $footerRowScrollContainer = $footerRowScrollerR
-
-            if (hasFrozenRows)
-            {
-                if (options.frozenBottom)
-                {
+            $footerRowScrollContainer = $footerRowScrollerR;
+            if (hasFrozenRows) {
+                if (options.frozenBottom) {
                     $viewportScrollContainerX = $viewportBottomR;
                     $viewportScrollContainerY = $viewportTopR;
-                } else
-                {
+                }
+                else {
                     $viewportScrollContainerX = $viewportScrollContainerY = $viewportBottomR;
                 }
-            } else
-            {
+            }
+            else {
                 $viewportScrollContainerX = $viewportScrollContainerY = $viewportTopR;
             }
-        } else
-        {
+        }
+        else {
             $headerScrollContainer = $headerScrollerL;
             $headerRowScrollContainer = $headerRowScrollerL;
             $footerRowScrollContainer = $footerRowScrollerL;
-
-            if (hasFrozenRows)
-            {
-                if (options.frozenBottom)
-                {
+            if (hasFrozenRows) {
+                if (options.frozenBottom) {
                     $viewportScrollContainerX = $viewportBottomL;
                     $viewportScrollContainerY = $viewportTopL;
-                } else
-                {
+                }
+                else {
                     $viewportScrollContainerX = $viewportScrollContainerY = $viewportBottomL;
                 }
-            } else
-            {
+            }
+            else {
                 $viewportScrollContainerX = $viewportScrollContainerY = $viewportTopL;
             }
         }
     }
-
-    function measureCellPaddingAndBorder()
-    {
-        let el;
-        let h = ["borderLeftWidth", "borderRightWidth", "paddingLeft", "paddingRight"];
-        let v = ["borderTopWidth", "borderBottomWidth", "paddingTop", "paddingBottom"];
-
+    function measureCellPaddingAndBorder() {
+        var el;
+        var h = ["borderLeftWidth", "borderRightWidth", "paddingLeft", "paddingRight"];
+        var v = ["borderTopWidth", "borderBottomWidth", "paddingTop", "paddingBottom"];
         el = $("<div class='ui-state-default slick-header-column' style='visibility:hidden'>-</div>").appendTo($headers);
         headerColumnWidthDiff = headerColumnHeightDiff = 0;
-        if (el.css("box-sizing") != "border-box" && el.css("-moz-box-sizing") != "border-box" && el.css("-webkit-box-sizing") != "border-box")
-        {
-            $.each(h, function (n, val)
-            {
+        if (el.css("box-sizing") != "border-box" && el.css("-moz-box-sizing") != "border-box" && el.css("-webkit-box-sizing") != "border-box") {
+            $.each(h, function (n, val) {
                 headerColumnWidthDiff += parseFloat(el.css(val)) || 0;
             });
-            $.each(v, function (n, val)
-            {
+            $.each(v, function (n, val) {
                 headerColumnHeightDiff += parseFloat(el.css(val)) || 0;
             });
         }
         el.remove();
-
-        let r = $("<div class='slick-row' />").appendTo($canvas);
+        var r = $("<div class='slick-row' />").appendTo($canvas);
         el = $("<div class='slick-cell' id='' style='visibility:hidden'>-</div>").appendTo(r);
         cellWidthDiff = cellHeightDiff = 0;
-        if (el.css("box-sizing") != "border-box" && el.css("-moz-box-sizing") != "border-box" && el.css("-webkit-box-sizing") != "border-box")
-        {
-            $.each(h, function (n, val)
-            {
+        if (el.css("box-sizing") != "border-box" && el.css("-moz-box-sizing") != "border-box" && el.css("-webkit-box-sizing") != "border-box") {
+            $.each(h, function (n, val) {
                 cellWidthDiff += parseFloat(el.css(val)) || 0;
             });
-            $.each(v, function (n, val)
-            {
+            $.each(v, function (n, val) {
                 cellHeightDiff += parseFloat(el.css(val)) || 0;
             });
         }
         r.remove();
-
         absoluteColumnMinWidth = Math.max(headerColumnWidthDiff, cellWidthDiff);
     }
-
-    function createCssRules()
-    {
+    function createCssRules() {
         $style = $("<style type='text/css' rel='stylesheet' />").appendTo($("head"));
-        let rowHeight = (options.rowHeight - cellHeightDiff);
-        let rules = ["." + uid + " .slick-group-header-column { left: 1000px; }", "." + uid + " .slick-header-column { left: 1000px; }", "." + uid + " .slick-top-panel { height:" + options.topPanelHeight + "px; }", "." + uid + " .slick-headerrow-columns { height:" + options.headerRowHeight + "px; }", "." + uid + " .slick-cell { height:" + rowHeight + "px; }", "." + uid + " .slick-row { height:" + options.rowHeight + "px; }", "." + uid + " .slick-footerrow-columns { height:" + options.footerRowHeight + "px; }"];
-
-        for (let i = 0; i < columns.length; i++)
-        {
+        var rowHeight = (options.rowHeight - cellHeightDiff);
+        var rules = ["." + uid + " .slick-group-header-column { left: 1000px; }", "." + uid + " .slick-header-column { left: 1000px; }", "." + uid + " .slick-top-panel { height:" + options.topPanelHeight + "px; }", "." + uid + " .slick-headerrow-columns { height:" + options.headerRowHeight + "px; }", "." + uid + " .slick-cell { height:" + rowHeight + "px; }", "." + uid + " .slick-row { height:" + options.rowHeight + "px; }", "." + uid + " .slick-footerrow-columns { height:" + options.footerRowHeight + "px; }"];
+        for (var i = 0; i < columns.length; i++) {
             rules.push("." + uid + " .l" + i + " { }");
             rules.push("." + uid + " .r" + i + " { }");
         }
-
-        if ($style[0].styleSheet)
-        { // IE
+        if ($style[0].styleSheet) {
             $style[0].styleSheet.cssText = rules.join(" ");
-        } else
-        {
+        }
+        else {
             $style[0].appendChild(document.createTextNode(rules.join(" ")));
         }
     }
-
-    function getColumnCssRules(idx)
-    {
-        if (!stylesheet)
-        {
-            let sheets = document.styleSheets;
-            for (let i = 0; i < sheets.length; i++)
-            {
-                if ((sheets[i].ownerNode || sheets[i].owningElement) == $style[0])
-                {
+    function getColumnCssRules(idx) {
+        if (!stylesheet) {
+            var sheets = document.styleSheets;
+            for (var i = 0; i < sheets.length; i++) {
+                if ((sheets[i].ownerNode || sheets[i].owningElement) == $style[0]) {
                     stylesheet = sheets[i];
                     break;
                 }
             }
-
-            if (!stylesheet)
-            {
+            if (!stylesheet) {
                 throw new Error("Cannot find stylesheet.");
             }
-
-            // find and cache column CSS rules
             columnCssRulesL = [];
             columnCssRulesR = [];
-            let cssRules = (stylesheet.cssRules || stylesheet.rules);
-            let matches, columnIdx;
-            for (let i = 0; i < cssRules.length; i++)
-            {
-                let selector = cssRules[i].selectorText;
-                if (matches = /\.l\d+/.exec(selector))
-                {
+            var cssRules = (stylesheet.cssRules || stylesheet.rules);
+            var matches = void 0, columnIdx = void 0;
+            for (var i = 0; i < cssRules.length; i++) {
+                var selector = cssRules[i].selectorText;
+                if (matches = /\.l\d+/.exec(selector)) {
                     columnIdx = parseInt(matches[0].substr(2, matches[0].length - 2), 10);
                     columnCssRulesL[columnIdx] = cssRules[i];
-                } else if (matches = /\.r\d+/.exec(selector))
-                {
+                }
+                else if (matches = /\.r\d+/.exec(selector)) {
                     columnIdx = parseInt(matches[0].substr(2, matches[0].length - 2), 10);
                     columnCssRulesR[columnIdx] = cssRules[i];
                 }
             }
         }
-
         return {
             "left": columnCssRulesL[idx],
             "right": columnCssRulesR[idx]
         };
     }
-
-    function removeCssRules()
-    {
+    function removeCssRules() {
         $style.remove();
         stylesheet = null;
     }
-
-    function destroy()
-    {
+    function destroy() {
         getEditorLock().cancelCurrentEdit();
-
         trigger(self.onBeforeDestroy, {});
-
-        let i = plugins.length;
-        while (i--)
-        {
+        var i = plugins.length;
+        while (i--) {
             unregisterPlugin(plugins[i]);
         }
-
         unbindAncestorScrollEvents();
         $container.unbind(".slickgrid");
         removeCssRules();
-
         $container.empty().removeClass(uid);
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // General
-
-
-    function trigger(evt: any, args: any, e?: any): any
-    {
+    function trigger(evt, args, e) {
         e = e || new Slick.EventData();
         args = args || {};
         args.grid = self;
         return evt.notify(args, e, self);
     }
-
-    function getEditorLock()
-    {
+    function getEditorLock() {
         return options.editorLock;
     }
-
-    function getEditController()
-    {
+    function getEditController() {
         return editController;
     }
-
-    function getColumnIndex(id)
-    {
+    function getColumnIndex(id) {
         return columnsById[id];
     }
-
-    function autosizeColumns()
-    {
-        let i, c,
-            widths = [],
-            shrinkLeeway = 0,
-            total = 0,
-            prevTotal,
-            availWidth = viewportHasVScroll ? viewportW - scrollbarDimensions.width : viewportW;
-
-        for (i = 0; i < columns.length; i++)
-        {
+    function autosizeColumns() {
+        var i, c, widths = [], shrinkLeeway = 0, total = 0, prevTotal, availWidth = viewportHasVScroll ? viewportW - scrollbarDimensions.width : viewportW;
+        for (i = 0; i < columns.length; i++) {
             c = columns[i];
             widths.push(c.width);
             total += c.width;
-            if (c.resizable)
-            {
+            if (c.resizable) {
                 shrinkLeeway += c.width - Math.max(c.minWidth, absoluteColumnMinWidth);
             }
         }
-
-        // shrink
         prevTotal = total;
-        while (total > availWidth && shrinkLeeway)
-        {
-            let shrinkProportion = (total - availWidth) / shrinkLeeway;
-            for (i = 0; i < columns.length && total > availWidth; i++)
-            {
+        while (total > availWidth && shrinkLeeway) {
+            var shrinkProportion = (total - availWidth) / shrinkLeeway;
+            for (i = 0; i < columns.length && total > availWidth; i++) {
                 c = columns[i];
-                let width = widths[i];
-                if (!c.resizable || width <= c.minWidth || width <= absoluteColumnMinWidth)
-                {
+                var width = widths[i];
+                if (!c.resizable || width <= c.minWidth || width <= absoluteColumnMinWidth) {
                     continue;
                 }
-                let absMinWidth = Math.max(c.minWidth, absoluteColumnMinWidth);
-                let shrinkSize = Math.floor(shrinkProportion * (width - absMinWidth)) || 1;
+                var absMinWidth = Math.max(c.minWidth, absoluteColumnMinWidth);
+                var shrinkSize = Math.floor(shrinkProportion * (width - absMinWidth)) || 1;
                 shrinkSize = Math.min(shrinkSize, width - absMinWidth);
                 total -= shrinkSize;
                 shrinkLeeway -= shrinkSize;
                 widths[i] -= shrinkSize;
             }
-            if (prevTotal <= total)
-            { // avoid infinite loop
+            if (prevTotal <= total) {
                 break;
             }
             prevTotal = total;
         }
-
-        // grow
         prevTotal = total;
-        while (total < availWidth)
-        {
-            let growProportion = availWidth / total;
-            for (i = 0; i < columns.length && total < availWidth; i++)
-            {
+        while (total < availWidth) {
+            var growProportion = availWidth / total;
+            for (i = 0; i < columns.length && total < availWidth; i++) {
                 c = columns[i];
-                let currentWidth = widths[i];
-                let growSize;
-
-                if (!c.resizable || c.maxWidth <= currentWidth)
-                {
+                var currentWidth = widths[i];
+                var growSize = void 0;
+                if (!c.resizable || c.maxWidth <= currentWidth) {
                     growSize = 0;
-                } else
-                {
+                }
+                else {
                     growSize = Math.min(Math.floor(growProportion * currentWidth) - currentWidth, (c.maxWidth - currentWidth) || 1000000) || 1;
                 }
                 total += growSize;
                 widths[i] += growSize;
             }
-            if (prevTotal >= total)
-            { // avoid infinite loop
+            if (prevTotal >= total) {
                 break;
             }
             prevTotal = total;
         }
-
-        let reRender = false;
-        for (i = 0; i < columns.length; i++)
-        {
-            if (columns[i].rerenderOnResize && columns[i].width != widths[i])
-            {
+        var reRender = false;
+        for (i = 0; i < columns.length; i++) {
+            if (columns[i].rerenderOnResize && columns[i].width != widths[i]) {
                 reRender = true;
             }
             columns[i].width = widths[i];
         }
-
         applyColumnHeaderWidths();
         applyColumnGroupHeaderWidths();
         updateCanvasWidth(true);
-        if (reRender)
-        {
+        if (reRender) {
             invalidateAllRows();
             render();
         }
     }
-
-    function applyColumnGroupHeaderWidths()
-    {
-        if (!treeColumns.hasDepth()) return;
-
-        for (let depth = $groupHeadersL.length - 1; depth >= 0; depth--)
-        {
-
-            let groupColumns = treeColumns.getColumnsInDepth(depth);
-
-            $().add($groupHeadersL[depth]).add($groupHeadersR[depth]).each(function (i)
-            {
-                let $groupHeader = $(this),
-                    currentColumnIndex = 0;
-
+    function applyColumnGroupHeaderWidths() {
+        if (!treeColumns.hasDepth())
+            return;
+        for (var depth = $groupHeadersL.length - 1; depth >= 0; depth--) {
+            var groupColumns = treeColumns.getColumnsInDepth(depth);
+            $().add($groupHeadersL[depth]).add($groupHeadersR[depth]).each(function (i) {
+                var $groupHeader = $(this), currentColumnIndex = 0;
                 $groupHeader.width(i == 0 ? getHeadersWidthL() : getHeadersWidthR());
-
-                $groupHeader.children().each(function ()
-                {
-                    let $groupHeaderColumn = $(this);
-
-                    let m = $(this).data('column');
-
+                $groupHeader.children().each(function () {
+                    var $groupHeaderColumn = $(this);
+                    var m = $(this).data('column');
                     m.width = 0;
-
-                    m.columns.forEach(function ()
-                    {
-                        let $headerColumn = $groupHeader.next().children(':eq(' + (currentColumnIndex++) + ')');
+                    m.columns.forEach(function () {
+                        var $headerColumn = $groupHeader.next().children(':eq(' + (currentColumnIndex++) + ')');
                         m.width += $headerColumn.outerWidth();
-                    })
-
+                    });
                     $groupHeaderColumn.width(m.width - headerColumnWidthDiff);
-
                 });
-
-            })
-
+            });
         }
     }
-
-    function applyColumnHeaderWidths()
-    {
-        if (!initialized)
-        {
+    function applyColumnHeaderWidths() {
+        if (!initialized) {
             return;
         }
-        let h;
-        for (let i = 0, headers = $headers.children(), ii = headers.length; i < ii; i++)
-        {
+        var h;
+        for (var i = 0, headers = $headers.children(), ii = headers.length; i < ii; i++) {
             h = $(headers[i]);
-            if (h.width() !== columns[i].width - headerColumnWidthDiff)
-            {
+            if (h.width() !== columns[i].width - headerColumnWidthDiff) {
                 h.width(columns[i].width - headerColumnWidthDiff);
             }
         }
-
         updateColumnCaches();
     }
-
-    function applyColumnWidths()
-    {
-        let x = 0,
-            w, rule;
-        for (let i = 0; i < columns.length; i++)
-        {
+    function applyColumnWidths() {
+        var x = 0, w, rule;
+        for (var i = 0; i < columns.length; i++) {
             w = columns[i].width;
-
             rule = getColumnCssRules(i);
             rule.left.style.left = x + "px";
             rule.right.style.right = (((options.frozenColumn != -1 && i > options.frozenColumn) ? canvasWidthR : canvasWidthL) - x - w) + "px";
-
-            // If this column is frozen, reset the css left value since the
-            // column starts in a new viewport.
-            if (options.frozenColumn == i)
-            {
+            if (options.frozenColumn == i) {
                 x = 0;
-            } else
-            {
+            }
+            else {
                 x += columns[i].width;
             }
         }
     }
-
-    function setSortColumn(columnId, ascending)
-    {
+    function setSortColumn(columnId, ascending) {
         setSortColumns([{
-            columnId: columnId,
-            sortAsc: ascending
-        }]);
+                columnId: columnId,
+                sortAsc: ascending
+            }]);
     }
-
-    function setSortColumns(cols)
-    {
+    function setSortColumns(cols) {
         sortColumns = cols;
-
-        let headerColumnEls = $headers.children();
+        var headerColumnEls = $headers.children();
         headerColumnEls.removeClass("slick-header-column-sorted")
             .find(".slick-sort-indicator")
             .removeClass("slick-sort-indicator-asc slick-sort-indicator-desc");
-
-        $.each(sortColumns, function (i, col)
-        {
-            if (col.sortAsc == null)
-            {
+        $.each(sortColumns, function (i, col) {
+            if (col.sortAsc == null) {
                 col.sortAsc = true;
             }
-            let columnIndex = getColumnIndex(col.columnId);
-            if (columnIndex != null)
-            {
+            var columnIndex = getColumnIndex(col.columnId);
+            if (columnIndex != null) {
                 headerColumnEls.eq(columnIndex)
                     .addClass("slick-header-column-sorted")
                     .find(".slick-sort-indicator")
@@ -2054,102 +1404,72 @@ function SlickGrid(container, data, columns, options)
             }
         });
     }
-
-    function getSortColumns()
-    {
+    function getSortColumns() {
         return sortColumns;
     }
-
-    function handleSelectedRangesChanged(e, ranges)
-    {
+    function handleSelectedRangesChanged(e, ranges) {
         selectedRows = [];
-        let hash = {};
-        for (let i = 0; i < ranges.length; i++)
-        {
-            for (let j = ranges[i].fromRow; j <= ranges[i].toRow; j++)
-            {
-                if (!hash[j])
-                { // prevent duplicates
+        var hash = {};
+        for (var i = 0; i < ranges.length; i++) {
+            for (var j = ranges[i].fromRow; j <= ranges[i].toRow; j++) {
+                if (!hash[j]) {
                     selectedRows.push(j);
                     hash[j] = {};
                 }
-                for (let k = ranges[i].fromCell; k <= ranges[i].toCell; k++)
-                {
-                    if (canCellBeSelected(j, k))
-                    {
+                for (var k = ranges[i].fromCell; k <= ranges[i].toCell; k++) {
+                    if (canCellBeSelected(j, k)) {
                         hash[j][columns[k].id] = options.selectedCellCssClass;
                     }
                 }
             }
         }
-
         setCellCssStyles(options.selectedCellCssClass, hash);
-
         trigger(self.onSelectedRowsChanged, {
             rows: getSelectedRows()
         }, e);
     }
-
-    function getColumns()
-    {
+    function getColumns() {
         return columns;
     }
-
-    function updateColumnCaches()
-    {
-        // Pre-calculate cell boundaries.
+    function updateColumnCaches() {
         columnPosLeft = [];
         columnPosRight = [];
-        let x = 0;
-        for (let i = 0, ii = columns.length; i < ii; i++)
-        {
+        var x = 0;
+        for (var i = 0, ii = columns.length; i < ii; i++) {
             columnPosLeft[i] = x;
             columnPosRight[i] = x + columns[i].width;
-
-            if (options.frozenColumn == i)
-            {
+            if (options.frozenColumn == i) {
                 x = 0;
-            } else
-            {
+            }
+            else {
                 x += columns[i].width;
             }
         }
     }
-
-    function setColumns(columnDefinitions)
-    {
-        let _treeColumns = new Slick.TreeColumns(columnDefinitions);
-        if (_treeColumns.hasDepth())
-        {
+    function setColumns(columnDefinitions) {
+        var _treeColumns = new Slick.TreeColumns(columnDefinitions);
+        if (_treeColumns.hasDepth()) {
             treeColumns = _treeColumns;
             columns = treeColumns.extractColumns();
-        } else
-        {
+        }
+        else {
             columns = columnDefinitions;
         }
-
         columnsById = {};
-        for (let i = 0; i < columns.length; i++)
-        {
-            let m = columns[i] = $.extend({}, columnDefaults, columns[i]);
+        for (var i = 0; i < columns.length; i++) {
+            var m = columns[i] = $.extend({}, columnDefaults, columns[i]);
             columnsById[m.id] = i;
-            if (m.minWidth && m.width < m.minWidth)
-            {
+            if (m.minWidth && m.width < m.minWidth) {
                 m.width = m.minWidth;
             }
-            if (m.maxWidth && m.width > m.maxWidth)
-            {
+            if (m.maxWidth && m.width > m.maxWidth) {
                 m.width = m.maxWidth;
             }
         }
-
         updateColumnCaches();
-
-        if (initialized)
-        {
+        if (initialized) {
             setPaneVisibility();
             setOverflow();
-
             invalidateAllRows();
             createColumnHeaders();
             createColumnGroupHeaders();
@@ -2162,812 +1482,535 @@ function SlickGrid(container, data, columns, options)
             handleScroll();
         }
     }
-
-    function getOptions()
-    {
+    function getOptions() {
         return options;
     }
-
-    function setOptions(args)
-    {
-        if (!getEditorLock().commitCurrentEdit())
-        {
+    function setOptions(args) {
+        if (!getEditorLock().commitCurrentEdit()) {
             return;
         }
-
         makeActiveCellNormal();
-
-        if (options.enableAddRow !== args.enableAddRow)
-        {
+        if (options.enableAddRow !== args.enableAddRow) {
             invalidateRow(getDataLength());
         }
-
         options = $.extend(options, args);
         validateAndEnforceOptions();
-
         setFrozenOptions();
         setScroller();
         zombieRowNodeFromLastMouseWheelEvent = null;
-
         setColumns(treeColumns.extractColumns());
         render();
     }
-
-    function validateAndEnforceOptions()
-    {
-        if (options.autoHeight)
-        {
+    function validateAndEnforceOptions() {
+        if (options.autoHeight) {
             options.leaveSpaceForNewRows = false;
         }
     }
-
-    function setData(newData, scrollToTop)
-    {
+    function setData(newData, scrollToTop) {
         data = newData;
         invalidateAllRows();
         updateRowCount();
-        if (scrollToTop)
-        {
+        if (scrollToTop) {
             scrollTo(0);
         }
     }
-
-    function getData()
-    {
+    function getData() {
         return data;
     }
-
-    function getDataLength():number
-    {
-        if (data.getLength)
-        {
+    function getDataLength() {
+        if (data.getLength) {
             return data.getLength();
-        } else
-        {
+        }
+        else {
             return data.length;
         }
     }
-
-    function getDataLengthIncludingAddNew()
-    {
+    function getDataLengthIncludingAddNew() {
         return getDataLength() + (options.enableAddRow ? 1 : 0);
     }
-
-    function getDataItem(i)
-    {
-        if (data.getItem)
-        {
+    function getDataItem(i) {
+        if (data.getItem) {
             return data.getItem(i);
-        } else
-        {
+        }
+        else {
             return data[i];
         }
     }
-
-    function getTopPanel()
-    {
+    function getTopPanel() {
         return $topPanel[0];
     }
-
-    function setTopPanelVisibility(visible)
-    {
-        if (options.showTopPanel != visible)
-        {
+    function setTopPanelVisibility(visible) {
+        if (options.showTopPanel != visible) {
             options.showTopPanel = visible;
-            if (visible)
-            {
+            if (visible) {
                 $topPanelScroller.slideDown("fast", resizeCanvas);
-            } else
-            {
+            }
+            else {
                 $topPanelScroller.slideUp("fast", resizeCanvas);
             }
         }
     }
-
-    function setHeaderRowVisibility(visible)
-    {
-        if (options.showHeaderRow != visible)
-        {
+    function setHeaderRowVisibility(visible) {
+        if (options.showHeaderRow != visible) {
             options.showHeaderRow = visible;
-            if (visible)
-            {
+            if (visible) {
                 $headerRowScroller.slideDown("fast", resizeCanvas);
-            } else
-            {
+            }
+            else {
                 $headerRowScroller.slideUp("fast", resizeCanvas);
             }
         }
     }
-
-    function setFooterRowVisibility(visible)
-    {
-        if (options.showFooterRow != visible)
-        {
+    function setFooterRowVisibility(visible) {
+        if (options.showFooterRow != visible) {
             options.showFooterRow = visible;
-            if (visible)
-            {
+            if (visible) {
                 $footerRowScroller.fadeIn("fast", resizeCanvas);
-            } else
-            {
+            }
+            else {
                 $footerRowScroller.slideDown("fast", resizeCanvas);
             }
         }
     }
-
-    function getContainerNode()
-    {
+    function getContainerNode() {
         return $container.get(0);
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // Rendering / Scrolling
-
-    function getRowTop(row)
-    {
+    function getRowTop(row) {
         return options.rowHeight * row - offset;
     }
-
-    function getRowFromPosition(y)
-    {
+    function getRowFromPosition(y) {
         return Math.floor((y + offset) / options.rowHeight);
     }
-
-    function scrollTo(y)
-    {
+    function scrollTo(y) {
         y = Math.max(y, 0);
         y = Math.min(y, th - $viewportScrollContainerY.height() + ((viewportHasHScroll || hasFrozenColumns()) ? scrollbarDimensions.height : 0));
-
-        let oldOffset = offset;
-
+        var oldOffset = offset;
         page = Math.min(n - 1, Math.floor(y / ph));
         offset = Math.round(page * cj);
-        let newScrollTop = y - offset;
-
-        if (offset != oldOffset)
-        {
-            let range = getVisibleRange(newScrollTop);
+        var newScrollTop = y - offset;
+        if (offset != oldOffset) {
+            var range = getVisibleRange(newScrollTop);
             cleanupRows(range);
             updateRowPositions();
         }
-
-        if (prevScrollTop != newScrollTop)
-        {
+        if (prevScrollTop != newScrollTop) {
             vScrollDir = (prevScrollTop + oldOffset < newScrollTop + offset) ? 1 : -1;
-
             lastRenderedScrollTop = (scrollTop = prevScrollTop = newScrollTop);
-
-            if (hasFrozenColumns())
-            {
+            if (hasFrozenColumns()) {
                 $viewportTopL[0].scrollTop = newScrollTop;
             }
-
-            if (hasFrozenRows)
-            {
+            if (hasFrozenRows) {
                 $viewportBottomL[0].scrollTop = $viewportBottomR[0].scrollTop = newScrollTop;
             }
-
             $viewportScrollContainerY[0].scrollTop = newScrollTop;
-
             trigger(self.onViewportChanged, {});
         }
     }
-
-    function defaultFormatter(row, cell, value, columnDef, dataContext)
-    {
-        if (value == null)
-        {
+    function defaultFormatter(row, cell, value, columnDef, dataContext) {
+        if (value == null) {
             return "";
-        } else
-        {
+        }
+        else {
             return (value + "").replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
         }
     }
-
-    function getFormatter(row, column)
-    {
-        let rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
-
-        // look up by id, then index
-        let columnOverrides = rowMetadata && rowMetadata.columns && (rowMetadata.columns[column.id] || rowMetadata.columns[getColumnIndex(column.id)]);
-
+    function getFormatter(row, column) {
+        var rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
+        var columnOverrides = rowMetadata && rowMetadata.columns && (rowMetadata.columns[column.id] || rowMetadata.columns[getColumnIndex(column.id)]);
         return (columnOverrides && columnOverrides.formatter) || (rowMetadata && rowMetadata.formatter) || column.formatter || (options.formatterFactory && options.formatterFactory.getFormatter(column)) || options.defaultFormatter;
     }
-
-    function callFormatter(row, cell, value, m, item)
-    {
-
-        let result;
-
-        // pass metadata to formatter
-        let metadata = data.getItemMetadata && data.getItemMetadata(row);
+    function callFormatter(row, cell, value, m, item) {
+        var result;
+        var metadata = data.getItemMetadata && data.getItemMetadata(row);
         metadata = metadata && metadata.columns;
-
-        if (metadata)
-        {
-            let columnData = metadata[m.id] || metadata[cell];
+        if (metadata) {
+            var columnData = metadata[m.id] || metadata[cell];
             result = getFormatter(row, m)(row, cell, value, m, item, columnData);
-        } else
-        {
+        }
+        else {
             result = getFormatter(row, m)(row, cell, value, m, item);
         }
-
         return result;
     }
-
-    function getEditor(row, cell)
-    {
-        let column = columns[cell];
-        let rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
-        let columnMetadata = rowMetadata && rowMetadata.columns;
-
-        if (columnMetadata && columnMetadata[column.id] && columnMetadata[column.id].editor !== undefined)
-        {
+    function getEditor(row, cell) {
+        var column = columns[cell];
+        var rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
+        var columnMetadata = rowMetadata && rowMetadata.columns;
+        if (columnMetadata && columnMetadata[column.id] && columnMetadata[column.id].editor !== undefined) {
             return columnMetadata[column.id].editor;
         }
-        if (columnMetadata && columnMetadata[cell] && columnMetadata[cell].editor !== undefined)
-        {
+        if (columnMetadata && columnMetadata[cell] && columnMetadata[cell].editor !== undefined) {
             return columnMetadata[cell].editor;
         }
-
         return column.editor || (options.editorFactory && options.editorFactory.getEditor(column));
     }
-
-    function getDataItemValueForColumn(item, columnDef)
-    {
-        if (options.dataItemColumnValueExtractor)
-        {
+    function getDataItemValueForColumn(item, columnDef) {
+        if (options.dataItemColumnValueExtractor) {
             return options.dataItemColumnValueExtractor(item, columnDef);
         }
         return item[columnDef.field];
     }
-
-    function appendRowHtml(stringArrayL, stringArrayR, row, range, dataLength)
-    {
-        let d = getDataItem(row);
-        let dataLoading = row < dataLength && !d;
-        let rowCss = "slick-row" + (hasFrozenRows && row < options.frozenRow ? ' frozen' : '') + (dataLoading ? " loading" : "") + (row === activeRow ? " active" : "") + (row % 2 == 1 ? " odd" : " even");
-
-        if (!d)
-        {
+    function appendRowHtml(stringArrayL, stringArrayR, row, range, dataLength) {
+        var d = getDataItem(row);
+        var dataLoading = row < dataLength && !d;
+        var rowCss = "slick-row" + (hasFrozenRows && row < options.frozenRow ? ' frozen' : '') + (dataLoading ? " loading" : "") + (row === activeRow ? " active" : "") + (row % 2 == 1 ? " odd" : " even");
+        if (!d) {
             rowCss += " " + options.addNewRowCssClass;
         }
-
-        let metadata = data.getItemMetadata && data.getItemMetadata(row);
-
-        if (metadata && metadata.cssClasses)
-        {
+        var metadata = data.getItemMetadata && data.getItemMetadata(row);
+        if (metadata && metadata.cssClasses) {
             rowCss += " " + metadata.cssClasses;
         }
-
-        let frozenRowOffset = getFrozenRowOffset(row);
-
-        let rowHtml = "<div class='ui-widget-content " + rowCss + "' style='top:" + (getRowTop(row) - frozenRowOffset) + "px'>";
-
+        var frozenRowOffset = getFrozenRowOffset(row);
+        var rowHtml = "<div class='ui-widget-content " + rowCss + "' style='top:" + (getRowTop(row) - frozenRowOffset) + "px'>";
         stringArrayL.push(rowHtml);
-
-        if (hasFrozenColumns())
-        {
+        if (hasFrozenColumns()) {
             stringArrayR.push(rowHtml);
         }
-
-        let colspan, m;
-        for (let i = 0, ii = columns.length; i < ii; i++)
-        {
+        var colspan, m;
+        for (var i = 0, ii = columns.length; i < ii; i++) {
             m = columns[i];
             colspan = 1;
-            if (metadata && metadata.columns)
-            {
-                let columnData = metadata.columns[m.id] || metadata.columns[i];
+            if (metadata && metadata.columns) {
+                var columnData = metadata.columns[m.id] || metadata.columns[i];
                 colspan = (columnData && columnData.colspan) || 1;
-                if (colspan === "*")
-                {
+                if (colspan === "*") {
                     colspan = ii - i;
                 }
             }
-
-            // Do not render cells outside of the viewport.
-            if (columnPosRight[Math.min(ii - 1, i + colspan - 1)] > range.leftPx)
-            {
-                if (columnPosLeft[i] > range.rightPx)
-                {
-                    // All columns to the right are outside the range.
+            if (columnPosRight[Math.min(ii - 1, i + colspan - 1)] > range.leftPx) {
+                if (columnPosLeft[i] > range.rightPx) {
                     break;
                 }
-
-                if (hasFrozenColumns() && (i > options.frozenColumn))
-                {
+                if (hasFrozenColumns() && (i > options.frozenColumn)) {
                     appendCellHtml(stringArrayR, row, i, colspan, d);
-                } else
-                {
+                }
+                else {
                     appendCellHtml(stringArrayL, row, i, colspan, d);
                 }
-            } else if (hasFrozenColumns() && (i <= options.frozenColumn))
-            {
+            }
+            else if (hasFrozenColumns() && (i <= options.frozenColumn)) {
                 appendCellHtml(stringArrayL, row, i, colspan, d);
             }
-
-            if (colspan > 1)
-            {
+            if (colspan > 1) {
                 i += (colspan - 1);
             }
         }
-
         stringArrayL.push("</div>");
-
-        if (hasFrozenColumns())
-        {
+        if (hasFrozenColumns()) {
             stringArrayR.push("</div>");
         }
     }
-
-    function appendCellHtml(stringArray, row, cell, colspan, item)
-    {
-        let m = columns[cell];
-        let cellCss = "slick-cell l" + cell + " r" + Math.min(columns.length - 1, cell + colspan - 1) + (m.cssClass ? " " + m.cssClass : "");
-
-        if (hasFrozenColumns() && cell <= options.frozenColumn) cellCss += ' frozen';
-
-        if (row === activeRow && cell === activeCell) cellCss += " active";
-
-        // TODO:  merge them together in the setter
-        for (let key in cellCssClasses)
-        {
-            if (cellCssClasses[key][row] && cellCssClasses[key][row][m.id])
-            {
+    function appendCellHtml(stringArray, row, cell, colspan, item) {
+        var m = columns[cell];
+        var cellCss = "slick-cell l" + cell + " r" + Math.min(columns.length - 1, cell + colspan - 1) + (m.cssClass ? " " + m.cssClass : "");
+        if (hasFrozenColumns() && cell <= options.frozenColumn)
+            cellCss += ' frozen';
+        if (row === activeRow && cell === activeCell)
+            cellCss += " active";
+        for (var key in cellCssClasses) {
+            if (cellCssClasses[key][row] && cellCssClasses[key][row][m.id]) {
                 cellCss += (" " + cellCssClasses[key][row][m.id]);
             }
         }
-
         stringArray.push("<div class='" + cellCss + "'>");
-
-        // if there is a corresponding row (if not, this is the Add New row or this data hasn't been loaded yet)
-        if (item)
-        {
-            let value = getDataItemValueForColumn(item, m);
+        if (item) {
+            var value = getDataItemValueForColumn(item, m);
             stringArray.push(callFormatter(row, cell, value, m, item));
         }
-
         stringArray.push("</div>");
-
         rowsCache[row].cellRenderQueue.push(cell);
         rowsCache[row].cellColSpans[cell] = colspan;
     }
-
-    function cleanupRows(rangeToKeep)
-    {
-        let i: any;
-        for (i in rowsCache)
-        {
-            let removeFrozenRow = true;
-
-            if (hasFrozenRows && ((options.frozenBottom && i >= actualFrozenRow) // Frozen bottom rows
+    function cleanupRows(rangeToKeep) {
+        var i;
+        for (i in rowsCache) {
+            var removeFrozenRow = true;
+            if (hasFrozenRows && ((options.frozenBottom && i >= actualFrozenRow)
                 ||
-                (!options.frozenBottom && i <= actualFrozenRow) // Frozen top rows
-            ))
-            {
+                    (!options.frozenBottom && i <= actualFrozenRow))) {
                 removeFrozenRow = false;
             }
-
-            if (((i = parseInt(i, 10)) !== activeRow) && (i < rangeToKeep.top || i > rangeToKeep.bottom) && (removeFrozenRow))
-            {
+            if (((i = parseInt(i, 10)) !== activeRow) && (i < rangeToKeep.top || i > rangeToKeep.bottom) && (removeFrozenRow)) {
                 removeRowFromCache(i);
             }
         }
     }
-
-    function invalidate()
-    {
+    function invalidate() {
         updateRowCount();
         invalidateAllRows();
         render();
     }
-
-    function invalidateAllRows()
-    {
-        if (currentEditor)
-        {
+    function invalidateAllRows() {
+        if (currentEditor) {
             makeActiveCellNormal();
         }
-        for (let row in rowsCache)
-        {
+        for (var row in rowsCache) {
             removeRowFromCache(row);
         }
     }
-
-    function removeRowFromCache(row)
-    {
-        let cacheEntry = rowsCache[row];
-        if (!cacheEntry)
-        {
+    function removeRowFromCache(row) {
+        var cacheEntry = rowsCache[row];
+        if (!cacheEntry) {
             return;
         }
-
-        if (rowNodeFromLastMouseWheelEvent == cacheEntry.rowNode[0] || (hasFrozenColumns() && rowNodeFromLastMouseWheelEvent == cacheEntry.rowNode[1]))
-        {
-
+        if (rowNodeFromLastMouseWheelEvent == cacheEntry.rowNode[0] || (hasFrozenColumns() && rowNodeFromLastMouseWheelEvent == cacheEntry.rowNode[1])) {
             cacheEntry.rowNode.hide();
-
             zombieRowNodeFromLastMouseWheelEvent = cacheEntry.rowNode;
-        } else
-        {
-
-            cacheEntry.rowNode.each(function ()
-            {
+        }
+        else {
+            cacheEntry.rowNode.each(function () {
                 this.parentElement.removeChild(this);
             });
-
         }
-
         delete rowsCache[row];
         delete postProcessedRows[row];
         renderedRows--;
         counter_rows_removed++;
     }
-
-    function invalidateRows(rows)
-    {
-        let i, rl;
-        if (!rows || !rows.length)
-        {
+    function invalidateRows(rows) {
+        var i, rl;
+        if (!rows || !rows.length) {
             return;
         }
         vScrollDir = 0;
-        for (i = 0, rl = rows.length; i < rl; i++)
-        {
-            if (currentEditor && activeRow === rows[i])
-            {
+        for (i = 0, rl = rows.length; i < rl; i++) {
+            if (currentEditor && activeRow === rows[i]) {
                 makeActiveCellNormal();
             }
-            if (rowsCache[rows[i]])
-            {
+            if (rowsCache[rows[i]]) {
                 removeRowFromCache(rows[i]);
             }
         }
     }
-
-    function invalidateRow(row)
-    {
+    function invalidateRow(row) {
         invalidateRows([row]);
     }
-
-    function updateCell(row, cell)
-    {
-        let cellNode = getCellNode(row, cell);
-        if (!cellNode)
-        {
+    function updateCell(row, cell) {
+        var cellNode = getCellNode(row, cell);
+        if (!cellNode) {
             return;
         }
-
-        let m = columns[cell],
-            d = getDataItem(row);
-        if (currentEditor && activeRow === row && activeCell === cell)
-        {
+        var m = columns[cell], d = getDataItem(row);
+        if (currentEditor && activeRow === row && activeCell === cell) {
             currentEditor.loadValue(d);
-        } else
-        {
+        }
+        else {
             cellNode.innerHTML = d ? callFormatter(row, cell, getDataItemValueForColumn(d, m), m, d) : "";
             invalidatePostProcessingResults(row);
         }
     }
-
-    function updateRow(row)
-    {
-        let cacheEntry = rowsCache[row];
-        if (!cacheEntry)
-        {
+    function updateRow(row) {
+        var cacheEntry = rowsCache[row];
+        if (!cacheEntry) {
             return;
         }
-
         ensureCellNodesInRowsCache(row);
-
-        let d = getDataItem(row);
-
-        let columnIdx: any;
-        for (columnIdx in cacheEntry.cellNodesByColumnIdx)
-        {
-            if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx))
-            {
+        var d = getDataItem(row);
+        var columnIdx;
+        for (columnIdx in cacheEntry.cellNodesByColumnIdx) {
+            if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx)) {
                 continue;
             }
-
             columnIdx = columnIdx | 0;
-            let m = columns[columnIdx],
-                node = cacheEntry.cellNodesByColumnIdx[columnIdx][0];
-
-            if (row === activeRow && columnIdx === activeCell && currentEditor)
-            {
+            var m = columns[columnIdx], node = cacheEntry.cellNodesByColumnIdx[columnIdx][0];
+            if (row === activeRow && columnIdx === activeCell && currentEditor) {
                 currentEditor.loadValue(d);
-            } else if (d)
-            {
+            }
+            else if (d) {
                 node.innerHTML = callFormatter(row, columnIdx, getDataItemValueForColumn(d, m), m, d);
-            } else
-            {
+            }
+            else {
                 node.innerHTML = "";
             }
         }
-
         invalidatePostProcessingResults(row);
     }
-
-    function getViewportHeight()
-    {
-        if (options.autoHeight)
-        {
+    function getViewportHeight() {
+        if (options.autoHeight) {
             viewportH = options.rowHeight * getDataLengthIncludingAddNew() + ((options.frozenColumn == -1) ? $headers.outerHeight() : 0);
-        } else
-        {
+        }
+        else {
             topPanelH = (options.showTopPanel) ? options.topPanelHeight + getVBoxDelta($topPanelScroller) : 0;
-
             headerRowH = (options.showHeaderRow) ? options.headerRowHeight + getVBoxDelta($headerRowScroller) : 0;
-
             footerRowH = (options.showFooterRow) ? options.footerRowHeight + getVBoxDelta($footerRowScroller) : 0;
-
             viewportH = parseFloat($.css($container[0], "height", true)) - parseFloat($.css($container[0], "paddingTop", true)) - parseFloat($.css($container[0], "paddingBottom", true)) - parseFloat($.css($headerScroller[0], "height")) - getVBoxDelta($headerScroller) - topPanelH - headerRowH - footerRowH;
         }
-
         numVisibleRows = Math.ceil(viewportH / options.rowHeight);
     }
-
-    function getViewportWidth()
-    {
+    function getViewportWidth() {
         viewportW = parseFloat($.css($container[0], "width", true));
     }
-
-    function resizeCanvas()
-    {
-        if (!initialized)
-        {
+    function resizeCanvas() {
+        if (!initialized) {
             return;
         }
-
-        paneTopH = 0
-        paneBottomH = 0
-        viewportTopH = 0
+        paneTopH = 0;
+        paneBottomH = 0;
+        viewportTopH = 0;
         viewportBottomH = 0;
-
         getViewportWidth();
         getViewportHeight();
-
-        // Account for Frozen Rows
-        if (hasFrozenRows)
-        {
-            if (options.frozenBottom)
-            {
+        if (hasFrozenRows) {
+            if (options.frozenBottom) {
                 paneTopH = viewportH - frozenRowsHeight - scrollbarDimensions.height;
-
                 paneBottomH = frozenRowsHeight + scrollbarDimensions.height;
-            } else
-            {
+            }
+            else {
                 paneTopH = frozenRowsHeight;
                 paneBottomH = viewportH - frozenRowsHeight;
             }
-        } else
-        {
+        }
+        else {
             paneTopH = viewportH;
         }
-
-        // The top pane includes the top panel and the header row
         paneTopH += topPanelH + headerRowH + footerRowH;
-
-        if (hasFrozenColumns() && options.autoHeight)
-        {
+        if (hasFrozenColumns() && options.autoHeight) {
             paneTopH += scrollbarDimensions.height;
         }
-
-        // The top viewport does not contain the top panel or header row
         viewportTopH = paneTopH - topPanelH - headerRowH - footerRowH;
-
-        if (options.autoHeight)
-        {
-            if (hasFrozenColumns())
-            {
-                $container.height(
-                    paneTopH + parseFloat($.css($headerScrollerL[0], "height")));
+        if (options.autoHeight) {
+            if (hasFrozenColumns()) {
+                $container.height(paneTopH + parseFloat($.css($headerScrollerL[0], "height")));
             }
-
             $paneTopL.css('position', 'relative');
         }
-
         $paneTopL.css({
             'top': $paneHeaderL.height(),
             'height': paneTopH
         });
-
-        let paneBottomTop = $paneTopL.position().top + paneTopH;
-
+        var paneBottomTop = $paneTopL.position().top + paneTopH;
         $viewportTopL.height(viewportTopH);
-
-        if (hasFrozenColumns())
-        {
+        if (hasFrozenColumns()) {
             $paneTopR.css({
                 'top': $paneHeaderL.height(),
                 'height': paneTopH
             });
-
             $viewportTopR.height(viewportTopH);
-
-            if (hasFrozenRows)
-            {
+            if (hasFrozenRows) {
                 $paneBottomL.css({
                     'top': paneBottomTop,
                     'height': paneBottomH
                 });
-
                 $paneBottomR.css({
                     'top': paneBottomTop,
                     'height': paneBottomH
                 });
-
                 $viewportBottomR.height(paneBottomH);
             }
-        } else
-        {
-            if (hasFrozenRows)
-            {
+        }
+        else {
+            if (hasFrozenRows) {
                 $paneBottomL.css({
                     'width': '100%',
                     'height': paneBottomH
                 });
-
                 $paneBottomL.css('top', paneBottomTop);
             }
         }
-
-        if (hasFrozenRows)
-        {
+        if (hasFrozenRows) {
             $viewportBottomL.height(paneBottomH);
-
-            if (options.frozenBottom)
-            {
+            if (options.frozenBottom) {
                 $canvasBottomL.height(frozenRowsHeight);
-
-                if (hasFrozenColumns())
-                {
+                if (hasFrozenColumns()) {
                     $canvasBottomR.height(frozenRowsHeight);
                 }
-            } else
-            {
+            }
+            else {
                 $canvasTopL.height(frozenRowsHeight);
-
-                if (hasFrozenColumns())
-                {
+                if (hasFrozenColumns()) {
                     $canvasTopR.height(frozenRowsHeight);
                 }
             }
-        } else
-        {
+        }
+        else {
             $viewportTopR.height(viewportTopH);
         }
-
-        if (options.forceFitColumns)
-        {
+        if (options.forceFitColumns) {
             autosizeColumns();
         }
-
         updateRowCount();
         handleScroll();
-        // Since the width has changed, force the render() to reevaluate virtually rendered cells.
         lastRenderedScrollLeft = -1;
         render();
     }
-
-    function updateRowCount()
-    {
-        if (!initialized)
-        {
+    function updateRowCount() {
+        if (!initialized) {
             return;
         }
-
-        let dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
-        let numberOfRows = 0;
-        let oldH = (hasFrozenRows && !options.frozenBottom) ? $canvasBottomL.height() : $canvasTopL.height();
-
-        if (hasFrozenRows)
-        {
-            let numberOfRows = getDataLength() - options.frozenRow;
-        } else
-        {
-            let numberOfRows = dataLengthIncludingAddNew + (options.leaveSpaceForNewRows ? numVisibleRows - 1 : 0);
+        var dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
+        var numberOfRows = 0;
+        var oldH = (hasFrozenRows && !options.frozenBottom) ? $canvasBottomL.height() : $canvasTopL.height();
+        if (hasFrozenRows) {
+            var numberOfRows_1 = getDataLength() - options.frozenRow;
         }
-
-        let tempViewportH = $viewportScrollContainerY.height();
-        let oldViewportHasVScroll = viewportHasVScroll;
-        // with autoHeight, we do not need to accommodate the vertical scroll bar
+        else {
+            var numberOfRows_2 = dataLengthIncludingAddNew + (options.leaveSpaceForNewRows ? numVisibleRows - 1 : 0);
+        }
+        var tempViewportH = $viewportScrollContainerY.height();
+        var oldViewportHasVScroll = viewportHasVScroll;
         viewportHasVScroll = !options.autoHeight && (numberOfRows * options.rowHeight > tempViewportH);
-
         makeActiveCellNormal();
-
-        // remove the rows that are now outside of the data range
-        // this helps avoid redundant calls to .removeRow() when the size of the data decreased by thousands of rows
-        let l = dataLengthIncludingAddNew - 1;
-        let i: any;
-        for (i in rowsCache)
-        {
-            if (i >= l)
-            {
+        var l = dataLengthIncludingAddNew - 1;
+        var i;
+        for (i in rowsCache) {
+            if (i >= l) {
                 removeRowFromCache(i);
             }
         }
-
         th = Math.max(options.rowHeight * numberOfRows, tempViewportH - scrollbarDimensions.height);
-
-        if (activeCellNode && activeRow > l)
-        {
+        if (activeCellNode && activeRow > l) {
             resetActiveCell();
         }
-
-        if (th < maxSupportedCssHeight)
-        {
-            // just one page
+        if (th < maxSupportedCssHeight) {
             h = ph = th;
             n = 1;
             cj = 0;
-        } else
-        {
-            // break into pages
+        }
+        else {
             h = maxSupportedCssHeight;
             ph = h / 100;
             n = Math.floor(th / ph);
             cj = (th - h) / (n - 1);
         }
-
-        if (h !== oldH)
-        {
-            if (hasFrozenRows && !options.frozenBottom)
-            {
+        if (h !== oldH) {
+            if (hasFrozenRows && !options.frozenBottom) {
                 $canvasBottomL.css("height", h);
-
-                if (hasFrozenColumns())
-                {
+                if (hasFrozenColumns()) {
                     $canvasBottomR.css("height", h);
                 }
-            } else
-            {
+            }
+            else {
                 $canvasTopL.css("height", h);
                 $canvasTopR.css("height", h);
             }
-
             scrollTop = $viewportScrollContainerY[0].scrollTop;
         }
-
-        let oldScrollTopInRange = (scrollTop + offset <= th - tempViewportH);
-
-        if (th == 0 || scrollTop == 0)
-        {
+        var oldScrollTopInRange = (scrollTop + offset <= th - tempViewportH);
+        if (th == 0 || scrollTop == 0) {
             page = offset = 0;
-        } else if (oldScrollTopInRange)
-        {
-            // maintain virtual position
+        }
+        else if (oldScrollTopInRange) {
             scrollTo(scrollTop + offset);
-        } else
-        {
-            // scroll to bottom
+        }
+        else {
             scrollTo(th - tempViewportH);
         }
-
-        if (h != oldH && options.autoHeight)
-        {
+        if (h != oldH && options.autoHeight) {
             resizeCanvas();
         }
-
-        if (options.forceFitColumns && oldViewportHasVScroll != viewportHasVScroll)
-        {
+        if (options.forceFitColumns && oldViewportHasVScroll != viewportHasVScroll) {
             autosizeColumns();
         }
         updateCanvasWidth(false);
     }
-
-    function getVisibleRange(viewportTop?, viewportLeft?)
-    {
-        if (viewportTop == null)
-        {
+    function getVisibleRange(viewportTop, viewportLeft) {
+        if (viewportTop == null) {
             viewportTop = scrollTop;
         }
-        if (viewportLeft == null)
-        {
+        if (viewportLeft == null) {
             viewportLeft = scrollLeft;
         }
-
         return {
             top: getRowFromPosition(viewportTop),
             bottom: getRowFromPosition(viewportTop + viewportH) + 1,
@@ -2975,393 +2018,252 @@ function SlickGrid(container, data, columns, options)
             rightPx: viewportLeft + viewportW
         };
     }
-
-    function getRenderedRange(viewportTop?, viewportLeft?)
-    {
-        let range = getVisibleRange(viewportTop, viewportLeft);
-        let buffer = Math.round(viewportH / options.rowHeight);
-        let minBuffer = 3;
-
-        if (vScrollDir == -1)
-        {
+    function getRenderedRange(viewportTop, viewportLeft) {
+        var range = getVisibleRange(viewportTop, viewportLeft);
+        var buffer = Math.round(viewportH / options.rowHeight);
+        var minBuffer = 3;
+        if (vScrollDir == -1) {
             range.top -= buffer;
             range.bottom += minBuffer;
-        } else if (vScrollDir == 1)
-        {
+        }
+        else if (vScrollDir == 1) {
             range.top -= minBuffer;
             range.bottom += buffer;
-        } else
-        {
+        }
+        else {
             range.top -= minBuffer;
             range.bottom += minBuffer;
         }
-
         range.top = Math.max(0, range.top);
         range.bottom = Math.min(getDataLengthIncludingAddNew() - 1, range.bottom);
-
         range.leftPx -= viewportW;
         range.rightPx += viewportW;
-
         range.leftPx = Math.max(0, range.leftPx);
         range.rightPx = Math.min(canvasWidth, range.rightPx);
-
         return range;
     }
-
-    function ensureCellNodesInRowsCache(row)
-    {
-        let cacheEntry = rowsCache[row];
-        if (cacheEntry)
-        {
-            if (cacheEntry.cellRenderQueue.length)
-            {
-                let $lastNode = cacheEntry.rowNode.children().last();
-                while (cacheEntry.cellRenderQueue.length)
-                {
-                    let columnIdx = cacheEntry.cellRenderQueue.pop();
-
+    function ensureCellNodesInRowsCache(row) {
+        var cacheEntry = rowsCache[row];
+        if (cacheEntry) {
+            if (cacheEntry.cellRenderQueue.length) {
+                var $lastNode = cacheEntry.rowNode.children().last();
+                while (cacheEntry.cellRenderQueue.length) {
+                    var columnIdx = cacheEntry.cellRenderQueue.pop();
                     cacheEntry.cellNodesByColumnIdx[columnIdx] = $lastNode;
                     $lastNode = $lastNode.prev();
-
-                    // Hack to retrieve the frozen columns because
-                    if ($lastNode.length == 0)
-                    {
+                    if ($lastNode.length == 0) {
                         $lastNode = $(cacheEntry.rowNode[0]).children().last();
                     }
                 }
             }
         }
     }
-
-    function cleanUpCells(range, row)
-    {
-        // Ignore frozen rows
-        if (hasFrozenRows && ((options.frozenBottom && row > actualFrozenRow) // Frozen bottom rows
+    function cleanUpCells(range, row) {
+        if (hasFrozenRows && ((options.frozenBottom && row > actualFrozenRow)
             ||
-            (row <= actualFrozenRow) // Frozen top rows
-        ))
-        {
+                (row <= actualFrozenRow))) {
             return;
         }
-
-        let totalCellsRemoved = 0;
-        let cacheEntry = rowsCache[row];
-
-        // Remove cells outside the range.
-        let cellsToRemove = [];
-        let i: any;
-        for (i in cacheEntry.cellNodesByColumnIdx)
-        {
-            // I really hate it when people mess with Array.prototype.
-            if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(i))
-            {
+        var totalCellsRemoved = 0;
+        var cacheEntry = rowsCache[row];
+        var cellsToRemove = [];
+        var i;
+        for (i in cacheEntry.cellNodesByColumnIdx) {
+            if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(i)) {
                 continue;
             }
-
-            // This is a string, so it needs to be cast back to a number.
             i = i | 0;
-
-            // Ignore frozen columns
-            if (i <= options.frozenColumn)
-            {
+            if (i <= options.frozenColumn) {
                 continue;
             }
-
-            let colspan = cacheEntry.cellColSpans[i];
-            if (columnPosLeft[i] > range.rightPx || columnPosRight[Math.min(columns.length - 1, i + colspan - 1)] < range.leftPx)
-            {
-                if (!(row == activeRow && i == activeCell))
-                {
+            var colspan = cacheEntry.cellColSpans[i];
+            if (columnPosLeft[i] > range.rightPx || columnPosRight[Math.min(columns.length - 1, i + colspan - 1)] < range.leftPx) {
+                if (!(row == activeRow && i == activeCell)) {
                     cellsToRemove.push(i);
                 }
             }
         }
-
-        let cellToRemove;
-        while ((cellToRemove = cellsToRemove.pop()) != null)
-        {
+        var cellToRemove;
+        while ((cellToRemove = cellsToRemove.pop()) != null) {
             cacheEntry.cellNodesByColumnIdx[cellToRemove][0].parentElement.removeChild(cacheEntry.cellNodesByColumnIdx[cellToRemove][0]);
             delete cacheEntry.cellColSpans[cellToRemove];
             delete cacheEntry.cellNodesByColumnIdx[cellToRemove];
-            if (postProcessedRows[row])
-            {
+            if (postProcessedRows[row]) {
                 delete postProcessedRows[row][cellToRemove];
             }
             totalCellsRemoved++;
         }
     }
-
-    function cleanUpAndRenderCells(range)
-    {
-        let cacheEntry;
-        let stringArray = [];
-        let processedRows = [];
-        let cellsAdded;
-        let totalCellsAdded = 0;
-        let colspan;
-
-        for (let row = range.top, btm = range.bottom; row <= btm; row++)
-        {
+    function cleanUpAndRenderCells(range) {
+        var cacheEntry;
+        var stringArray = [];
+        var processedRows = [];
+        var cellsAdded;
+        var totalCellsAdded = 0;
+        var colspan;
+        for (var row = range.top, btm = range.bottom; row <= btm; row++) {
             cacheEntry = rowsCache[row];
-            if (!cacheEntry)
-            {
+            if (!cacheEntry) {
                 continue;
             }
-
-            // cellRenderQueue populated in renderRows() needs to be cleared first
             ensureCellNodesInRowsCache(row);
-
             cleanUpCells(range, row);
-
-            // Render missing cells.
             cellsAdded = 0;
-
-            let metadata = data.getItemMetadata && data.getItemMetadata(row);
+            var metadata = data.getItemMetadata && data.getItemMetadata(row);
             metadata = metadata && metadata.columns;
-
-            let d = getDataItem(row);
-
-            // TODO:  shorten this loop (index? heuristics? binary search?)
-            for (let i = 0, ii = columns.length; i < ii; i++)
-            {
-                // Cells to the right are outside the range.
-                if (columnPosLeft[i] > range.rightPx)
-                {
+            var d = getDataItem(row);
+            for (var i = 0, ii = columns.length; i < ii; i++) {
+                if (columnPosLeft[i] > range.rightPx) {
                     break;
                 }
-
-                // Already rendered.
-                if ((colspan = cacheEntry.cellColSpans[i]) != null)
-                {
+                if ((colspan = cacheEntry.cellColSpans[i]) != null) {
                     i += (colspan > 1 ? colspan - 1 : 0);
                     continue;
                 }
-
                 colspan = 1;
-                if (metadata)
-                {
-                    let columnData = metadata[columns[i].id] || metadata[i];
+                if (metadata) {
+                    var columnData = metadata[columns[i].id] || metadata[i];
                     colspan = (columnData && columnData.colspan) || 1;
-                    if (colspan === "*")
-                    {
+                    if (colspan === "*") {
                         colspan = ii - i;
                     }
                 }
-
-                if (columnPosRight[Math.min(ii - 1, i + colspan - 1)] > range.leftPx)
-                {
+                if (columnPosRight[Math.min(ii - 1, i + colspan - 1)] > range.leftPx) {
                     appendCellHtml(stringArray, row, i, colspan, d);
                     cellsAdded++;
                 }
-
                 i += (colspan > 1 ? colspan - 1 : 0);
             }
-
-            if (cellsAdded)
-            {
+            if (cellsAdded) {
                 totalCellsAdded += cellsAdded;
                 processedRows.push(row);
             }
         }
-
-        if (!stringArray.length)
-        {
+        if (!stringArray.length) {
             return;
         }
-
-        let x = document.createElement("div");
+        var x = document.createElement("div");
         x.innerHTML = stringArray.join("");
-
-        let processedRow;
-        let $node;
-        while ((processedRow = processedRows.pop()) != null)
-        {
+        var processedRow;
+        var $node;
+        while ((processedRow = processedRows.pop()) != null) {
             cacheEntry = rowsCache[processedRow];
-            let columnIdx;
-            while ((columnIdx = cacheEntry.cellRenderQueue.pop()) != null)
-            {
+            var columnIdx = void 0;
+            while ((columnIdx = cacheEntry.cellRenderQueue.pop()) != null) {
                 $node = $(x).children().last();
-
-                if (hasFrozenColumns() && (columnIdx > options.frozenColumn))
-                {
+                if (hasFrozenColumns() && (columnIdx > options.frozenColumn)) {
                     $(cacheEntry.rowNode[1]).append($node);
-                } else
-                {
+                }
+                else {
                     $(cacheEntry.rowNode[0]).append($node);
                 }
-
                 cacheEntry.cellNodesByColumnIdx[columnIdx] = $node;
             }
         }
     }
-
-    function renderRows(range)
-    {
-        let stringArrayL = [],
-            stringArrayR = [],
-            rows = [],
-            needToReselectCell = false,
-            dataLength = getDataLength();
-
-        for (let i = range.top, ii = range.bottom; i <= ii; i++)
-        {
-            if (rowsCache[i] || (hasFrozenRows && options.frozenBottom && i == getDataLength()))
-            {
+    function renderRows(range) {
+        var stringArrayL = [], stringArrayR = [], rows = [], needToReselectCell = false, dataLength = getDataLength();
+        for (var i = range.top, ii = range.bottom; i <= ii; i++) {
+            if (rowsCache[i] || (hasFrozenRows && options.frozenBottom && i == getDataLength())) {
                 continue;
             }
             renderedRows++;
             rows.push(i);
-
-            // Create an entry right away so that appendRowHtml() can
-            // start populatating it.
             rowsCache[i] = {
                 "rowNode": null,
-
-                // ColSpans of rendered cells (by column idx).
-                // Can also be used for checking whether a cell has been rendered.
                 "cellColSpans": [],
-
-                // Cell nodes (by column idx).  Lazy-populated by ensureCellNodesInRowsCache().
                 "cellNodesByColumnIdx": [],
-
-                // Column indices of cell nodes that have been rendered, but not yet indexed in
-                // cellNodesByColumnIdx.  These are in the same order as cell nodes added at the
-                // end of the row.
                 "cellRenderQueue": []
             };
-
             appendRowHtml(stringArrayL, stringArrayR, i, range, dataLength);
-            if (activeCellNode && activeRow === i)
-            {
+            if (activeCellNode && activeRow === i) {
                 needToReselectCell = true;
             }
             counter_rows_rendered++;
         }
-
-        if (!rows.length)
-        {
+        if (!rows.length) {
             return;
         }
-
-        let x = document.createElement("div"),
-            xRight = document.createElement("div");
-
+        var x = document.createElement("div"), xRight = document.createElement("div");
         x.innerHTML = stringArrayL.join("");
         xRight.innerHTML = stringArrayR.join("");
-
-        for (let i = 0, ii = rows.length; i < ii; i++)
-        {
-            if ((hasFrozenRows) && (rows[i] >= actualFrozenRow))
-            {
-                if (hasFrozenColumns())
-                {
+        for (var i = 0, ii = rows.length; i < ii; i++) {
+            if ((hasFrozenRows) && (rows[i] >= actualFrozenRow)) {
+                if (hasFrozenColumns()) {
                     rowsCache[rows[i]].rowNode = $()
                         .add($(x.firstChild).appendTo($canvasBottomL))
                         .add($(xRight.firstChild).appendTo($canvasBottomR));
-                } else
-                {
+                }
+                else {
                     rowsCache[rows[i]].rowNode = $()
                         .add($(x.firstChild).appendTo($canvasBottomL));
                 }
-            } else if (hasFrozenColumns())
-            {
+            }
+            else if (hasFrozenColumns()) {
                 rowsCache[rows[i]].rowNode = $()
                     .add($(x.firstChild).appendTo($canvasTopL))
                     .add($(xRight.firstChild).appendTo($canvasTopR));
-            } else
-            {
+            }
+            else {
                 rowsCache[rows[i]].rowNode = $()
                     .add($(x.firstChild).appendTo($canvasTopL));
             }
         }
-
-        if (needToReselectCell)
-        {
+        if (needToReselectCell) {
             activeCellNode = getCellNode(activeRow, activeCell);
         }
     }
-
-    function startPostProcessing()
-    {
-        if (!options.enableAsyncPostRender)
-        {
+    function startPostProcessing() {
+        if (!options.enableAsyncPostRender) {
             return;
         }
         clearTimeout(h_postrender);
         h_postrender = setTimeout(asyncPostProcessRows, options.asyncPostRenderDelay);
     }
-
-    function invalidatePostProcessingResults(row)
-    {
+    function invalidatePostProcessingResults(row) {
         delete postProcessedRows[row];
         postProcessFromRow = Math.min(postProcessFromRow, row);
         postProcessToRow = Math.max(postProcessToRow, row);
         startPostProcessing();
     }
-
-    function updateRowPositions()
-    {
-        for (let row in rowsCache)
-        {
+    function updateRowPositions() {
+        for (var row in rowsCache) {
             rowsCache[row].rowNode.css('top', getRowTop(row) + "px");
         }
     }
-
-    function render()
-    {
-        if (!initialized)
-        {
+    function render() {
+        if (!initialized) {
             return;
         }
-        let visible = getVisibleRange();
-        let rendered = getRenderedRange();
-
-        // remove rows no longer in the viewport
+        var visible = getVisibleRange();
+        var rendered = getRenderedRange();
         cleanupRows(rendered);
-
-        // add new rows & missing cells in existing rows
-        if (lastRenderedScrollLeft != scrollLeft)
-        {
-
-            if (hasFrozenRows)
-            {
-
-                let renderedFrozenRows = $.extend(true, {}, rendered);
-
-                if (options.frozenBottom)
-                {
-
+        if (lastRenderedScrollLeft != scrollLeft) {
+            if (hasFrozenRows) {
+                var renderedFrozenRows = $.extend(true, {}, rendered);
+                if (options.frozenBottom) {
                     renderedFrozenRows.top = actualFrozenRow;
                     renderedFrozenRows.bottom = getDataLength();
-                } else
-                {
-
+                }
+                else {
                     renderedFrozenRows.top = 0;
                     renderedFrozenRows.bottom = options.frozenRow;
                 }
-
                 cleanUpAndRenderCells(renderedFrozenRows);
             }
-
             cleanUpAndRenderCells(rendered);
         }
-
-        // render missing rows
         renderRows(rendered);
-
-        // Render frozen rows
-        if (hasFrozenRows)
-        {
-            if (options.frozenBottom)
-            {
+        if (hasFrozenRows) {
+            if (options.frozenBottom) {
                 renderRows({
                     top: actualFrozenRow,
                     bottom: getDataLength() - 1,
                     leftPx: rendered.leftPx,
                     rightPx: rendered.rightPx
                 });
-            } else
-            {
+            }
+            else {
                 renderRows({
                     top: 0,
                     bottom: options.frozenRow - 1,
@@ -3370,264 +2272,183 @@ function SlickGrid(container, data, columns, options)
                 });
             }
         }
-
         postProcessFromRow = visible.top;
         postProcessToRow = Math.min(getDataLengthIncludingAddNew() - 1, visible.bottom);
         startPostProcessing();
-
         lastRenderedScrollTop = scrollTop;
         lastRenderedScrollLeft = scrollLeft;
         h_render = null;
     }
-
-    function handleHeaderRowScroll()
-    {
-        let scrollLeft = $headerRowScrollContainer[0].scrollLeft;
-        if (scrollLeft != $viewportScrollContainerX[0].scrollLeft)
-        {
+    function handleHeaderRowScroll() {
+        var scrollLeft = $headerRowScrollContainer[0].scrollLeft;
+        if (scrollLeft != $viewportScrollContainerX[0].scrollLeft) {
             $viewportScrollContainerX[0].scrollLeft = scrollLeft;
         }
     }
-
-    function handleFooterRowScroll()
-    {
-        let scrollLeft = $footerRowScrollContainer[0].scrollLeft;
-        if (scrollLeft != $viewportScrollContainerX[0].scrollLeft)
-        {
+    function handleFooterRowScroll() {
+        var scrollLeft = $footerRowScrollContainer[0].scrollLeft;
+        if (scrollLeft != $viewportScrollContainerX[0].scrollLeft) {
             $viewportScrollContainerX[0].scrollLeft = scrollLeft;
         }
     }
-
-    function handleMouseWheel(e, delta, deltaX, deltaY)
-    {
-        let $rowNode = $(e.target).closest(".slick-row");
-        let rowNode = $rowNode[0];
-
-        if (rowNode != rowNodeFromLastMouseWheelEvent)
-        {
-
-            let $gridCanvas = $rowNode.parents('.grid-canvas');
-            let left = $gridCanvas.hasClass('grid-canvas-left');
-
-            if (zombieRowNodeFromLastMouseWheelEvent && zombieRowNodeFromLastMouseWheelEvent[left ? 0 : 1] != rowNode)
-            {
-                let zombieRow = zombieRowNodeFromLastMouseWheelEvent[left || zombieRowNodeFromLastMouseWheelEvent.length == 1 ? 0 : 1];
+    function handleMouseWheel(e, delta, deltaX, deltaY) {
+        var $rowNode = $(e.target).closest(".slick-row");
+        var rowNode = $rowNode[0];
+        if (rowNode != rowNodeFromLastMouseWheelEvent) {
+            var $gridCanvas = $rowNode.parents('.grid-canvas');
+            var left = $gridCanvas.hasClass('grid-canvas-left');
+            if (zombieRowNodeFromLastMouseWheelEvent && zombieRowNodeFromLastMouseWheelEvent[left ? 0 : 1] != rowNode) {
+                var zombieRow = zombieRowNodeFromLastMouseWheelEvent[left || zombieRowNodeFromLastMouseWheelEvent.length == 1 ? 0 : 1];
                 zombieRow.parentElement.removeChild(zombieRow);
-
                 zombieRowNodeFromLastMouseWheelEvent = null;
             }
-
             rowNodeFromLastMouseWheelEvent = rowNode;
         }
-
         scrollTop = Math.max(0, $viewportScrollContainerY[0].scrollTop - (deltaY * options.rowHeight));
         scrollLeft = $viewportScrollContainerX[0].scrollLeft + (deltaX * 10);
-        let handled = _handleScroll(true);
-        if (handled) e.preventDefault();
+        var handled = _handleScroll(true);
+        if (handled)
+            e.preventDefault();
     }
-
-    function handleScroll()
-    {
+    function handleScroll() {
         scrollTop = $viewportScrollContainerY[0].scrollTop;
         scrollLeft = $viewportScrollContainerX[0].scrollLeft;
         return _handleScroll(false);
     }
-
-    function _handleScroll(isMouseWheel)
-    {
-        let maxScrollDistanceY = $viewportScrollContainerY[0].scrollHeight - $viewportScrollContainerY[0].clientHeight;
-        let maxScrollDistanceX = $viewportScrollContainerY[0].scrollWidth - $viewportScrollContainerY[0].clientWidth;
-        let hasFrozenCols = hasFrozenColumns();
-
-        // Ceiling the max scroll values
-        if (scrollTop > maxScrollDistanceY)
-        {
+    function _handleScroll(isMouseWheel) {
+        var maxScrollDistanceY = $viewportScrollContainerY[0].scrollHeight - $viewportScrollContainerY[0].clientHeight;
+        var maxScrollDistanceX = $viewportScrollContainerY[0].scrollWidth - $viewportScrollContainerY[0].clientWidth;
+        var hasFrozenCols = hasFrozenColumns();
+        if (scrollTop > maxScrollDistanceY) {
             scrollTop = maxScrollDistanceY;
         }
-        if (scrollLeft > maxScrollDistanceX)
-        {
+        if (scrollLeft > maxScrollDistanceX) {
             scrollLeft = maxScrollDistanceX;
         }
-
-        let vScrollDist = Math.abs(scrollTop - prevScrollTop);
-        let hScrollDist = Math.abs(scrollLeft - prevScrollLeft);
-
-        if (hScrollDist)
-        {
+        var vScrollDist = Math.abs(scrollTop - prevScrollTop);
+        var hScrollDist = Math.abs(scrollLeft - prevScrollLeft);
+        if (hScrollDist) {
             prevScrollLeft = scrollLeft;
-
             $viewportScrollContainerX[0].scrollLeft = scrollLeft;
             $headerScrollContainer[0].scrollLeft = scrollLeft;
             $topPanelScroller[0].scrollLeft = scrollLeft;
             $headerRowScrollContainer[0].scrollLeft = scrollLeft;
             $footerRowScrollContainer[0].scrollLeft = scrollLeft;
-
-            if (hasFrozenCols)
-            {
-                if (hasFrozenRows)
-                {
+            if (hasFrozenCols) {
+                if (hasFrozenRows) {
                     $viewportTopR[0].scrollLeft = scrollLeft;
                 }
-            } else
-            {
-                if (hasFrozenRows)
-                {
+            }
+            else {
+                if (hasFrozenRows) {
                     $viewportTopL[0].scrollLeft = scrollLeft;
                 }
             }
         }
-
-        if (vScrollDist)
-        {
+        if (vScrollDist) {
             vScrollDir = prevScrollTop < scrollTop ? 1 : -1;
             prevScrollTop = scrollTop;
-
-            if (isMouseWheel)
-            {
+            if (isMouseWheel) {
                 $viewportScrollContainerY[0].scrollTop = scrollTop;
             }
-
-            if (hasFrozenCols)
-            {
-                if (hasFrozenRows && !options.frozenBottom)
-                {
+            if (hasFrozenCols) {
+                if (hasFrozenRows && !options.frozenBottom) {
                     $viewportBottomL[0].scrollTop = scrollTop;
-                } else
-                {
+                }
+                else {
                     $viewportTopL[0].scrollTop = scrollTop;
                 }
             }
-
-            // switch virtual pages if needed
-            if (vScrollDist < viewportH)
-            {
+            if (vScrollDist < viewportH) {
                 scrollTo(scrollTop + offset);
-            } else
-            {
-                let oldOffset = offset;
-                if (h == viewportH)
-                {
+            }
+            else {
+                var oldOffset = offset;
+                if (h == viewportH) {
                     page = 0;
-                } else
-                {
+                }
+                else {
                     page = Math.min(n - 1, Math.floor(scrollTop * ((th - viewportH) / (h - viewportH)) * (1 / ph)));
                 }
                 offset = Math.round(page * cj);
-                if (oldOffset != offset)
-                {
+                if (oldOffset != offset) {
                     invalidateAllRows();
                 }
             }
         }
-
-        if (hScrollDist || vScrollDist)
-        {
-            if (h_render)
-            {
+        if (hScrollDist || vScrollDist) {
+            if (h_render) {
                 clearTimeout(h_render);
             }
-
-            if (Math.abs(lastRenderedScrollTop - scrollTop) > 20 || Math.abs(lastRenderedScrollLeft - scrollLeft) > 20)
-            {
-                if (options.forceSyncScrolling || (
-                    Math.abs(lastRenderedScrollTop - scrollTop) < viewportH && Math.abs(lastRenderedScrollLeft - scrollLeft) < viewportW))
-                {
+            if (Math.abs(lastRenderedScrollTop - scrollTop) > 20 || Math.abs(lastRenderedScrollLeft - scrollLeft) > 20) {
+                if (options.forceSyncScrolling || (Math.abs(lastRenderedScrollTop - scrollTop) < viewportH && Math.abs(lastRenderedScrollLeft - scrollLeft) < viewportW)) {
                     render();
-                } else
-                {
+                }
+                else {
                     h_render = setTimeout(render, 50);
                 }
-
                 trigger(self.onViewportChanged, {});
             }
         }
-
         trigger(self.onScroll, {
             scrollLeft: scrollLeft,
             scrollTop: scrollTop
         });
-
-        if (hScrollDist || vScrollDist) return true;
+        if (hScrollDist || vScrollDist)
+            return true;
         return false;
     }
-
-    function asyncPostProcessRows()
-    {
-        let dataLength = getDataLength();
-        while (postProcessFromRow <= postProcessToRow)
-        {
-            let row = (vScrollDir >= 0) ? postProcessFromRow++ : postProcessToRow--;
-            let cacheEntry = rowsCache[row];
-            if (!cacheEntry || row >= dataLength)
-            {
+    function asyncPostProcessRows() {
+        var dataLength = getDataLength();
+        while (postProcessFromRow <= postProcessToRow) {
+            var row = (vScrollDir >= 0) ? postProcessFromRow++ : postProcessToRow--;
+            var cacheEntry = rowsCache[row];
+            if (!cacheEntry || row >= dataLength) {
                 continue;
             }
-
-            if (!postProcessedRows[row])
-            {
+            if (!postProcessedRows[row]) {
                 postProcessedRows[row] = {};
             }
-
             ensureCellNodesInRowsCache(row);
-            let columnIdx: any;
-            for (columnIdx in cacheEntry.cellNodesByColumnIdx)
-            {
-                if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx))
-                {
+            var columnIdx = void 0;
+            for (columnIdx in cacheEntry.cellNodesByColumnIdx) {
+                if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx)) {
                     continue;
                 }
-
                 columnIdx = columnIdx | 0;
-
-                let m = columns[columnIdx];
-                if (m.asyncPostRender && !postProcessedRows[row][columnIdx])
-                {
-                    let node = cacheEntry.cellNodesByColumnIdx[columnIdx];
-                    if (node)
-                    {
+                var m = columns[columnIdx];
+                if (m.asyncPostRender && !postProcessedRows[row][columnIdx]) {
+                    var node = cacheEntry.cellNodesByColumnIdx[columnIdx];
+                    if (node) {
                         m.asyncPostRender(node, row, getDataItem(row), m);
                     }
                     postProcessedRows[row][columnIdx] = true;
                 }
             }
-
             h_postrender = setTimeout(asyncPostProcessRows, options.asyncPostRenderDelay);
             return;
         }
     }
-
-    function updateCellCssStylesOnRenderedRows(addedHash, removedHash)
-    {
-        let node, columnId, addedRowHash, removedRowHash;
-        for (let row in rowsCache)
-        {
+    function updateCellCssStylesOnRenderedRows(addedHash, removedHash) {
+        var node, columnId, addedRowHash, removedRowHash;
+        for (var row in rowsCache) {
             removedRowHash = removedHash && removedHash[row];
             addedRowHash = addedHash && addedHash[row];
-
-            if (removedRowHash)
-            {
-                for (columnId in removedRowHash)
-                {
-                    if (!addedRowHash || removedRowHash[columnId] != addedRowHash[columnId])
-                    {
+            if (removedRowHash) {
+                for (columnId in removedRowHash) {
+                    if (!addedRowHash || removedRowHash[columnId] != addedRowHash[columnId]) {
                         node = getCellNode(row, getColumnIndex(columnId));
-                        if (node)
-                        {
+                        if (node) {
                             $(node).removeClass(removedRowHash[columnId]);
                         }
                     }
                 }
             }
-
-            if (addedRowHash)
-            {
-                for (columnId in addedRowHash)
-                {
-                    if (!removedRowHash || removedRowHash[columnId] != addedRowHash[columnId])
-                    {
+            if (addedRowHash) {
+                for (columnId in addedRowHash) {
+                    if (!removedRowHash || removedRowHash[columnId] != addedRowHash[columnId]) {
                         node = getCellNode(row, getColumnIndex(columnId));
-                        if (node)
-                        {
+                        if (node) {
                             $(node).addClass(addedRowHash[columnId]);
                         }
                     }
@@ -3635,470 +2456,320 @@ function SlickGrid(container, data, columns, options)
             }
         }
     }
-
-    function addCellCssStyles(key, hash)
-    {
-        if (cellCssClasses[key])
-        {
+    function addCellCssStyles(key, hash) {
+        if (cellCssClasses[key]) {
             throw "addCellCssStyles: cell CSS hash with key '" + key + "' already exists.";
         }
-
         cellCssClasses[key] = hash;
         updateCellCssStylesOnRenderedRows(hash, null);
-
         trigger(self.onCellCssStylesChanged, {
             "key": key,
             "hash": hash
         });
     }
-
-    function removeCellCssStyles(key)
-    {
-        if (!cellCssClasses[key])
-        {
+    function removeCellCssStyles(key) {
+        if (!cellCssClasses[key]) {
             return;
         }
-
         updateCellCssStylesOnRenderedRows(null, cellCssClasses[key]);
         delete cellCssClasses[key];
-
         trigger(self.onCellCssStylesChanged, {
             "key": key,
             "hash": null
         });
     }
-
-    function setCellCssStyles(key, hash)
-    {
-        let prevHash = cellCssClasses[key];
-
+    function setCellCssStyles(key, hash) {
+        var prevHash = cellCssClasses[key];
         cellCssClasses[key] = hash;
         updateCellCssStylesOnRenderedRows(hash, prevHash);
-
         trigger(self.onCellCssStylesChanged, {
             "key": key,
             "hash": hash
         });
     }
-
-    function getCellCssStyles(key)
-    {
+    function getCellCssStyles(key) {
         return cellCssClasses[key];
     }
-
-
-    function toggleCellClass($cell, times, speed)
-    {
-        if (!times)
-        {
+    function toggleCellClass($cell, times, speed) {
+        if (!times) {
             return;
         }
-        setTimeout(function ()
-        {
-            $cell.queue(function ()
-            {
+        setTimeout(function () {
+            $cell.queue(function () {
                 $cell.toggleClass(options.cellFlashingCssClass).dequeue();
                 toggleCellClass($cell, times - 1, speed);
             });
-        },
-            speed);
+        }, speed);
     }
-
-    function flashCell(row, cell, speed)
-    {
+    function flashCell(row, cell, speed) {
         speed = speed || 100;
-        if (rowsCache[row])
-        {
-            let $cell = $(getCellNode(row, cell));
-
+        if (rowsCache[row]) {
+            var $cell = $(getCellNode(row, cell));
             toggleCellClass($cell, 4, speed);
         }
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // Interactivity
-
-    function handleDragInit(e, dd)
-    {
-        let cell = getCellFromEvent(e);
-        if (!cell || !cellExists(cell.row, cell.cell))
-        {
+    function handleDragInit(e, dd) {
+        var cell = getCellFromEvent(e);
+        if (!cell || !cellExists(cell.row, cell.cell)) {
             return false;
         }
-
-        let retval = trigger(self.onDragInit, dd, e);
-        if (e.isImmediatePropagationStopped())
-        {
+        var retval = trigger(self.onDragInit, dd, e);
+        if (e.isImmediatePropagationStopped()) {
             return retval;
         }
-
-        // if nobody claims to be handling drag'n'drop by stopping immediate propagation,
-        // cancel out of it
         return false;
     }
-
-    function handleDragStart(interactEvent)
-    {
-        let event = $.Event(interactEvent.originalEvent.type, interactEvent.originalEvent);
-        let cell = getCellFromEvent(event);
-        if (!cell || !cellExists(cell.row, cell.cell))
-        {
+    function handleDragStart(interactEvent) {
+        var event = $.Event(interactEvent.originalEvent.type, interactEvent.originalEvent);
+        var cell = getCellFromEvent(event);
+        if (!cell || !cellExists(cell.row, cell.cell)) {
             return false;
         }
-
-        let retval = trigger(self.onDragStart, interactEvent, event);
-        if (event.isImmediatePropagationStopped())
-        {
+        var retval = trigger(self.onDragStart, interactEvent, event);
+        if (event.isImmediatePropagationStopped()) {
             return retval;
         }
-
         return false;
     }
-
-    function handleDrag(interactEvent)
-    {
-        let event = $.Event(interactEvent.originalEvent.type, interactEvent.originalEvent);
+    function handleDrag(interactEvent) {
+        var event = $.Event(interactEvent.originalEvent.type, interactEvent.originalEvent);
         return trigger(self.onDrag, interactEvent, event);
     }
-
-    function handleDragEnd(interactEvent)
-    {
+    function handleDragEnd(interactEvent) {
         trigger(self.onDragEnd, interactEvent, $.Event('mousedown'));
     }
-
-    function handleKeyDown(e)
-    {
+    function handleKeyDown(e) {
         trigger(self.onKeyDown, {
             row: activeRow,
             cell: activeCell
         }, e);
-        let handled = e.isImmediatePropagationStopped();
-
-        if (!handled)
-        {
-            if (!e.shiftKey && !e.altKey && !e.ctrlKey)
-            {
-                if (e.which == 27)
-                {
-                    if (!getEditorLock().isActive())
-                    {
-                        return; // no editing mode to cancel, allow bubbling and default processing (exit without cancelling the event)
+        var handled = e.isImmediatePropagationStopped();
+        if (!handled) {
+            if (!e.shiftKey && !e.altKey && !e.ctrlKey) {
+                if (e.which == 27) {
+                    if (!getEditorLock().isActive()) {
+                        return;
                     }
                     cancelEditAndSetFocus();
-                } else if (e.which == 34)
-                {
+                }
+                else if (e.which == 34) {
                     navigatePageDown();
                     handled = true;
-                } else if (e.which == 33)
-                {
+                }
+                else if (e.which == 33) {
                     navigatePageUp();
                     handled = true;
-                } else if (e.which == 37)
-                {
+                }
+                else if (e.which == 37) {
                     handled = navigateLeft();
-                } else if (e.which == 39)
-                {
+                }
+                else if (e.which == 39) {
                     handled = navigateRight();
-                } else if (e.which == 38)
-                {
+                }
+                else if (e.which == 38) {
                     handled = navigateUp();
-                } else if (e.which == 40)
-                {
+                }
+                else if (e.which == 40) {
                     handled = navigateDown();
-                } else if (e.which == 9)
-                {
+                }
+                else if (e.which == 9) {
                     handled = navigateNext();
-                } else if (e.which == 13)
-                {
-                    if (options.editable)
-                    {
-                        if (currentEditor)
-                        {
-                            // adding new row
-                            if (activeRow === getDataLength())
-                            {
+                }
+                else if (e.which == 13) {
+                    if (options.editable) {
+                        if (currentEditor) {
+                            if (activeRow === getDataLength()) {
                                 navigateDown();
-                            } else
-                            {
+                            }
+                            else {
                                 commitEditAndSetFocus();
                             }
-                        } else
-                        {
-                            if (getEditorLock().commitCurrentEdit())
-                            {
+                        }
+                        else {
+                            if (getEditorLock().commitCurrentEdit()) {
                                 makeActiveCellEditable();
                             }
                         }
                     }
                     handled = true;
                 }
-            } else if (e.which == 9 && e.shiftKey && !e.ctrlKey && !e.altKey)
-            {
+            }
+            else if (e.which == 9 && e.shiftKey && !e.ctrlKey && !e.altKey) {
                 handled = navigatePrev();
             }
         }
-
-        if (handled)
-        {
-            // the event has been handled so don't let parent element (bubbling/propagation) or browser (default) handle it
+        if (handled) {
             e.stopPropagation();
             e.preventDefault();
-            try
-            {
-                e.originalEvent.keyCode = 0; // prevent default behaviour for special keys in IE browsers (F3, F5, etc.)
+            try {
+                e.originalEvent.keyCode = 0;
             }
-            // ignore exceptions - setting the original event's keycode throws access denied exception for "Ctrl"
-            // (hitting control key only, nothing else), "Shift" (maybe others)
-            catch (error)
-            {
+            catch (error) {
             }
         }
     }
-
-    function handleClick(e)
-    {
-        if (!currentEditor)
-        {
-            // if this click resulted in some cell child node getting focus,
-            // don't steal it back - keyboard events will still bubble up
-            // IE9+ seems to default DIVs to tabIndex=0 instead of -1, so check for cell clicks directly.
-            if (e.target != document.activeElement || $(e.target).hasClass("slick-cell"))
-            {
+    function handleClick(e) {
+        if (!currentEditor) {
+            if (e.target != document.activeElement || $(e.target).hasClass("slick-cell")) {
                 setFocus();
             }
         }
-
-        let cell = getCellFromEvent(e);
-        if (!cell || (currentEditor !== null && activeRow == cell.row && activeCell == cell.cell))
-        {
+        var cell = getCellFromEvent(e);
+        if (!cell || (currentEditor !== null && activeRow == cell.row && activeCell == cell.cell)) {
             return;
         }
-
         trigger(self.onClick, {
             row: cell.row,
             cell: cell.cell
         }, e);
-        if (e.isImmediatePropagationStopped())
-        {
+        if (e.isImmediatePropagationStopped()) {
             return;
         }
-
-        if ((activeCell != cell.cell || activeRow != cell.row) && canCellBeActive(cell.row, cell.cell))
-        {
-            if (!getEditorLock().isActive() || getEditorLock().commitCurrentEdit())
-            {
-
+        if ((activeCell != cell.cell || activeRow != cell.row) && canCellBeActive(cell.row, cell.cell)) {
+            if (!getEditorLock().isActive() || getEditorLock().commitCurrentEdit()) {
                 scrollRowIntoView(cell.row, false);
                 setActiveCellInternal(getCellNode(cell.row, cell.cell));
             }
         }
     }
-
-    function handleContextMenu(e)
-    {
-        let $cell = $(e.target).closest(".slick-cell", $canvas);
-        if ($cell.length === 0)
-        {
+    function handleContextMenu(e) {
+        var $cell = $(e.target).closest(".slick-cell", $canvas);
+        if ($cell.length === 0) {
             return;
         }
-
-        // are we editing this cell?
-        if (activeCellNode === $cell[0] && currentEditor !== null)
-        {
+        if (activeCellNode === $cell[0] && currentEditor !== null) {
             return;
         }
-
         trigger(self.onContextMenu, {}, e);
     }
-
-    function handleDblClick(e)
-    {
-        let cell = getCellFromEvent(e);
-        if (!cell || (currentEditor !== null && activeRow == cell.row && activeCell == cell.cell))
-        {
+    function handleDblClick(e) {
+        var cell = getCellFromEvent(e);
+        if (!cell || (currentEditor !== null && activeRow == cell.row && activeCell == cell.cell)) {
             return;
         }
-
         trigger(self.onDblClick, {
             row: cell.row,
             cell: cell.cell
         }, e);
-        if (e.isImmediatePropagationStopped())
-        {
+        if (e.isImmediatePropagationStopped()) {
             return;
         }
-
-        if (options.editable)
-        {
+        if (options.editable) {
             gotoCell(cell.row, cell.cell, true);
         }
     }
-
-    function handleHeaderMouseEnter(e)
-    {
+    function handleHeaderMouseEnter(e) {
         trigger(self.onHeaderMouseEnter, {
             "column": $(this).data("column")
         }, e);
     }
-
-    function handleHeaderMouseLeave(e)
-    {
+    function handleHeaderMouseLeave(e) {
         trigger(self.onHeaderMouseLeave, {
             "column": $(this).data("column")
         }, e);
     }
-
-    function handleHeaderContextMenu(e)
-    {
-        let $header = $(e.target).closest(".slick-header-column", ".slick-header-columns");
-        let column = $header && $header.data("column");
+    function handleHeaderContextMenu(e) {
+        var $header = $(e.target).closest(".slick-header-column", ".slick-header-columns");
+        var column = $header && $header.data("column");
         trigger(self.onHeaderContextMenu, {
             column: column
         }, e);
     }
-
-    function handleHeaderClick(e)
-    {
-        let $header = $(e.target).closest(".slick-header-column", ".slick-header-columns");
-        let column = $header && $header.data("column");
-        if (column)
-        {
+    function handleHeaderClick(e) {
+        var $header = $(e.target).closest(".slick-header-column", ".slick-header-columns");
+        var column = $header && $header.data("column");
+        if (column) {
             trigger(self.onHeaderClick, {
                 column: column
             }, e);
         }
     }
-
-    function handleMouseEnter(e)
-    {
+    function handleMouseEnter(e) {
         trigger(self.onMouseEnter, {}, e);
     }
-
-    function handleMouseLeave(e)
-    {
+    function handleMouseLeave(e) {
         trigger(self.onMouseLeave, {}, e);
     }
-
-    function cellExists(row, cell)
-    {
+    function cellExists(row, cell) {
         return !(row < 0 || row >= getDataLength() || cell < 0 || cell >= columns.length);
     }
-
-    function getCellFromPoint(x, y)
-    {
-        let row = getRowFromPosition(y);
-        let cell = 0;
-
-        let w = 0;
-        for (let i = 0; i < columns.length && w < x; i++)
-        {
+    function getCellFromPoint(x, y) {
+        var row = getRowFromPosition(y);
+        var cell = 0;
+        var w = 0;
+        for (var i = 0; i < columns.length && w < x; i++) {
             w += columns[i].width;
             cell++;
         }
-
-        if (cell < 0)
-        {
+        if (cell < 0) {
             cell = 0;
         }
-
         return {
             row: row,
             cell: cell - 1
         };
     }
-
-    function getCellFromNode(cellNode)
-    {
-        // read column number from .l<columnNumber> CSS class
-        let cls = /l\d+/.exec(cellNode.className);
-        if (!cls)
-        {
+    function getCellFromNode(cellNode) {
+        var cls = /l\d+/.exec(cellNode.className);
+        if (!cls) {
             throw "getCellFromNode: cannot get cell - " + cellNode.className;
         }
         return parseInt(cls[0].substr(1, cls[0].length - 1), 10);
     }
-
-    function getRowFromNode(rowNode)
-    {
-        let row: any, i:any;
+    function getRowFromNode(rowNode) {
+        var row, i;
         for (row in rowsCache)
             for (i in rowsCache[row].rowNode)
-                if (rowsCache[row].rowNode[i] === rowNode) return row | 0;
-
+                if (rowsCache[row].rowNode[i] === rowNode)
+                    return row | 0;
         return null;
     }
-
-    function getFrozenRowOffset(row)
-    {
-        let offset = (hasFrozenRows) ? (options.frozenBottom) ? (row >= actualFrozenRow) ? (h < viewportTopH) ? (actualFrozenRow * options.rowHeight) : h : 0 : (row >= actualFrozenRow) ? frozenRowsHeight : 0 : 0;
-
+    function getFrozenRowOffset(row) {
+        var offset = (hasFrozenRows) ? (options.frozenBottom) ? (row >= actualFrozenRow) ? (h < viewportTopH) ? (actualFrozenRow * options.rowHeight) : h : 0 : (row >= actualFrozenRow) ? frozenRowsHeight : 0 : 0;
         return offset;
     }
-
-    function getCellFromEvent(e)
-    {
-        let row, cell;
-        let $cell = $(e.target).closest(".slick-cell", $canvas);
-        if (!$cell.length)
-        {
+    function getCellFromEvent(e) {
+        var row, cell;
+        var $cell = $(e.target).closest(".slick-cell", $canvas);
+        if (!$cell.length) {
             return null;
         }
-
         row = getRowFromNode($cell[0].parentNode);
-
-        if (hasFrozenRows)
-        {
-
-            let c = $cell.parents('.grid-canvas').offset();
-
-            let rowOffset = 0;
-            let isBottom = $cell.parents('.grid-canvas-bottom').length;
-
-            if (isBottom)
-            {
+        if (hasFrozenRows) {
+            var c = $cell.parents('.grid-canvas').offset();
+            var rowOffset = 0;
+            var isBottom = $cell.parents('.grid-canvas-bottom').length;
+            if (isBottom) {
                 rowOffset = (options.frozenBottom) ? $canvasTopL.height() : frozenRowsHeight;
             }
-
             row = getCellFromPoint(e.clientX - c.left, e.clientY - c.top + rowOffset + $(document).scrollTop()).row;
         }
-
         cell = getCellFromNode($cell[0]);
-
-        if (row == null || cell == null)
-        {
+        if (row == null || cell == null) {
             return null;
-        } else
-        {
+        }
+        else {
             return {
                 "row": row,
                 "cell": cell
             };
         }
     }
-
-    function getCellNodeBox(row, cell)
-    {
-        if (!cellExists(row, cell))
-        {
+    function getCellNodeBox(row, cell) {
+        if (!cellExists(row, cell)) {
             return null;
         }
-
-        let frozenRowOffset = getFrozenRowOffset(row);
-
-        let y1 = getRowTop(row) - frozenRowOffset;
-        let y2 = y1 + options.rowHeight - 1;
-        let x1 = 0;
-        for (let i = 0; i < cell; i++)
-        {
+        var frozenRowOffset = getFrozenRowOffset(row);
+        var y1 = getRowTop(row) - frozenRowOffset;
+        var y2 = y1 + options.rowHeight - 1;
+        var x1 = 0;
+        for (var i = 0; i < cell; i++) {
             x1 += columns[i].width;
-
-            if (options.frozenColumn == i)
-            {
+            if (options.frozenColumn == i) {
                 x1 = 0;
             }
         }
-        let x2 = x1 + columns[cell].width;
-
+        var x2 = x1 + columns[cell].width;
         return {
             top: y1,
             left: x1,
@@ -4106,177 +2777,115 @@ function SlickGrid(container, data, columns, options)
             right: x2
         };
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // Cell switching
-
-    function resetActiveCell()
-    {
+    function resetActiveCell() {
         setActiveCellInternal(null, false);
     }
-
-    function setFocus()
-    {
-        if (tabbingDirection == -1)
-        {
+    function setFocus() {
+        if (tabbingDirection == -1) {
             $focusSink[0].focus();
-        } else
-        {
+        }
+        else {
             $focusSink2[0].focus();
         }
     }
-
-    function scrollCellIntoView(row, cell, doPaging?)
-    {
-        // Don't scroll to frozen cells
-        if (cell <= options.frozenColumn)
-        {
+    function scrollCellIntoView(row, cell, doPaging) {
+        if (cell <= options.frozenColumn) {
             return;
         }
-
-        if (row < actualFrozenRow)
-        {
+        if (row < actualFrozenRow) {
             scrollRowIntoView(row, doPaging);
         }
-
-        let colspan = getColspan(row, cell);
-        let left = columnPosLeft[cell],
-            right = columnPosRight[cell + (colspan > 1 ? colspan - 1 : 0)],
-            scrollRight = scrollLeft + $viewportScrollContainerX.width();
-
-        if (left < scrollLeft)
-        {
+        var colspan = getColspan(row, cell);
+        var left = columnPosLeft[cell], right = columnPosRight[cell + (colspan > 1 ? colspan - 1 : 0)], scrollRight = scrollLeft + $viewportScrollContainerX.width();
+        if (left < scrollLeft) {
             $viewportScrollContainerX.scrollLeft(left);
             handleScroll();
             render();
-        } else if (right > scrollRight)
-        {
+        }
+        else if (right > scrollRight) {
             $viewportScrollContainerX.scrollLeft(Math.min(left, right - $viewportScrollContainerX[0].clientWidth));
             handleScroll();
             render();
         }
     }
-
-    function setActiveCellInternal(newCell, opt_editMode?)
-    {
-        if (activeCellNode !== null)
-        {
+    function setActiveCellInternal(newCell, opt_editMode) {
+        if (activeCellNode !== null) {
             makeActiveCellNormal();
             $(activeCellNode).removeClass("active");
-            if (rowsCache[activeRow])
-            {
+            if (rowsCache[activeRow]) {
                 $(rowsCache[activeRow].rowNode).removeClass("active");
             }
         }
-
-        let activeCellChanged = (activeCellNode !== newCell);
+        var activeCellChanged = (activeCellNode !== newCell);
         activeCellNode = newCell;
-
-        if (activeCellNode != null)
-        {
-            let $activeCellNode = $(activeCellNode);
-            let $activeCellOffset = $activeCellNode.offset();
-
-            let rowOffset = Math.floor($activeCellNode.parents('.grid-canvas').offset().top);
-            let isBottom = $activeCellNode.parents('.grid-canvas-bottom').length;
-
-            if (hasFrozenRows && isBottom)
-            {
+        if (activeCellNode != null) {
+            var $activeCellNode = $(activeCellNode);
+            var $activeCellOffset = $activeCellNode.offset();
+            var rowOffset = Math.floor($activeCellNode.parents('.grid-canvas').offset().top);
+            var isBottom = $activeCellNode.parents('.grid-canvas-bottom').length;
+            if (hasFrozenRows && isBottom) {
                 rowOffset -= (options.frozenBottom) ? $canvasTopL.height() : frozenRowsHeight;
             }
-
-            let cell = getCellFromPoint($activeCellOffset.left, Math.ceil($activeCellOffset.top) - rowOffset);
-
+            var cell = getCellFromPoint($activeCellOffset.left, Math.ceil($activeCellOffset.top) - rowOffset);
             activeRow = cell.row;
             activeCell = activePosX = activeCell = activePosX = getCellFromNode(activeCellNode[0]);
-
             $activeCellNode.addClass("active");
-            if (rowsCache[activeRow])
-            {
+            if (rowsCache[activeRow]) {
                 $(rowsCache[activeRow].rowNode).addClass('active');
             }
-
-            if (opt_editMode == null)
-            {
+            if (opt_editMode == null) {
                 opt_editMode = (activeRow == getDataLength()) || options.autoEdit;
             }
-
-            if (options.editable && opt_editMode && isCellPotentiallyEditable(activeRow, activeCell))
-            {
+            if (options.editable && opt_editMode && isCellPotentiallyEditable(activeRow, activeCell)) {
                 clearTimeout(h_editorLoader);
-
-                if (options.asyncEditorLoading)
-                {
-                    h_editorLoader = setTimeout(function ()
-                    {
+                if (options.asyncEditorLoading) {
+                    h_editorLoader = setTimeout(function () {
                         makeActiveCellEditable();
                     }, options.asyncEditorLoadDelay);
-                } else
-                {
+                }
+                else {
                     makeActiveCellEditable();
                 }
             }
-        } else
-        {
+        }
+        else {
             activeRow = activeCell = null;
         }
-
-        if (activeCellChanged)
-        {
+        if (activeCellChanged) {
             setTimeout(scrollActiveCellIntoView, 50);
             trigger(self.onActiveCellChanged, getActiveCell());
         }
     }
-
-    function clearTextSelection()
-    {
-        if (document.selection && document.selection.empty)
-        {
-            try
-            {
-                //IE fails here if selected element is not in dom
+    function clearTextSelection() {
+        if (document.selection && document.selection.empty) {
+            try {
                 document.selection.empty();
-            } catch (e)
-            {
             }
-        } else if (window.getSelection)
-        {
-            let sel = window.getSelection();
-            if (sel && sel.removeAllRanges)
-            {
+            catch (e) {
+            }
+        }
+        else if (window.getSelection) {
+            var sel = window.getSelection();
+            if (sel && sel.removeAllRanges) {
                 sel.removeAllRanges();
             }
         }
     }
-
-    function isCellPotentiallyEditable(row, cell)
-    {
-        let dataLength = getDataLength();
-        // is the data for this row loaded?
-        if (row < dataLength && !getDataItem(row))
-        {
+    function isCellPotentiallyEditable(row, cell) {
+        var dataLength = getDataLength();
+        if (row < dataLength && !getDataItem(row)) {
             return false;
         }
-
-        // are we in the Add New row?  can we create new from this cell?
-        if (columns[cell].cannotTriggerInsert && row >= dataLength)
-        {
+        if (columns[cell].cannotTriggerInsert && row >= dataLength) {
             return false;
         }
-
-        // does this cell have an editor?
-        if (!getEditor(row, cell))
-        {
+        if (!getEditor(row, cell)) {
             return false;
         }
-
         return true;
     }
-
-    function makeActiveCellNormal()
-    {
-        if (!currentEditor)
-        {
+    function makeActiveCellNormal() {
+        if (!currentEditor) {
             return;
         }
         trigger(self.onBeforeCellEditorDestroy, {
@@ -4284,71 +2893,47 @@ function SlickGrid(container, data, columns, options)
         });
         currentEditor.destroy();
         currentEditor = null;
-
-        if (activeCellNode)
-        {
-            let d = getDataItem(activeRow);
+        if (activeCellNode) {
+            var d = getDataItem(activeRow);
             $(activeCellNode).removeClass("editable invalid");
-            if (d)
-            {
-                let column = columns[activeCell];
+            if (d) {
+                var column = columns[activeCell];
                 activeCellNode[0].innerHTML = callFormatter(activeRow, activeCell, getDataItemValueForColumn(d, column), column, d);
                 invalidatePostProcessingResults(activeRow);
             }
         }
-
-        // if there previously was text selected on a page (such as selected text in the edit cell just removed),
-        // IE can't set focus to anything else correctly
-        if (navigator.userAgent.toLowerCase().match(/msie/))
-        {
+        if (navigator.userAgent.toLowerCase().match(/msie/)) {
             clearTextSelection();
         }
-
         getEditorLock().deactivate(editController);
     }
-
-    function makeActiveCellEditable(editor?)
-    {
-        if (!activeCellNode)
-        {
+    function makeActiveCellEditable(editor) {
+        if (!activeCellNode) {
             return;
         }
-        if (!options.editable)
-        {
+        if (!options.editable) {
             throw "Grid : makeActiveCellEditable : should never get called when options.editable is false";
         }
-
-        // cancel pending async call if there is one
         clearTimeout(h_editorLoader);
-
-        if (!isCellPotentiallyEditable(activeRow, activeCell))
-        {
+        if (!isCellPotentiallyEditable(activeRow, activeCell)) {
             return;
         }
-
-        let columnDef = columns[activeCell];
-        let item = getDataItem(activeRow);
-
+        var columnDef = columns[activeCell];
+        var item = getDataItem(activeRow);
         if (trigger(self.onBeforeEditCell, {
             row: activeRow,
             cell: activeCell,
             item: item,
             column: columnDef
-        }) === false)
-        {
+        }) === false) {
             setFocus();
             return;
         }
-
         getEditorLock().activate(editController);
         $(activeCellNode).addClass("editable");
-
-        // don't clear the cell if a custom editor is passed through
-        if (!editor)
-        {
+        if (!editor) {
             activeCellNode[0].innerHTML = "";
         }
-
         currentEditor = new (editor || getEditor(activeRow, activeCell))({
             grid: self,
             gridPosition: absBox($container[0]),
@@ -4359,45 +2944,29 @@ function SlickGrid(container, data, columns, options)
             commitChanges: commitEditAndSetFocus,
             cancelChanges: cancelEditAndSetFocus
         });
-
-        if (item)
-        {
+        if (item) {
             currentEditor.loadValue(item);
         }
-
         serializedEditorValue = currentEditor.serializeValue();
-
-        if (currentEditor.position)
-        {
+        if (currentEditor.position) {
             handleActiveCellPositionChange();
         }
     }
-
-    function commitEditAndSetFocus()
-    {
-        // if the commit fails, it would do so due to a validation error
-        // if so, do not steal the focus from the editor
-        if (getEditorLock().commitCurrentEdit())
-        {
+    function commitEditAndSetFocus() {
+        if (getEditorLock().commitCurrentEdit()) {
             setFocus();
-            if (options.autoEdit)
-            {
+            if (options.autoEdit) {
                 navigateDown();
             }
         }
     }
-
-    function cancelEditAndSetFocus()
-    {
-        if (getEditorLock().cancelCurrentEdit())
-        {
+    function cancelEditAndSetFocus() {
+        if (getEditorLock().cancelCurrentEdit()) {
             setFocus();
         }
     }
-
-    function absBox(elem)
-    {
-        let box = {
+    function absBox(elem) {
+        var box = {
             top: elem.offsetTop,
             left: elem.offsetLeft,
             bottom: 0,
@@ -4408,259 +2977,173 @@ function SlickGrid(container, data, columns, options)
         };
         box.bottom = box.top + box.height;
         box.right = box.left + box.width;
-
-        // walk up the tree
-        let offsetParent = elem.offsetParent;
-        while ((elem = elem.parentNode) != document.body)
-        {
-            if (box.visible && elem.scrollHeight != elem.offsetHeight && $(elem).css("overflowY") != "visible")
-            {
+        var offsetParent = elem.offsetParent;
+        while ((elem = elem.parentNode) != document.body) {
+            if (box.visible && elem.scrollHeight != elem.offsetHeight && $(elem).css("overflowY") != "visible") {
                 box.visible = box.bottom > elem.scrollTop && box.top < elem.scrollTop + elem.clientHeight;
             }
-
-            if (box.visible && elem.scrollWidth != elem.offsetWidth && $(elem).css("overflowX") != "visible")
-            {
+            if (box.visible && elem.scrollWidth != elem.offsetWidth && $(elem).css("overflowX") != "visible") {
                 box.visible = box.right > elem.scrollLeft && box.left < elem.scrollLeft + elem.clientWidth;
             }
-
             box.left -= elem.scrollLeft;
             box.top -= elem.scrollTop;
-
-            if (elem === offsetParent)
-            {
+            if (elem === offsetParent) {
                 box.left += elem.offsetLeft;
                 box.top += elem.offsetTop;
                 offsetParent = elem.offsetParent;
             }
-
             box.bottom = box.top + box.height;
             box.right = box.left + box.width;
         }
-
         return box;
     }
-
-    function getActiveCellPosition()
-    {
+    function getActiveCellPosition() {
         return absBox(activeCellNode[0]);
     }
-
-    function getGridPosition()
-    {
-        return absBox($container[0])
+    function getGridPosition() {
+        return absBox($container[0]);
     }
-
-    function handleActiveCellPositionChange()
-    {
-        if (!activeCellNode)
-        {
+    function handleActiveCellPositionChange() {
+        if (!activeCellNode) {
             return;
         }
-
         trigger(self.onActiveCellPositionChanged, {});
-
-        if (currentEditor)
-        {
-            let cellBox = getActiveCellPosition();
-            if (currentEditor.show && currentEditor.hide)
-            {
-                if (!cellBox.visible)
-                {
+        if (currentEditor) {
+            var cellBox = getActiveCellPosition();
+            if (currentEditor.show && currentEditor.hide) {
+                if (!cellBox.visible) {
                     currentEditor.hide();
-                } else
-                {
+                }
+                else {
                     currentEditor.show();
                 }
             }
-
-            if (currentEditor.position)
-            {
+            if (currentEditor.position) {
                 currentEditor.position(cellBox);
             }
         }
     }
-
-    function getCellEditor()
-    {
+    function getCellEditor() {
         return currentEditor;
     }
-
-    function getActiveCell()
-    {
-        if (!activeCellNode)
-        {
+    function getActiveCell() {
+        if (!activeCellNode) {
             return null;
-        } else
-        {
+        }
+        else {
             return {
                 row: activeRow,
                 cell: activeCell
             };
         }
     }
-
-    function getActiveCellNode()
-    {
+    function getActiveCellNode() {
         return activeCellNode;
     }
-
-    function scrollActiveCellIntoView()
-    {
-        if (activeRow != null && activeCell != null)
-        {
+    function scrollActiveCellIntoView() {
+        if (activeRow != null && activeCell != null) {
             scrollCellIntoView(activeRow, activeCell);
         }
     }
-
-    function scrollRowIntoView(row, doPaging)
-    {
-
-        if (!hasFrozenRows || (!options.frozenBottom && row > actualFrozenRow - 1) || (options.frozenBottom && row < actualFrozenRow - 1))
-        {
-
-            let viewportScrollH = $viewportScrollContainerY.height();
-
-            let rowAtTop = row * options.rowHeight;
-            let rowAtBottom = (row + 1) * options.rowHeight - viewportScrollH + (viewportHasHScroll ? scrollbarDimensions.height : 0);
-
-            // need to page down?
-            if ((row + 1) * options.rowHeight > scrollTop + viewportScrollH + offset)
-            {
+    function scrollRowIntoView(row, doPaging) {
+        if (!hasFrozenRows || (!options.frozenBottom && row > actualFrozenRow - 1) || (options.frozenBottom && row < actualFrozenRow - 1)) {
+            var viewportScrollH = $viewportScrollContainerY.height();
+            var rowAtTop = row * options.rowHeight;
+            var rowAtBottom = (row + 1) * options.rowHeight - viewportScrollH + (viewportHasHScroll ? scrollbarDimensions.height : 0);
+            if ((row + 1) * options.rowHeight > scrollTop + viewportScrollH + offset) {
                 scrollTo(doPaging ? rowAtTop : rowAtBottom);
                 render();
             }
-            // or page up?
-            else if (row * options.rowHeight < scrollTop + offset)
-            {
+            else if (row * options.rowHeight < scrollTop + offset) {
                 scrollTo(doPaging ? rowAtBottom : rowAtTop);
                 render();
             }
         }
     }
-
-    function scrollRowToTop(row)
-    {
+    function scrollRowToTop(row) {
         scrollTo(row * options.rowHeight);
         render();
     }
-
-    function scrollPage(dir)
-    {
-        let deltaRows = dir * numVisibleRows;
+    function scrollPage(dir) {
+        var deltaRows = dir * numVisibleRows;
         scrollTo((getRowFromPosition(scrollTop) + deltaRows) * options.rowHeight);
         render();
-
-        if (options.enableCellNavigation && activeRow != null)
-        {
-            let row = activeRow + deltaRows;
-            let dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
-            if (row >= dataLengthIncludingAddNew)
-            {
+        if (options.enableCellNavigation && activeRow != null) {
+            var row = activeRow + deltaRows;
+            var dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
+            if (row >= dataLengthIncludingAddNew) {
                 row = dataLengthIncludingAddNew - 1;
             }
-            if (row < 0)
-            {
+            if (row < 0) {
                 row = 0;
             }
-
-            let cell = 0,
-                prevCell = null;
-            let prevActivePosX = activePosX;
-            while (cell <= activePosX)
-            {
-                if (canCellBeActive(row, cell))
-                {
+            var cell = 0, prevCell = null;
+            var prevActivePosX = activePosX;
+            while (cell <= activePosX) {
+                if (canCellBeActive(row, cell)) {
                     prevCell = cell;
                 }
                 cell += getColspan(row, cell);
             }
-
-            if (prevCell !== null)
-            {
+            if (prevCell !== null) {
                 setActiveCellInternal(getCellNode(row, prevCell));
                 activePosX = prevActivePosX;
-            } else
-            {
+            }
+            else {
                 resetActiveCell();
             }
         }
     }
-
-    function navigatePageDown()
-    {
+    function navigatePageDown() {
         scrollPage(1);
     }
-
-    function navigatePageUp()
-    {
+    function navigatePageUp() {
         scrollPage(-1);
     }
-
-    function getColspan(row, cell)
-    {
-        let metadata = data.getItemMetadata && data.getItemMetadata(row);
-        if (!metadata || !metadata.columns)
-        {
+    function getColspan(row, cell) {
+        var metadata = data.getItemMetadata && data.getItemMetadata(row);
+        if (!metadata || !metadata.columns) {
             return 1;
         }
-
-        let columnData = columns[cell] && (metadata.columns[columns[cell].id] || metadata.columns[cell]);
-        let colspan = (columnData && columnData.colspan);
-        if (colspan === "*")
-        {
+        var columnData = columns[cell] && (metadata.columns[columns[cell].id] || metadata.columns[cell]);
+        var colspan = (columnData && columnData.colspan);
+        if (colspan === "*") {
             colspan = columns.length - cell;
-        } else
-        {
+        }
+        else {
             colspan = colspan || 1;
         }
-
         return colspan;
     }
-
-    function findFirstFocusableCell(row)
-    {
-        let cell = 0;
-        while (cell < columns.length)
-        {
-            if (canCellBeActive(row, cell))
-            {
+    function findFirstFocusableCell(row) {
+        var cell = 0;
+        while (cell < columns.length) {
+            if (canCellBeActive(row, cell)) {
                 return cell;
             }
             cell += getColspan(row, cell);
         }
         return null;
     }
-
-    function findLastFocusableCell(row)
-    {
-        let cell = 0;
-        let lastFocusableCell = null;
-        while (cell < columns.length)
-        {
-            if (canCellBeActive(row, cell))
-            {
+    function findLastFocusableCell(row) {
+        var cell = 0;
+        var lastFocusableCell = null;
+        while (cell < columns.length) {
+            if (canCellBeActive(row, cell)) {
                 lastFocusableCell = cell;
             }
             cell += getColspan(row, cell);
         }
         return lastFocusableCell;
     }
-
-    function gotoRight(row, cell, posX)
-    {
-        if (cell >= columns.length)
-        {
+    function gotoRight(row, cell, posX) {
+        if (cell >= columns.length) {
             return null;
         }
-
-        do
-        {
+        do {
             cell += getColspan(row, cell);
-        }
-        while (cell < columns.length && !canCellBeActive(row, cell));
-
-        if (cell < columns.length)
-        {
+        } while (cell < columns.length && !canCellBeActive(row, cell));
+        if (cell < columns.length) {
             return {
                 "row": row,
                 "cell": cell,
@@ -4669,61 +3152,44 @@ function SlickGrid(container, data, columns, options)
         }
         return null;
     }
-
-    function gotoLeft(row, cell, posX)
-    {
-        if (cell <= 0)
-        {
+    function gotoLeft(row, cell, posX) {
+        if (cell <= 0) {
             return null;
         }
-
-        let firstFocusableCell = findFirstFocusableCell(row);
-        if (firstFocusableCell === null || firstFocusableCell >= cell)
-        {
+        var firstFocusableCell = findFirstFocusableCell(row);
+        if (firstFocusableCell === null || firstFocusableCell >= cell) {
             return null;
         }
-
-        let prev = {
+        var prev = {
             "row": row,
             "cell": firstFocusableCell,
             "posX": firstFocusableCell
         };
-        let pos;
-        while (true)
-        {
+        var pos;
+        while (true) {
             pos = gotoRight(prev.row, prev.cell, prev.posX);
-            if (!pos)
-            {
+            if (!pos) {
                 return null;
             }
-            if (pos.cell >= cell)
-            {
+            if (pos.cell >= cell) {
                 return prev;
             }
             prev = pos;
         }
     }
-
-    function gotoDown(row, cell, posX)
-    {
-        let prevCell;
-        let dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
-        while (true)
-        {
-            if (++row >= dataLengthIncludingAddNew)
-            {
+    function gotoDown(row, cell, posX) {
+        var prevCell;
+        var dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
+        while (true) {
+            if (++row >= dataLengthIncludingAddNew) {
                 return null;
             }
-
             prevCell = cell = 0;
-            while (cell <= posX)
-            {
+            while (cell <= posX) {
                 prevCell = cell;
                 cell += getColspan(row, cell);
             }
-
-            if (canCellBeActive(row, prevCell))
-            {
+            if (canCellBeActive(row, prevCell)) {
                 return {
                     "row": row,
                     "cell": prevCell,
@@ -4732,26 +3198,18 @@ function SlickGrid(container, data, columns, options)
             }
         }
     }
-
-    function gotoUp(row, cell, posX)
-    {
-        let prevCell;
-        while (true)
-        {
-            if (--row < 0)
-            {
+    function gotoUp(row, cell, posX) {
+        var prevCell;
+        while (true) {
+            if (--row < 0) {
                 return null;
             }
-
             prevCell = cell = 0;
-            while (cell <= posX)
-            {
+            while (cell <= posX) {
                 prevCell = cell;
                 cell += getColspan(row, cell);
             }
-
-            if (canCellBeActive(row, prevCell))
-            {
+            if (canCellBeActive(row, prevCell)) {
                 return {
                     "row": row,
                     "cell": prevCell,
@@ -4760,14 +3218,10 @@ function SlickGrid(container, data, columns, options)
             }
         }
     }
-
-    function gotoNext(row, cell, posX)
-    {
-        if (row == null && cell == null)
-        {
+    function gotoNext(row, cell, posX) {
+        if (row == null && cell == null) {
             row = cell = posX = 0;
-            if (canCellBeActive(row, cell))
-            {
+            if (canCellBeActive(row, cell)) {
                 return {
                     "row": row,
                     "cell": cell,
@@ -4775,20 +3229,15 @@ function SlickGrid(container, data, columns, options)
                 };
             }
         }
-
-        let pos = gotoRight(row, cell, posX);
-        if (pos)
-        {
+        var pos = gotoRight(row, cell, posX);
+        if (pos) {
             return pos;
         }
-
-        let firstFocusableCell = null;
-        let dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
-        while (++row < dataLengthIncludingAddNew)
-        {
+        var firstFocusableCell = null;
+        var dataLengthIncludingAddNew = getDataLengthIncludingAddNew();
+        while (++row < dataLengthIncludingAddNew) {
             firstFocusableCell = findFirstFocusableCell(row);
-            if (firstFocusableCell !== null)
-            {
+            if (firstFocusableCell !== null) {
                 return {
                     "row": row,
                     "cell": firstFocusableCell,
@@ -4798,15 +3247,11 @@ function SlickGrid(container, data, columns, options)
         }
         return null;
     }
-
-    function gotoPrev(row, cell, posX)
-    {
-        if (row == null && cell == null)
-        {
+    function gotoPrev(row, cell, posX) {
+        if (row == null && cell == null) {
             row = getDataLengthIncludingAddNew() - 1;
             cell = posX = columns.length - 1;
-            if (canCellBeActive(row, cell))
-            {
+            if (canCellBeActive(row, cell)) {
                 return {
                     "row": row,
                     "cell": cell,
@@ -4814,25 +3259,19 @@ function SlickGrid(container, data, columns, options)
                 };
             }
         }
-
-        let pos;
-        let lastSelectableCell;
-        while (!pos)
-        {
+        var pos;
+        var lastSelectableCell;
+        while (!pos) {
             pos = gotoLeft(row, cell, posX);
-            if (pos)
-            {
+            if (pos) {
                 break;
             }
-            if (--row < 0)
-            {
+            if (--row < 0) {
                 return null;
             }
-
             cell = 0;
             lastSelectableCell = findLastFocusableCell(row);
-            if (lastSelectableCell !== null)
-            {
+            if (lastSelectableCell !== null) {
                 pos = {
                     "row": row,
                     "cell": lastSelectableCell,
@@ -4842,60 +3281,36 @@ function SlickGrid(container, data, columns, options)
         }
         return pos;
     }
-
-    function navigateRight()
-    {
+    function navigateRight() {
         return navigate("right");
     }
-
-    function navigateLeft()
-    {
+    function navigateLeft() {
         return navigate("left");
     }
-
-    function navigateDown()
-    {
+    function navigateDown() {
         return navigate("down");
     }
-
-    function navigateUp()
-    {
+    function navigateUp() {
         return navigate("up");
     }
-
-    function navigateNext()
-    {
+    function navigateNext() {
         return navigate("next");
     }
-
-    function navigatePrev()
-    {
+    function navigatePrev() {
         return navigate("prev");
     }
-
-    /**
-     * @param {string} dir Navigation direction.
-     * @return {boolean} Whether navigation resulted in a change of active cell.
-     */
-    function navigate(dir)
-    {
-        if (!options.enableCellNavigation)
-        {
+    function navigate(dir) {
+        if (!options.enableCellNavigation) {
             return false;
         }
-
-        if (!activeCellNode && dir != "prev" && dir != "next")
-        {
+        if (!activeCellNode && dir != "prev" && dir != "next") {
             return false;
         }
-
-        if (!getEditorLock().commitCurrentEdit())
-        {
+        if (!getEditorLock().commitCurrentEdit()) {
             return true;
         }
         setFocus();
-
-        let tabbingDirections = {
+        var tabbingDirections = {
             "up": -1,
             "down": 1,
             "left": -1,
@@ -4904,8 +3319,7 @@ function SlickGrid(container, data, columns, options)
             "next": 1
         };
         tabbingDirection = tabbingDirections[dir];
-
-        let stepFunctions = {
+        var stepFunctions = {
             "up": gotoUp,
             "down": gotoDown,
             "left": gotoLeft,
@@ -4913,166 +3327,108 @@ function SlickGrid(container, data, columns, options)
             "prev": gotoPrev,
             "next": gotoNext
         };
-        let stepFn = stepFunctions[dir];
-        let pos = stepFn(activeRow, activeCell, activePosX);
-        if (pos)
-        {
-            if (hasFrozenRows && options.frozenBottom & (<any>(pos.row == getDataLength() ) ) )
-            {
+        var stepFn = stepFunctions[dir];
+        var pos = stepFn(activeRow, activeCell, activePosX);
+        if (pos) {
+            if (hasFrozenRows && options.frozenBottom & (pos.row == getDataLength())) {
                 return;
             }
-
-            let isAddNewRow = (pos.row == getDataLength());
-
-            if ((!options.frozenBottom && pos.row >= actualFrozenRow) || (options.frozenBottom && pos.row < actualFrozenRow))
-            {
+            var isAddNewRow = (pos.row == getDataLength());
+            if ((!options.frozenBottom && pos.row >= actualFrozenRow) || (options.frozenBottom && pos.row < actualFrozenRow)) {
                 scrollCellIntoView(pos.row, pos.cell, !isAddNewRow);
             }
-
-            setActiveCellInternal(getCellNode(pos.row, pos.cell))
+            setActiveCellInternal(getCellNode(pos.row, pos.cell));
             activePosX = pos.posX;
             return true;
-        } else
-        {
+        }
+        else {
             setActiveCellInternal(getCellNode(activeRow, activeCell));
             return false;
         }
     }
-
-    function getCellNode(row, cell)
-    {
-        if (rowsCache[row])
-        {
+    function getCellNode(row, cell) {
+        if (rowsCache[row]) {
             ensureCellNodesInRowsCache(row);
             return rowsCache[row].cellNodesByColumnIdx[cell];
         }
         return null;
     }
-
-    function setActiveCell(row, cell)
-    {
-        if (!initialized)
-        {
+    function setActiveCell(row, cell) {
+        if (!initialized) {
             return;
         }
-        if (row > getDataLength() || row < 0 || cell >= columns.length || cell < 0)
-        {
+        if (row > getDataLength() || row < 0 || cell >= columns.length || cell < 0) {
             return;
         }
-
-        if (!options.enableCellNavigation)
-        {
+        if (!options.enableCellNavigation) {
             return;
         }
-
         scrollCellIntoView(row, cell, false);
         setActiveCellInternal(getCellNode(row, cell), false);
     }
-
-    function canCellBeActive(row, cell)
-    {
-        if (!options.enableCellNavigation || row >= getDataLengthIncludingAddNew() || row < 0 || cell >= columns.length || cell < 0)
-        {
+    function canCellBeActive(row, cell) {
+        if (!options.enableCellNavigation || row >= getDataLengthIncludingAddNew() || row < 0 || cell >= columns.length || cell < 0) {
             return false;
         }
-
-        let rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
-        if (rowMetadata && typeof rowMetadata.focusable === "boolean")
-        {
+        var rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
+        if (rowMetadata && typeof rowMetadata.focusable === "boolean") {
             return rowMetadata.focusable;
         }
-
-        let columnMetadata = rowMetadata && rowMetadata.columns;
-        if (columnMetadata && columns[cell] && columnMetadata[columns[cell].id] && typeof columnMetadata[columns[cell].id].focusable === "boolean")
-        {
+        var columnMetadata = rowMetadata && rowMetadata.columns;
+        if (columnMetadata && columns[cell] && columnMetadata[columns[cell].id] && typeof columnMetadata[columns[cell].id].focusable === "boolean") {
             return columnMetadata[columns[cell].id].focusable;
         }
-        if (columnMetadata && columnMetadata[cell] && typeof columnMetadata[cell].focusable === "boolean")
-        {
+        if (columnMetadata && columnMetadata[cell] && typeof columnMetadata[cell].focusable === "boolean") {
             return columnMetadata[cell].focusable;
         }
-
         return columns[cell] && columns[cell].focusable;
     }
-
-    function canCellBeSelected(row, cell)
-    {
-        if (row >= getDataLength() || row < 0 || cell >= columns.length || cell < 0)
-        {
+    function canCellBeSelected(row, cell) {
+        if (row >= getDataLength() || row < 0 || cell >= columns.length || cell < 0) {
             return false;
         }
-
-        let rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
-        if (rowMetadata && typeof rowMetadata.selectable === "boolean")
-        {
+        var rowMetadata = data.getItemMetadata && data.getItemMetadata(row);
+        if (rowMetadata && typeof rowMetadata.selectable === "boolean") {
             return rowMetadata.selectable;
         }
-
-        let columnMetadata = rowMetadata && rowMetadata.columns && (rowMetadata.columns[columns[cell].id] || rowMetadata.columns[cell]);
-        if (columnMetadata && typeof columnMetadata.selectable === "boolean")
-        {
+        var columnMetadata = rowMetadata && rowMetadata.columns && (rowMetadata.columns[columns[cell].id] || rowMetadata.columns[cell]);
+        if (columnMetadata && typeof columnMetadata.selectable === "boolean") {
             return columnMetadata.selectable;
         }
-
         return columns[cell].selectable;
     }
-
-    function gotoCell(row, cell, forceEdit)
-    {
-        if (!initialized)
-        {
+    function gotoCell(row, cell, forceEdit) {
+        if (!initialized) {
             return;
         }
-        if (!canCellBeActive(row, cell))
-        {
+        if (!canCellBeActive(row, cell)) {
             return;
         }
-
-        if (!getEditorLock().commitCurrentEdit())
-        {
+        if (!getEditorLock().commitCurrentEdit()) {
             return;
         }
-
         scrollCellIntoView(row, cell, false);
-
-        let newCell = getCellNode(row, cell);
-
-        // if selecting the 'add new' row, start editing right away
+        var newCell = getCellNode(row, cell);
         setActiveCellInternal(newCell, forceEdit || (row === getDataLength()) || options.autoEdit);
-
-        // if no editor was created, set the focus back on the grid
-        if (!currentEditor)
-        {
+        if (!currentEditor) {
             setFocus();
         }
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // IEditor implementation for the editor lock
-
-    function commitCurrentEdit()
-    {
-        let item = getDataItem(activeRow);
-        let column = columns[activeCell];
-
-        if (currentEditor)
-        {
-            if (currentEditor.isValueChanged())
-            {
-                let validationResults = currentEditor.validate();
-
-                if (validationResults.valid)
-                {
-                    if (activeRow < getDataLength())
-                    {
-                        let editCommand = {
+    function commitCurrentEdit() {
+        var item = getDataItem(activeRow);
+        var column = columns[activeCell];
+        if (currentEditor) {
+            if (currentEditor.isValueChanged()) {
+                var validationResults = currentEditor.validate();
+                if (validationResults.valid) {
+                    if (activeRow < getDataLength()) {
+                        var editCommand = {
                             row: activeRow,
                             cell: activeCell,
                             editor: currentEditor,
                             serializedValue: currentEditor.serializeValue(),
                             prevSerializedValue: serializedEditorValue,
-                            execute: function ()
-                            {
+                            execute: function () {
                                 this.editor.applyValue(item, this.serializedValue);
                                 updateRow(this.row);
                                 trigger(self.onCellChange, {
@@ -5081,8 +3437,7 @@ function SlickGrid(container, data, columns, options)
                                     item: item
                                 });
                             },
-                            undo: function ()
-                            {
+                            undo: function () {
                                 this.editor.applyValue(item, this.prevSerializedValue);
                                 updateRow(this.row);
                                 trigger(self.onCellChange, {
@@ -5092,20 +3447,17 @@ function SlickGrid(container, data, columns, options)
                                 });
                             }
                         };
-
-                        if (options.editCommandHandler)
-                        {
+                        if (options.editCommandHandler) {
                             makeActiveCellNormal();
                             options.editCommandHandler(item, column, editCommand);
-                        } else
-                        {
+                        }
+                        else {
                             editCommand.execute();
                             makeActiveCellNormal();
                         }
-
-                    } else
-                    {
-                        let newItem = {};
+                    }
+                    else {
+                        var newItem = {};
                         currentEditor.applyValue(newItem, currentEditor.serializeValue());
                         makeActiveCellNormal();
                         trigger(self.onAddNewRow, {
@@ -5113,16 +3465,12 @@ function SlickGrid(container, data, columns, options)
                             column: column
                         });
                     }
-
-                    // check whether the lock has been re-acquired by event handlers
                     return !getEditorLock().isActive();
-                } else
-                {
-                    // Re-add the CSS class to trigger transitions, if any.
+                }
+                else {
                     $(activeCellNode).removeClass("invalid");
-                    $(activeCellNode).width(); // force layout
+                    $(activeCellNode).width();
                     $(activeCellNode).addClass("invalid");
-
                     trigger(self.onValidationError, {
                         editor: currentEditor,
                         cellNode: activeCellNode,
@@ -5131,59 +3479,40 @@ function SlickGrid(container, data, columns, options)
                         cell: activeCell,
                         column: column
                     });
-
                     currentEditor.focus();
                     return false;
                 }
             }
-
             makeActiveCellNormal();
         }
         return true;
     }
-
-    function cancelCurrentEdit()
-    {
+    function cancelCurrentEdit() {
         makeActiveCellNormal();
         return true;
     }
-
-    function rowsToRanges(rows)
-    {
-        let ranges = [];
-        let lastCell = columns.length - 1;
-        for (let i = 0; i < rows.length; i++)
-        {
+    function rowsToRanges(rows) {
+        var ranges = [];
+        var lastCell = columns.length - 1;
+        for (var i = 0; i < rows.length; i++) {
             ranges.push(new Slick.Range(rows[i], 0, rows[i], lastCell));
         }
         return ranges;
     }
-
-    function getSelectedRows()
-    {
-        if (!selectionModel)
-        {
+    function getSelectedRows() {
+        if (!selectionModel) {
             throw "Selection model is not set";
         }
         return selectedRows;
     }
-
-    function setSelectedRows(rows)
-    {
-        if (!selectionModel)
-        {
+    function setSelectedRows(rows) {
+        if (!selectionModel) {
             throw "Selection model is not set";
         }
         selectionModel.setSelectedRanges(rowsToRanges(rows));
     }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // Debug
-
-    this.debug = function ()
-    {
-        let s = "";
-
+    this.debug = function () {
+        var s = "";
         s += ("\n" + "counter_rows_rendered:  " + counter_rows_rendered);
         s += ("\n" + "counter_rows_removed:  " + counter_rows_removed);
         s += ("\n" + "renderedRows:  " + renderedRows);
@@ -5193,23 +3522,13 @@ function SlickGrid(container, data, columns, options)
         s += ("\n" + "(current) page:  " + page);
         s += ("\n" + "page height (ph):  " + ph);
         s += ("\n" + "vScrollDir:  " + vScrollDir);
-
         alert(s);
     };
-
-    // a debug helper to be able to access private members
-    this.eval = function (expr)
-    {
+    this.eval = function (expr) {
         return eval(expr);
     };
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    // Public API
-
     $.extend(this, {
         "slickGridVersion": "2.1",
-
-        // Events
         "onScroll": new Slick.Event(),
         "onSort": new Slick.Event(),
         "onHeaderMouseEnter": new Slick.Event(),
@@ -5245,8 +3564,6 @@ function SlickGrid(container, data, columns, options)
         "onDragEnd": new Slick.Event(),
         "onSelectedRowsChanged": new Slick.Event(),
         "onCellCssStylesChanged": new Slick.Event(),
-
-        // Methods
         "registerPlugin": registerPlugin,
         "unregisterPlugin": unregisterPlugin,
         "getColumns": getColumns,
@@ -5268,7 +3585,6 @@ function SlickGrid(container, data, columns, options)
         "getSelectedRows": getSelectedRows,
         "setSelectedRows": setSelectedRows,
         "getContainerNode": getContainerNode,
-
         "render": render,
         "invalidate": invalidate,
         "invalidateRow": invalidateRow,
@@ -5291,7 +3607,6 @@ function SlickGrid(container, data, columns, options)
         "getActiveViewportNode": getActiveViewportNode,
         "setActiveViewportNode": setActiveViewportNode,
         "focus": setFocus,
-
         "getCellFromPoint": getCellFromPoint,
         "getCellFromEvent": getCellFromEvent,
         "getActiveCell": getActiveCell,
@@ -5329,14 +3644,10 @@ function SlickGrid(container, data, columns, options)
         "removeCellCssStyles": removeCellCssStyles,
         "getCellCssStyles": getCellCssStyles,
         "getFrozenRowOffset": getFrozenRowOffset,
-
         "init": finishInitialization,
         "destroy": destroy,
-
-        // IEditor implementation
         "getEditorLock": getEditorLock,
         "getEditController": getEditController
     });
-
     init();
 }

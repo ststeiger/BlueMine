@@ -4,40 +4,40 @@
  * @namespace Slick
  */
 const Slick = {
-  Event: Event,
-  EventData: EventData,
-  EventHandler: EventHandler,
-  Range: Range,
-  NonDataRow: NonDataItem,
-  Group: Group,
-  GroupTotals: GroupTotals,
-  EditorLock: EditorLock,
-  /** *
-   * A global singleton editor lock.
-   * @class GlobalEditorLock
-   * @static
-   * @constructor
-   */
-  GlobalEditorLock: new EditorLock(),
-  TreeColumns: TreeColumns,
+    Event: Event,
+    EventData: EventData,
+    EventHandler: EventHandler,
+    Range: Range,
+    NonDataRow: NonDataItem,
+    Group: Group,
+    GroupTotals: GroupTotals,
+    EditorLock: EditorLock,
+    /** *
+     * A global singleton editor lock.
+     * @class GlobalEditorLock
+     * @static
+     * @constructor
+     */
+    GlobalEditorLock: new EditorLock(),
+    TreeColumns: TreeColumns,
 
-  keyCode: {
-    BACKSPACE: 8,
-    DELETE: 46,
-    DOWN: 40,
-    END: 35,
-    ENTER: 13,
-    ESCAPE: 27,
-    HOME: 36,
-    INSERT: 45,
-    LEFT: 37,
-    PAGE_DOWN: 34,
-    PAGE_UP: 33,
-    RIGHT: 39,
-    TAB: 9,
-    UP: 38,
-    SPACE: 32
-  }
+    keyCode: {
+        BACKSPACE: 8,
+        DELETE: 46,
+        DOWN: 40,
+        END: 35,
+        ENTER: 13,
+        ESCAPE: 27,
+        HOME: 36,
+        INSERT: 45,
+        LEFT: 37,
+        PAGE_DOWN: 34,
+        PAGE_UP: 33,
+        RIGHT: 39,
+        TAB: 9,
+        UP: 38,
+        SPACE: 32
+    }
 };
 
 export default Slick;
@@ -48,43 +48,48 @@ export default Slick;
  * @class EventData
  * @constructor
  */
-function EventData() {
-  let isPropagationStopped = false;
-  let isImmediatePropagationStopped = false;
+function EventData()
+{
+    let isPropagationStopped = false;
+    let isImmediatePropagationStopped = false;
 
-  /***
-   * Stops event from propagating up the DOM tree.
-   * @method stopPropagation
-   */
-  this.stopPropagation = function() {
-    isPropagationStopped = true;
-  };
+    /***
+     * Stops event from propagating up the DOM tree.
+     * @method stopPropagation
+     */
+    this.stopPropagation = function ()
+    {
+        isPropagationStopped = true;
+    };
 
-  /***
-   * Returns whether stopPropagation was called on this event object.
-   * @method isPropagationStopped
-   * @return {Boolean}
-   */
-  this.isPropagationStopped = function() {
-    return isPropagationStopped;
-  };
+    /***
+     * Returns whether stopPropagation was called on this event object.
+     * @method isPropagationStopped
+     * @return {Boolean}
+     */
+    this.isPropagationStopped = function ()
+    {
+        return isPropagationStopped;
+    };
 
-  /***
-   * Prevents the rest of the handlers from being executed.
-   * @method stopImmediatePropagation
-   */
-  this.stopImmediatePropagation = function() {
-    isImmediatePropagationStopped = true;
-  };
+    /***
+     * Prevents the rest of the handlers from being executed.
+     * @method stopImmediatePropagation
+     */
+    this.stopImmediatePropagation = function ()
+    {
+        isImmediatePropagationStopped = true;
+    };
 
-  /***
-   * Returns whether stopImmediatePropagation was called on this event object.\
-   * @method isImmediatePropagationStopped
-   * @return {Boolean}
-   */
-  this.isImmediatePropagationStopped = function() {
-    return isImmediatePropagationStopped;
-  }
+    /***
+     * Returns whether stopImmediatePropagation was called on this event object.\
+     * @method isImmediatePropagationStopped
+     * @return {Boolean}
+     */
+    this.isImmediatePropagationStopped = function ()
+    {
+        return isImmediatePropagationStopped;
+    }
 }
 
 /***
@@ -92,94 +97,108 @@ function EventData() {
  * @class Event
  * @constructor
  */
-function Event() {
-  let handlers = [];
+function Event()
+{
+    let handlers = [];
 
-  /***
-   * Adds an event handler to be called when the event is fired.
-   * <p>Event handler will receive two arguments - an <code>EventData</code> and the <code>data</code>
-   * object the event was fired with.<p>
-   * @method subscribe
-   * @param fn {Function} Event handler.
-   */
-  this.subscribe = function(fn) {
-    handlers.push(fn);
-  };
+    /***
+     * Adds an event handler to be called when the event is fired.
+     * <p>Event handler will receive two arguments - an <code>EventData</code> and the <code>data</code>
+     * object the event was fired with.<p>
+     * @method subscribe
+     * @param fn {Function} Event handler.
+     */
+    this.subscribe = function (fn)
+    {
+        handlers.push(fn);
+    };
 
-  /***
-   * Removes an event handler added with <code>subscribe(fn)</code>.
-   * @method unsubscribe
-   * @param fn {Function} Event handler to be removed.
-   */
-  this.unsubscribe = function(fn) {
-    for (let i = handlers.length - 1; i >= 0; i--) {
-      if (handlers[i] === fn) {
-        handlers.splice(i, 1);
-      }
-    }
-  };
+    /***
+     * Removes an event handler added with <code>subscribe(fn)</code>.
+     * @method unsubscribe
+     * @param fn {Function} Event handler to be removed.
+     */
+    this.unsubscribe = function (fn)
+    {
+        for (let i = handlers.length - 1; i >= 0; i--)
+        {
+            if (handlers[i] === fn)
+            {
+                handlers.splice(i, 1);
+            }
+        }
+    };
 
-  /***
-   * Fires an event notifying all subscribers.
-   * @method notify
-   * @param args {Object} Additional data object to be passed to all handlers.
-   * @param e {EventData}
-   *      Optional.
-   *      An <code>EventData</code> object to be passed to all handlers.
-   *      For DOM events, an existing W3C/jQuery event object can be passed in.
-   * @param scope {Object}
-   *      Optional.
-   *      The scope ("this") within which the handler will be executed.
-   *      If not specified, the scope will be set to the <code>Event</code> instance.
-   */
-  this.notify = function(args, e, scope) {
-    e = e || new EventData();
-    scope = scope || this;
+    /***
+     * Fires an event notifying all subscribers.
+     * @method notify
+     * @param args {Object} Additional data object to be passed to all handlers.
+     * @param e {EventData}
+     *      Optional.
+     *      An <code>EventData</code> object to be passed to all handlers.
+     *      For DOM events, an existing W3C/jQuery event object can be passed in.
+     * @param scope {Object}
+     *      Optional.
+     *      The scope ("this") within which the handler will be executed.
+     *      If not specified, the scope will be set to the <code>Event</code> instance.
+     */
+    this.notify = function (args, e, scope)
+    {
+        e = e || new EventData();
+        scope = scope || this;
 
-    let returnValue;
-    for (let i = 0; i < handlers.length && !(e.isPropagationStopped() || e.isImmediatePropagationStopped()); i++) {
-      returnValue = handlers[i].call(scope, e, args);
-    }
+        let returnValue;
+        for (let i = 0; i < handlers.length && !(e.isPropagationStopped() || e.isImmediatePropagationStopped()); i++)
+        {
+            returnValue = handlers[i].call(scope, e, args);
+        }
 
-    return returnValue;
-  };
+        return returnValue;
+    };
 }
 
-function EventHandler() {
-  let handlers = [];
+function EventHandler()
+{
+    let handlers = [];
 
-  this.subscribe = function(event, handler) {
-    handlers.push({
-      event: event,
-      handler: handler
-    });
-    event.subscribe(handler);
+    this.subscribe = function (event, handler)
+    {
+        handlers.push({
+            event: event,
+            handler: handler
+        });
+        event.subscribe(handler);
 
-    return this; // allow chaining
-  };
+        return this; // allow chaining
+    };
 
-  this.unsubscribe = function(event, handler) {
-    let i = handlers.length;
-    while (i--) {
-      if (handlers[i].event === event && handlers[i].handler === handler) {
-        handlers.splice(i, 1);
-        event.unsubscribe(handler);
-        return;
-      }
+    this.unsubscribe = function (event, handler)
+    {
+        let i = handlers.length;
+        while (i--)
+        {
+            if (handlers[i].event === event && handlers[i].handler === handler)
+            {
+                handlers.splice(i, 1);
+                event.unsubscribe(handler);
+                return;
+            }
+        }
+
+        return this; // allow chaining
+    };
+
+    this.unsubscribeAll = function ()
+    {
+        let i = handlers.length;
+        while (i--)
+        {
+            handlers[i].event.unsubscribe(handlers[i].handler);
+        }
+        handlers = [];
+
+        return this; // allow chaining
     }
-
-    return this; // allow chaining
-  };
-
-  this.unsubscribeAll = function() {
-    let i = handlers.length;
-    while (i--) {
-      handlers[i].event.unsubscribe(handlers[i].handler);
-    }
-    handlers = [];
-
-    return this; // allow chaining
-  }
 }
 
 /***
@@ -191,77 +210,85 @@ function EventHandler() {
  * @param toRow {Integer} Optional. Ending row. Defaults to <code>fromRow</code>.
  * @param toCell {Integer} Optional. Ending cell. Defaults to <code>fromCell</code>.
  */
-function Range(fromRow, fromCell, toRow, toCell) {
-  if (toRow === undefined && toCell === undefined) {
-    toRow = fromRow;
-    toCell = fromCell;
-  }
-
-  /***
-   * @property fromRow
-   * @type {Integer}
-   */
-  this.fromRow = Math.min(fromRow, toRow);
-
-  /***
-   * @property fromCell
-   * @type {Integer}
-   */
-  this.fromCell = Math.min(fromCell, toCell);
-
-  /***
-   * @property toRow
-   * @type {Integer}
-   */
-  this.toRow = Math.max(fromRow, toRow);
-
-  /***
-   * @property toCell
-   * @type {Integer}
-   */
-  this.toCell = Math.max(fromCell, toCell);
-
-  /***
-   * Returns whether a range represents a single row.
-   * @method isSingleRow
-   * @return {Boolean}
-   */
-  this.isSingleRow = function() {
-    return this.fromRow == this.toRow;
-  };
-
-  /***
-   * Returns whether a range represents a single cell.
-   * @method isSingleCell
-   * @return {Boolean}
-   */
-  this.isSingleCell = function() {
-    return this.fromRow == this.toRow && this.fromCell == this.toCell;
-  };
-
-  /***
-   * Returns whether a range contains a given cell.
-   * @method contains
-   * @param row {Integer}
-   * @param cell {Integer}
-   * @return {Boolean}
-   */
-  this.contains = function(row, cell) {
-    return row >= this.fromRow && row <= this.toRow && cell >= this.fromCell && cell <= this.toCell;
-  };
-
-  /***
-   * Returns a readable representation of a range.
-   * @method toString
-   * @return {String}
-   */
-  this.toString = function() {
-    if (this.isSingleCell()) {
-      return "(" + this.fromRow + ":" + this.fromCell + ")";
-    } else {
-      return "(" + this.fromRow + ":" + this.fromCell + " - " + this.toRow + ":" + this.toCell + ")";
+function Range(fromRow, fromCell, toRow, toCell)
+{
+    if (toRow === undefined && toCell === undefined)
+    {
+        toRow = fromRow;
+        toCell = fromCell;
     }
-  }
+
+    /***
+     * @property fromRow
+     * @type {Integer}
+     */
+    this.fromRow = Math.min(fromRow, toRow);
+
+    /***
+     * @property fromCell
+     * @type {Integer}
+     */
+    this.fromCell = Math.min(fromCell, toCell);
+
+    /***
+     * @property toRow
+     * @type {Integer}
+     */
+    this.toRow = Math.max(fromRow, toRow);
+
+    /***
+     * @property toCell
+     * @type {Integer}
+     */
+    this.toCell = Math.max(fromCell, toCell);
+
+    /***
+     * Returns whether a range represents a single row.
+     * @method isSingleRow
+     * @return {Boolean}
+     */
+    this.isSingleRow = function ()
+    {
+        return this.fromRow == this.toRow;
+    };
+
+    /***
+     * Returns whether a range represents a single cell.
+     * @method isSingleCell
+     * @return {Boolean}
+     */
+    this.isSingleCell = function ()
+    {
+        return this.fromRow == this.toRow && this.fromCell == this.toCell;
+    };
+
+    /***
+     * Returns whether a range contains a given cell.
+     * @method contains
+     * @param row {Integer}
+     * @param cell {Integer}
+     * @return {Boolean}
+     */
+    this.contains = function (row, cell)
+    {
+        return row >= this.fromRow && row <= this.toRow && cell >= this.fromCell && cell <= this.toCell;
+    };
+
+    /***
+     * Returns a readable representation of a range.
+     * @method toString
+     * @return {String}
+     */
+    this.toString = function ()
+    {
+        if (this.isSingleCell())
+        {
+            return "(" + this.fromRow + ":" + this.fromCell + ")";
+        } else
+        {
+            return "(" + this.fromRow + ":" + this.fromCell + " - " + this.toRow + ":" + this.toCell + ")";
+        }
+    }
 }
 
 
@@ -270,8 +297,9 @@ function Range(fromRow, fromCell, toRow, toCell) {
  * @class NonDataItem
  * @constructor
  */
-function NonDataItem() {
-  this.__nonDataRow = true;
+function NonDataItem()
+{
+    this.__nonDataRow = true;
 }
 
 
@@ -281,72 +309,73 @@ function NonDataItem() {
  * @extends Slick.NonDataItem
  * @constructor
  */
-function Group() {
-  this.__group = true;
+function Group()
+{
+    this.__group = true;
 
-  /**
-   * Grouping level, starting with 0.
-   * @property level
-   * @type {Number}
-   */
-  this.level = 0;
+    /**
+     * Grouping level, starting with 0.
+     * @property level
+     * @type {Number}
+     */
+    this.level = 0;
 
-  /***
-   * Number of rows in the group.
-   * @property count
-   * @type {Integer}
-   */
-  this.count = 0;
+    /***
+     * Number of rows in the group.
+     * @property count
+     * @type {Integer}
+     */
+    this.count = 0;
 
-  /***
-   * Grouping value.
-   * @property value
-   * @type {Object}
-   */
-  this.value = null;
+    /***
+     * Grouping value.
+     * @property value
+     * @type {Object}
+     */
+    this.value = null;
 
-  /***
-   * Formatted display value of the group.
-   * @property title
-   * @type {String}
-   */
-  this.title = null;
+    /***
+     * Formatted display value of the group.
+     * @property title
+     * @type {String}
+     */
+    this.title = null;
 
-  /***
-   * Whether a group is collapsed.
-   * @property collapsed
-   * @type {Boolean}
-   */
-  this.collapsed = false;
+    /***
+     * Whether a group is collapsed.
+     * @property collapsed
+     * @type {Boolean}
+     */
+    this.collapsed = false;
 
-  /***
-   * GroupTotals, if any.
-   * @property totals
-   * @type {GroupTotals}
-   */
-  this.totals = null;
+    /***
+     * GroupTotals, if any.
+     * @property totals
+     * @type {GroupTotals}
+     */
+    this.totals = null;
 
-  /**
-   * Rows that are part of the group.
-   * @property rows
-   * @type {Array}
-   */
-  this.rows = [];
+    /**
+     * Rows that are part of the group.
+     * @property rows
+     * @type {Array}
+     */
+    this.rows = [];
 
-  /**
-   * Sub-groups that are part of the group.
-   * @property groups
-   * @type {Array}
-   */
-  this.groups = null;
+    /**
+     * Sub-groups that are part of the group.
+     * @property groups
+     * @type {Array}
+     */
+    this.groups = null;
 
-  /**
-   * A unique key used to identify the group.  This key can be used in calls to DataView
-   * collapseGroup() or expandGroup().
-   * @property groupingKey
-   * @type {Object}
-   */
-  this.groupingKey = null;
+    /**
+     * A unique key used to identify the group.  This key can be used in calls to DataView
+     * collapseGroup() or expandGroup().
+     * @property groupingKey
+     * @type {Object}
+     */
+    this.groupingKey = null;
 }
 
 Group.prototype = new NonDataItem();
@@ -357,8 +386,9 @@ Group.prototype = new NonDataItem();
  * @return {Boolean}
  * @param group {Group} Group instance to compare to.
  */
-Group.prototype.equals = function(group) {
-  return this.value === group.value && this.count === group.count && this.collapsed === group.collapsed && this.title === group.title;
+Group.prototype.equals = function (group)
+{
+    return this.value === group.value && this.count === group.count && this.collapsed === group.collapsed && this.title === group.title;
 };
 
 /***
@@ -370,23 +400,24 @@ Group.prototype.equals = function(group) {
  * @extends Slick.NonDataItem
  * @constructor
  */
-function GroupTotals() {
-  this.__groupTotals = true;
+function GroupTotals()
+{
+    this.__groupTotals = true;
 
-  /***
-   * Parent Group.
-   * @param group
-   * @type {Group}
-   */
-  this.group = null;
+    /***
+     * Parent Group.
+     * @param group
+     * @type {Group}
+     */
+    this.group = null;
 
-  /***
-   * Whether the totals have been fully initialized / calculated.
-   * Will be set to false for lazy-calculated group totals.
-   * @param initialized
-   * @type {Boolean}
-   */
-  this.initialized = false;
+    /***
+     * Whether the totals have been fully initialized / calculated.
+     * Will be set to false for lazy-calculated group totals.
+     * @param initialized
+     * @type {Boolean}
+     */
+    this.initialized = false;
 }
 
 GroupTotals.prototype = new NonDataItem();
@@ -399,77 +430,88 @@ GroupTotals.prototype = new NonDataItem();
  * @class EditorLock
  * @constructor
  */
-function EditorLock() {
-  let activeEditController = null;
+function EditorLock()
+{
+    let activeEditController = null;
 
-  /***
-   * Returns true if a specified edit controller is active (has the edit lock).
-   * If the parameter is not specified, returns true if any edit controller is active.
-   * @method isActive
-   * @param editController {EditController}
-   * @return {Boolean}
-   */
-  this.isActive = function(editController) {
-    return (editController ? activeEditController === editController : activeEditController !== null);
-  };
+    /***
+     * Returns true if a specified edit controller is active (has the edit lock).
+     * If the parameter is not specified, returns true if any edit controller is active.
+     * @method isActive
+     * @param editController {EditController}
+     * @return {Boolean}
+     */
+    this.isActive = function (editController)
+    {
+        return (editController ? activeEditController === editController : activeEditController !== null);
+    };
 
-  /***
-   * Sets the specified edit controller as the active edit controller (acquire edit lock).
-   * If another edit controller is already active, and exception will be thrown.
-   * @method activate
-   * @param editController {EditController} edit controller acquiring the lock
-   */
-  this.activate = function(editController) {
-    if (editController === activeEditController) { // already activated?
-      return;
-    }
-    if (activeEditController !== null) {
-      throw "SlickGrid.EditorLock.activate: an editController is still active, can't activate another editController";
-    }
-    if (!editController.commitCurrentEdit) {
-      throw "SlickGrid.EditorLock.activate: editController must implement .commitCurrentEdit()";
-    }
-    if (!editController.cancelCurrentEdit) {
-      throw "SlickGrid.EditorLock.activate: editController must implement .cancelCurrentEdit()";
-    }
-    activeEditController = editController;
-  };
+    /***
+     * Sets the specified edit controller as the active edit controller (acquire edit lock).
+     * If another edit controller is already active, and exception will be thrown.
+     * @method activate
+     * @param editController {EditController} edit controller acquiring the lock
+     */
+    this.activate = function (editController)
+    {
+        if (editController === activeEditController)
+        { // already activated?
+            return;
+        }
+        if (activeEditController !== null)
+        {
+            throw "SlickGrid.EditorLock.activate: an editController is still active, can't activate another editController";
+        }
+        if (!editController.commitCurrentEdit)
+        {
+            throw "SlickGrid.EditorLock.activate: editController must implement .commitCurrentEdit()";
+        }
+        if (!editController.cancelCurrentEdit)
+        {
+            throw "SlickGrid.EditorLock.activate: editController must implement .cancelCurrentEdit()";
+        }
+        activeEditController = editController;
+    };
 
-  /***
-   * Unsets the specified edit controller as the active edit controller (release edit lock).
-   * If the specified edit controller is not the active one, an exception will be thrown.
-   * @method deactivate
-   * @param editController {EditController} edit controller releasing the lock
-   */
-  this.deactivate = function(editController) {
-    if (activeEditController !== editController) {
-      throw "SlickGrid.EditorLock.deactivate: specified editController is not the currently active one";
-    }
-    activeEditController = null;
-  };
+    /***
+     * Unsets the specified edit controller as the active edit controller (release edit lock).
+     * If the specified edit controller is not the active one, an exception will be thrown.
+     * @method deactivate
+     * @param editController {EditController} edit controller releasing the lock
+     */
+    this.deactivate = function (editController)
+    {
+        if (activeEditController !== editController)
+        {
+            throw "SlickGrid.EditorLock.deactivate: specified editController is not the currently active one";
+        }
+        activeEditController = null;
+    };
 
-  /***
-   * Attempts to commit the current edit by calling "commitCurrentEdit" method on the active edit
-   * controller and returns whether the commit attempt was successful (commit may fail due to validation
-   * errors, etc.).  Edit controller's "commitCurrentEdit" must return true if the commit has succeeded
-   * and false otherwise.  If no edit controller is active, returns true.
-   * @method commitCurrentEdit
-   * @return {Boolean}
-   */
-  this.commitCurrentEdit = function() {
-    return (activeEditController ? activeEditController.commitCurrentEdit() : true);
-  };
+    /***
+     * Attempts to commit the current edit by calling "commitCurrentEdit" method on the active edit
+     * controller and returns whether the commit attempt was successful (commit may fail due to validation
+     * errors, etc.).  Edit controller's "commitCurrentEdit" must return true if the commit has succeeded
+     * and false otherwise.  If no edit controller is active, returns true.
+     * @method commitCurrentEdit
+     * @return {Boolean}
+     */
+    this.commitCurrentEdit = function ()
+    {
+        return (activeEditController ? activeEditController.commitCurrentEdit() : true);
+    };
 
-  /***
-   * Attempts to cancel the current edit by calling "cancelCurrentEdit" method on the active edit
-   * controller and returns whether the edit was successfully cancelled.  If no edit controller is
-   * active, returns true.
-   * @method cancelCurrentEdit
-   * @return {Boolean}
-   */
-  this.cancelCurrentEdit = function cancelCurrentEdit() {
-    return (activeEditController ? activeEditController.cancelCurrentEdit() : true);
-  };
+    /***
+     * Attempts to cancel the current edit by calling "cancelCurrentEdit" method on the active edit
+     * controller and returns whether the edit was successfully cancelled.  If no edit controller is
+     * active, returns true.
+     * @method cancelCurrentEdit
+     * @return {Boolean}
+     */
+    this.cancelCurrentEdit = function cancelCurrentEdit()
+    {
+        return (activeEditController ? activeEditController.cancelCurrentEdit() : true);
+    };
 }
 
 /**
@@ -478,155 +520,188 @@ function EditorLock() {
  * @returns {{hasDepth: 'hasDepth', getTreeColumns: 'getTreeColumns', extractColumns: 'extractColumns', getDepth: 'getDepth', getColumnsInDepth: 'getColumnsInDepth', getColumnsInGroup: 'getColumnsInGroup', visibleColumns: 'visibleColumns', filter: 'filter', reOrder: reOrder}}
  * @constructor
  */
-function TreeColumns(treeColumns) {
+function TreeColumns(treeColumns)
+{
 
-  let columnsById = {};
+    let columnsById = {};
 
-  function init() {
-    mapToId(treeColumns);
-  }
+    function init()
+    {
+        mapToId(treeColumns);
+    }
 
-  function mapToId(columns) {
-    columns.forEach(function(column) {
-      columnsById[column.id] = column;
+    function mapToId(columns)
+    {
+        columns.forEach(function (column)
+        {
+            columnsById[column.id] = column;
 
-      if (column.columns) mapToId(column.columns);
-    });
-  }
+            if (column.columns) mapToId(column.columns);
+        });
+    }
 
-  function filter(node, condition) {
+    function filter(node, condition)
+    {
 
-    return node.filter(function(column) {
+        return node.filter(function (column)
+        {
 
-      let valid = condition.call(column);
+            let valid = condition.call(column);
 
-      if (valid && column.columns) column.columns = filter(column.columns, condition);
+            if (valid && column.columns) column.columns = filter(column.columns, condition);
 
-      return valid && (!column.columns || column.columns.length);
-    });
-
-  }
-
-  function sort(columns, grid) {
-    columns.sort(function(a, b) {
-      let indexA = getOrDefault(grid.getColumnIndex(a.id)),
-        indexB = getOrDefault(grid.getColumnIndex(b.id));
-
-      return indexA - indexB;
-    })
-      .forEach(function(column) {
-        if (column.columns) sort(column.columns, grid);
-      });
-  }
-
-  function getOrDefault(value) {
-    return typeof value === 'undefined' ? -1 : value;
-  }
-
-  function getDepth(node) {
-    if (node.length) for (let i in node)
-      return getDepth(node[i]);
-    else if (node.columns) return 1 + getDepth(node.columns);
-    else return 1;
-  }
-
-  function getColumnsInDepth(node, depth, current) {
-    let columns = [];
-    current = current || 0;
-
-    if (depth == current) {
-
-      if (node.length) node.forEach(function(n) {
-        if (n.columns) n.extractColumns = function() {
-          return extractColumns(n);
-        };
-      });
-
-      return node;
-    } else for (let i in node)
-      if (node[i].columns) {
-        columns = columns.concat(getColumnsInDepth(node[i].columns, depth, current + 1));
-      }
-
-    return columns;
-  }
-
-  function extractColumns(node) {
-    let result = [];
-
-    if (node.hasOwnProperty('length')) {
-
-      for (let i = 0; i < node.length; i++)
-        result = result.concat(extractColumns(node[i]));
-
-    } else {
-
-      if (node.hasOwnProperty('columns'))
-
-        result = result.concat(extractColumns(node.columns));
-
-      else return node;
+            return valid && (!column.columns || column.columns.length);
+        });
 
     }
 
-    return result;
-  }
+    function sort(columns, grid)
+    {
+        columns.sort(function (a, b)
+        {
+            let indexA = getOrDefault(grid.getColumnIndex(a.id)),
+                indexB = getOrDefault(grid.getColumnIndex(b.id));
 
-  function cloneTreeColumns() {
-    return $.extend(true, [], treeColumns);
-  }
+            return indexA - indexB;
+        })
+            .forEach(function (column)
+            {
+                if (column.columns) sort(column.columns, grid);
+            });
+    }
 
-  init();
+    function getOrDefault(value)
+    {
+        return typeof value === 'undefined' ? -1 : value;
+    }
 
-  this.hasDepth = function() {
+    function getDepth(node)
+    {
+        if (node.length) for (let i in node)
+            return getDepth(node[i]);
+        else if (node.columns) return 1 + getDepth(node.columns);
+        else return 1;
+    }
 
-    for (let i in treeColumns)
-      if (treeColumns[i].hasOwnProperty('columns')) return true;
+    function getColumnsInDepth(node, depth, current)
+    {
+        let columns = [];
+        current = current || 0;
 
-    return false;
-  };
+        if (depth == current)
+        {
 
-  this.getTreeColumns = function() {
-    return treeColumns;
-  };
+            if (node.length) node.forEach(function (n)
+            {
+                if (n.columns) n.extractColumns = function ()
+                {
+                    return extractColumns(n);
+                };
+            });
 
-  this.extractColumns = function() {
-    return this.hasDepth() ? extractColumns(treeColumns) : treeColumns;
-  };
+            return node;
+        } else for (let i in node)
+            if (node[i].columns)
+            {
+                columns = columns.concat(getColumnsInDepth(node[i].columns, depth, current + 1));
+            }
 
-  this.getDepth = function() {
-    return getDepth(treeColumns);
-  };
+        return columns;
+    }
 
-  this.getColumnsInDepth = function(depth) {
-    return getColumnsInDepth(treeColumns, depth, 0);
-  };
+    function extractColumns(node)
+    {
+        let result = [];
 
-  this.getColumnsInGroup = function(groups) {
-    return extractColumns(groups);
-  };
+        if (node.hasOwnProperty('length'))
+        {
 
-  this.visibleColumns = function() {
-    return filter(cloneTreeColumns(), function() {
-      return this.visible;
-    });
-  };
+            for (let i = 0; i < node.length; i++)
+                result = result.concat(extractColumns(node[i]));
 
-  this.filter = function(condition) {
-    return filter(cloneTreeColumns(), condition);
-  };
+        } else
+        {
 
-  this.reOrder = function(grid) {
-    return sort(treeColumns, grid);
-  };
+            if (node.hasOwnProperty('columns'))
 
-  this.getById = function(id) {
-    return columnsById[id];
-  };
+                result = result.concat(extractColumns(node.columns));
 
-  this.getInIds = function(ids) {
-    return ids.map(function(id) {
-      return columnsById[id];
-    });
-  }
+            else return node;
+
+        }
+
+        return result;
+    }
+
+    function cloneTreeColumns()
+    {
+        return $.extend(true, [], treeColumns);
+    }
+
+    init();
+
+    this.hasDepth = function ()
+    {
+
+        for (let i in treeColumns)
+            if (treeColumns[i].hasOwnProperty('columns')) return true;
+
+        return false;
+    };
+
+    this.getTreeColumns = function ()
+    {
+        return treeColumns;
+    };
+
+    this.extractColumns = function ()
+    {
+        return this.hasDepth() ? extractColumns(treeColumns) : treeColumns;
+    };
+
+    this.getDepth = function ()
+    {
+        return getDepth(treeColumns);
+    };
+
+    this.getColumnsInDepth = function (depth)
+    {
+        return getColumnsInDepth(treeColumns, depth, 0);
+    };
+
+    this.getColumnsInGroup = function (groups)
+    {
+        return extractColumns(groups);
+    };
+
+    this.visibleColumns = function ()
+    {
+        return filter(cloneTreeColumns(), function ()
+        {
+            return this.visible;
+        });
+    };
+
+    this.filter = function (condition)
+    {
+        return filter(cloneTreeColumns(), condition);
+    };
+
+    this.reOrder = function (grid)
+    {
+        return sort(treeColumns, grid);
+    };
+
+    this.getById = function (id)
+    {
+        return columnsById[id];
+    };
+
+    this.getInIds = function (ids)
+    {
+        return ids.map(function (id)
+        {
+            return columnsById[id];
+        });
+    }
 }
