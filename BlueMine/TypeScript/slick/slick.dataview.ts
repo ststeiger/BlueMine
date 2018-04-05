@@ -1,6 +1,7 @@
 
-import Slick                  from './slick.core';
 // import $                      from 'jquery';
+
+import Slick                  from './slick.core';
 import GroupMetaDataProvider  from './slick.groupmetadataprovider';
 
 const Aggregators = {
@@ -238,6 +239,7 @@ function DataView(options){
 
   function setGrouping(groupingInfo){
     if (!options.groupItemMetadataProvider){
+      
       options.groupItemMetadataProvider = new Data.GroupItemMetadataProvider();
     }
 

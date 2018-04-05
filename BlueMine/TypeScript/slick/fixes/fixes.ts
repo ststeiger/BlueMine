@@ -7,6 +7,85 @@
 // function recalc(_items, UNUSED?)
 
 
+
+// slick.grid.ts
+interface ISlickGrid
+{
+    Grid:any;
+}
+
+
+// interact.d.ts
+// interface Interactable { allowFrom(className:string):Interactable;
+
+
+
+// slick.grid.ts
+//  jQueryNewWidthBehaviour = (<number><any>verArray[0] == 1 && <number><any>verArray[1] >= 8) || <number><any>verArray[0] >= 2;
+
+// slick.grid.ts
+//function queuePostProcessedRowForCleanup(cacheEntry, postProcessedRow, rowIdx, columnIdx?){
+
+/*
+// slick.grid.ts
+function toggleCellClass($cell, times, speed)
+{
+    if (!times){
+        return;
+    }
+    setTimeout(function(){
+            $cell.queue(function(){
+                $cell.toggleClass(options.cellFlashingCssClass).dequeue();
+                toggleCellClass(times - 1);
+            });
+        },
+        speed);
+}
+
+function flashCell(row, cell, speed){
+*/
+
+// slick.grid.ts
+interface IColumnDefaults  {
+    name: string;
+    resizable: boolean;
+    sortable: boolean;
+    minWidth: number;
+    rerenderOnResize: boolean;
+    headerCssClass: string;
+    defaultSortAsc: boolean;
+    focusable: boolean;
+    selectable: boolean;
+}
+
+
+
+// slick-frozen.grid.ts
+interface Frozen
+{
+    FrozenGrid: any;
+}
+
+// slick-frozen.grid.ts
+interface IColumnDefaults
+{
+    width?: number; // missing
+
+    name: string;
+    resizable: boolean;
+    sortable: boolean;
+    minWidth: number;
+    rerenderOnResize: boolean;
+    headerCssClass: string;
+    defaultSortAsc: boolean;
+    focusable: boolean;
+    selectable: boolean;
+}
+
+
+
+
+
 interface Math
 {
     hypot: any;

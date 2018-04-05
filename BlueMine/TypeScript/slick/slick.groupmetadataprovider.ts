@@ -1,4 +1,5 @@
-import $      from 'jquery';
+
+// import $      from 'jquery';
 import Slick  from './slick.core';
 
 export default GroupItemMetadataProvider;

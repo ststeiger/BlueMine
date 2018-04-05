@@ -21,8 +21,10 @@
 
 import Slick from './slick.core';
 
+
+
 // Slick.Grid globals pretense
-Slick.Grid = SlickGrid;
+(<ISlickGrid><any>Slick).Grid = SlickGrid;
 
 export default SlickGrid;
 
@@ -84,7 +86,10 @@ function SlickGrid(container, data, columns, options){
     addNewRowCssClass: 'new-row'
   };
 
-  let columnDefaults = {
+  
+    
+    
+  let columnDefaults:IColumnDefaults = {
     name: '',
     resizable: true,
     sortable: false,
@@ -947,7 +952,7 @@ function SlickGrid(container, data, columns, options){
     // jquery 1.8 changed .width to read the true inner element width if box-sizing is set to border-box, and introduced a setter for .outerWidth
     // so for equivalent functionality, prior to 1.8 use .width, and after use .outerWidth
     let verArray = $.fn.jquery.split('.');
-    jQueryNewWidthBehaviour = (verArray[0] == 1 && verArray[1] >= 8) || verArray[0] >= 2;
+    jQueryNewWidthBehaviour = (<number><any>verArray[0] == 1 && <number><any>verArray[1] >= 8) || <number><any>verArray[0] >= 2;
 
     el = $("<div class='ui-state-default slick-header-column' style='visibility:hidden'>-</div>").appendTo($headers);
     headerColumnWidthDiff = headerColumnHeightDiff = 0;
@@ -1559,7 +1564,8 @@ function SlickGrid(container, data, columns, options){
   }
 
   function cleanupRows(rangeToKeep){
-    for (let i in rowsCache){
+      let i:any;
+      for (i in rowsCache){
       if (((i = parseInt(i, 10)) !== activeRow) && (i < rangeToKeep.top || i > rangeToKeep.bottom)){
         removeRowFromCache(i);
       }
@@ -1587,17 +1593,17 @@ function SlickGrid(container, data, columns, options){
     }
   }
 
-  function queuePostProcessedRowForCleanup(cacheEntry, postProcessedRow, rowIdx){
+  function queuePostProcessedRowForCleanup(cacheEntry, postProcessedRow, rowIdx, columnIdx?){
     postProcessgroupId++;
-
+    
     // store and detach node for later async cleanup
     for (let columnIdx in postProcessedRow){
       if (postProcessedRow.hasOwnProperty(columnIdx)){
         postProcessedCleanupQueue.push({
           actionType: 'C',
           groupId: postProcessgroupId,
-          node: cacheEntry.cellNodesByColumnIdx[columnIdx | 0],
-          columnIdx: columnIdx | 0,
+          node: cacheEntry.cellNodesByColumnIdx[(<number><any>columnIdx) | 0],
+          //columnIdx: columnIdx | 0,
           rowIdx: rowIdx
         });
       }
@@ -1694,8 +1700,8 @@ function SlickGrid(container, data, columns, options){
     ensureCellNodesInRowsCache(row);
 
     let d = getDataItem(row);
-
-    for (let columnIdx in cacheEntry.cellNodesByColumnIdx){
+    let columnIdx;
+    for (columnIdx in cacheEntry.cellNodesByColumnIdx){
       if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx)){
         continue;
       }
@@ -1772,7 +1778,8 @@ function SlickGrid(container, data, columns, options){
     // remove the rows that are now outside of the data range
     // this helps avoid redundant calls to .removeRow() when the size of the data decreased by thousands of rows
     let l = dataLengthIncludingAddNew - 1;
-    for (let i in rowsCache){
+    let i:any;
+    for (i in rowsCache){
       if (i > l){
         removeRowFromCache(i);
       }
@@ -1843,7 +1850,7 @@ function SlickGrid(container, data, columns, options){
     };
   }
 
-  function getRenderedRange(viewportTop, viewportLeft){
+  function getRenderedRange(viewportTop?, viewportLeft?){
     let range = getVisibleRange(viewportTop, viewportLeft);
     let buffer = Math.round(viewportH / options.rowHeight);
     let minBuffer = 3;
@@ -1891,7 +1898,8 @@ function SlickGrid(container, data, columns, options){
 
     // Remove cells outside the range.
     let cellsToRemove = [];
-    for (let i in cacheEntry.cellNodesByColumnIdx){
+    let i;
+    for (i in cacheEntry.cellNodesByColumnIdx){
       // I really hate it when people mess with Array.prototype.
       if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(i)){
         continue;
@@ -2214,7 +2222,8 @@ function SlickGrid(container, data, columns, options){
       }
 
       ensureCellNodesInRowsCache(row);
-      for (let columnIdx in cacheEntry.cellNodesByColumnIdx){
+      let columnIdx:any;
+      for (columnIdx in cacheEntry.cellNodesByColumnIdx){
         if (!cacheEntry.cellNodesByColumnIdx.hasOwnProperty(columnIdx)){
           continue;
         }
@@ -2326,25 +2335,27 @@ function SlickGrid(container, data, columns, options){
     return cellCssClasses[key];
   }
 
+
+
+    function toggleCellClass($cell, times, speed){
+        if (!times){
+            return;
+        }
+        setTimeout(function(){
+                $cell.queue(function(){
+                    $cell.toggleClass(options.cellFlashingCssClass).dequeue();
+                    toggleCellClass($cell,times - 1, speed);
+                });
+            },
+            speed);
+    }
+  
   function flashCell(row, cell, speed){
     speed = speed || 100;
     if (rowsCache[row]){
       let $cell = $(getCellNode(row, cell));
 
-      function toggleCellClass(times){
-        if (!times){
-          return;
-        }
-        setTimeout(function(){
-          $cell.queue(function(){
-            $cell.toggleClass(options.cellFlashingCssClass).dequeue();
-            toggleCellClass(times - 1);
-          });
-        },
-          speed);
-      }
-
-      toggleCellClass(4);
+      toggleCellClass($cell,4, speed);
     }
   }
 
@@ -2594,7 +2605,7 @@ function SlickGrid(container, data, columns, options){
   function getRowFromNode(rowNode){
     for (let row in rowsCache){
       if (rowsCache[row].rowNode === rowNode){
-        return row | 0;
+        return <number><any>row | 0;
       }
     }
 
@@ -2674,8 +2685,8 @@ function SlickGrid(container, data, columns, options){
       render();
     }
   }
-
-  function setActiveCellInternal(newCell, opt_editMode){
+  
+  function setActiveCellInternal(newCell, opt_editMode?){
     if (activeCellNode !== null){
       makeActiveCellNormal();
       $(activeCellNode).removeClass('active');

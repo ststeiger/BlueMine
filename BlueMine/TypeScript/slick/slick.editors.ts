@@ -1,7 +1,7 @@
+
 import Slick from './slick.core';
 // import flatpickr from 'flatpickr';
 // import get = Reflect.get;
-// import {foobar} from "./___tests";
 // import 'flatpickr/dist/flatpickr.min.css';
 // import $ from 'jquery';
 

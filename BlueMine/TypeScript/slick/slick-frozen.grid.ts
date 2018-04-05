@@ -21,33 +21,6 @@
 
 import Slick from './slick.core';
 
-interface Frozen
-{
-    FrozenGrid: any;
-}
-
-interface IColumnDefaults
-{
-    width?: number; // missing
-
-    name: string;
-    resizable: boolean;
-    sortable: boolean;
-    minWidth: number;
-    rerenderOnResize: boolean;
-    headerCssClass: string;
-    defaultSortAsc: boolean;
-    focusable: boolean;
-    selectable: boolean;
-}
-
-
-
-// function getActiveViewportNode(element)
-// {
-//     setActiveViewportNode(element);
-//     //setActiveViewPortNode(element);
-
 
 
 // Slick.Grid globals pretense

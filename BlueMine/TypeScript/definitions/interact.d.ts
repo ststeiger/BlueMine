@@ -7,6 +7,10 @@
 
 declare namespace Interact {
     interface Interactable {
+
+        allowFrom(className:string):Interactable;
+        
+        
         // returns Element or string
         accept(): any;
         accept(newValue: Element): Interactable;
