@@ -8,6 +8,12 @@
 // fix interact.d.ts
 // interface Interactable { allowFrom(className:string):Interactable;
 
+// fix for flatpickr
+interface ObjectConstructor
+{
+    assign:any;
+}
+
 
 // fix slick.grid.ts
 interface ISlickGrid

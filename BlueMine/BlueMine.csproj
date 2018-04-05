@@ -5,12 +5,6 @@
     <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="TypeScript\NewFolder\**" />
-    <Content Remove="TypeScript\NewFolder\**" />
-    <EmbeddedResource Remove="TypeScript\NewFolder\**" />
-    <None Remove="TypeScript\NewFolder\**" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Remove="Code\afadsf.cs" />
     <Compile Remove="Code\CsvParser.cs" />
     <Compile Remove="Code\quick.cs" />
@@ -23,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code\Trash\" />
+    <Folder Include="TypeScript\flatpickr\" />
     <Folder Include="Views\Project\DisplayTemplates\" />
     <Folder Include="Views\Project\EditorTemplates\" />
   </ItemGroup>
