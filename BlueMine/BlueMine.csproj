@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
-    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Code\afadsf.cs" />
@@ -11,6 +11,9 @@
     <Compile Remove="Code\TextFieldParser.cs" />
     <Compile Remove="Code\YamlSer.cs" />
     <Compile Remove="Code\yuckie.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="TypeScript\definitions\jquery_mousewhell.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code\Trash\" />
@@ -36,6 +39,9 @@
   <ItemGroup>
     <ProjectReference Include="..\libExcelImport\libExcelImport.csproj" />
     <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="TypeScript\definitions\jquery_mousewhell.d.ts" />
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
   <Import Project="..\BlueMine.Data\BlueMine.Data.projitems" Label="Shared" />

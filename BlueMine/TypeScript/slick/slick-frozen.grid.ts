@@ -21,8 +21,37 @@
 
 import Slick from './slick.core';
 
+interface Frozen
+{
+    FrozenGrid: any;
+}
+
+interface IColumnDefaults
+{
+    width?: number; // missing
+
+    name: string;
+    resizable: boolean;
+    sortable: boolean;
+    minWidth: number;
+    rerenderOnResize: boolean;
+    headerCssClass: string;
+    defaultSortAsc: boolean;
+    focusable: boolean;
+    selectable: boolean;
+}
+
+
+
+// function getActiveViewportNode(element)
+// {
+//     setActiveViewportNode(element);
+//     //setActiveViewPortNode(element);
+
+
+
 // Slick.Grid globals pretense
-Slick.FrozenGrid = SlickGrid;
+(<Frozen><any>Slick).FrozenGrid = SlickGrid;
 
 export default SlickGrid;
 
@@ -84,7 +113,9 @@ function SlickGrid(container, data, columns, options){
     addNewRowCssClass: "new-row"
   };
 
-  let columnDefaults = {
+
+
+    let columnDefaults: IColumnDefaults = {
     name: "",
     resizable: true,
     sortable: false,
@@ -480,7 +511,7 @@ function SlickGrid(container, data, columns, options){
         .delegate(".slick-cell", "mouseenter", handleMouseEnter)
         .delegate(".slick-cell", "mouseleave", handleMouseLeave);
 
-      // legacy support for drag events
+      // legacy support for drag events // allowFrom: interact.js
       interact($canvas[0]).allowFrom('div.slick-cell').draggable({
         onmove: handleDrag,
         onstart: handleDragStart,
@@ -558,11 +589,6 @@ function SlickGrid(container, data, columns, options){
     return $viewport[0];
   }
 
-  function getActiveViewportNode(element){
-    setActiveViewPortNode(element);
-
-    return $activeViewportNode[0];
-  }
 
   function setActiveViewportNode(element){
     if (element){
@@ -570,6 +596,13 @@ function SlickGrid(container, data, columns, options){
     }
   }
 
+    function getActiveViewportNode(element)
+    {
+        setActiveViewportNode(element);
+        //setActiveViewPortNode(element);
+
+        return $activeViewportNode[0];
+    }
   function measureScrollbar(){
     let  $c = $("<div class='scrollbar-fix' style='position:absolute; top:-10000px; left:-10000px; width:100px; height:100px; overflow:scroll;'></div>").appendTo(document.body);
     let  dim = {
@@ -658,7 +691,7 @@ function SlickGrid(container, data, columns, options){
     return options.fullWidthRows ? Math.max(totalRowWidth, availableWidth) : totalRowWidth;
   }
 
-  function updateCanvasWidth(forceColumnWidthsUpdate){
+  function updateCanvasWidth(forceColumnWidthsUpdate?){
     let  oldCanvasWidth = canvasWidth;
     let  oldCanvasWidthL = canvasWidthL;
     let  oldCanvasWidthR = canvasWidthR;
@@ -1596,7 +1629,9 @@ function SlickGrid(container, data, columns, options){
   //////////////////////////////////////////////////////////////////////////////////////////////
   // General
 
-  function trigger(evt, args, e){
+
+function trigger(evt: any, args: any, e?: any): any
+{
     e = e || new Slick.EventData();
     args = args || {};
     args.grid = self;
@@ -2534,7 +2569,7 @@ function SlickGrid(container, data, columns, options){
     updateCanvasWidth(false);
   }
 
-  function getVisibleRange(viewportTop, viewportLeft){
+  function getVisibleRange(viewportTop?, viewportLeft?){
     if (viewportTop == null){
       viewportTop = scrollTop;
     }
@@ -3502,7 +3537,7 @@ function SlickGrid(container, data, columns, options){
     }
   }
 
-  function scrollCellIntoView(row, cell, doPaging){
+  function scrollCellIntoView(row, cell, doPaging?){
     // Don't scroll to frozen cells
     if (cell <= options.frozenColumn){
       return;
@@ -3528,7 +3563,7 @@ function SlickGrid(container, data, columns, options){
     }
   }
 
-  function setActiveCellInternal(newCell, opt_editMode){
+  function setActiveCellInternal(newCell, opt_editMode?){
     if (activeCellNode !== null){
       makeActiveCellNormal();
       $(activeCellNode).removeClass("active");
@@ -3650,7 +3685,7 @@ function SlickGrid(container, data, columns, options){
     getEditorLock().deactivate(editController);
   }
 
-  function makeActiveCellEditable(editor){
+  function makeActiveCellEditable(editor?){
     if (!activeCellNode){
       return;
     }

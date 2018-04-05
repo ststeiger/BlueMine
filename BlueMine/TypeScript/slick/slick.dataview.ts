@@ -24,8 +24,8 @@ interface IRefreshHint
     isFilterNarrowing:boolean;
     isFilterExpanding:boolean;
     isFilterUnchanged:boolean;
-    ignoreDiffsBefore:boolean;
-    ignoreDiffsAfter:boolean;
+    ignoreDiffsBefore:number;
+    ignoreDiffsAfter: number;
 }
 
 
@@ -826,7 +826,7 @@ function DataView(options){
     return diff;
   }
 
-  function recalc(_items){
+  function recalc(_items, UNUSED?){
     rowsById = null;
 
     if (refreshHints.isFilterNarrowing != prevRefreshHints.isFilterNarrowing ||

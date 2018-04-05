@@ -232,7 +232,7 @@ interface JQueryStatic<TElement extends Node = HTMLElement> {
      * @since 1.4
      */
     contains(container: Element, contained: Element): boolean;
-    css(elem: Element, unknown: any): any;
+    css(elem: Element, unknown: any, x?:boolean): any;
     /**
      * Returns value at named data store for the element, as set by jQuery.data(element, name, value), or
      * the full data store for the element.

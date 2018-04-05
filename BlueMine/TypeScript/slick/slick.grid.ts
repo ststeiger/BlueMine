@@ -1063,7 +1063,7 @@ function SlickGrid(container, data, columns, options){
   // ////////////////////////////////////////////////////////////////////////////////////////////
   // General
 
-  function trigger(evt, args, e){
+  function trigger(evt, args, e?){
     e = e || new Slick.EventData();
     args = args || {};
     args.grid = self;
@@ -1827,7 +1827,7 @@ function SlickGrid(container, data, columns, options){
     updateCanvasWidth(false);
   }
 
-  function getVisibleRange(viewportTop, viewportLeft){
+  function getVisibleRange(viewportTop?, viewportLeft?){
     if (viewportTop == null){
       viewportTop = scrollTop;
     }
@@ -2781,7 +2781,7 @@ function SlickGrid(container, data, columns, options){
     getEditorLock().deactivate(editController);
   }
 
-  function makeActiveCellEditable(editor){
+  function makeActiveCellEditable(editor?){
     if (!activeCellNode){
       return;
     }

@@ -1,9 +1,24 @@
 
+// jquery:
+// css(elem: Element, unknown: any, x?:boolean): any;
+
+
+// slick.dataview.ts
+// function recalc(_items, UNUSED?)
+
+
 interface Math
 {
     hypot: any;
     
 }
+
+
+interface Document
+{
+    selection: any;
+}
+
 
 
 interface  Window
@@ -16,6 +31,11 @@ interface  Function
     displayName: string;
 }
 
+
+interface StyleSheet
+{
+    owningElement: any;
+}
 
 
 
