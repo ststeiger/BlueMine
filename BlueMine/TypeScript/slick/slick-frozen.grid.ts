@@ -25,7 +25,6 @@ import Slick from './slick.core';
 
 // Slick.Grid globals pretense
 (<Frozen><any>Slick).FrozenGrid = SlickGrid;
-
 export default SlickGrid;
 
 // shared across all grids on the page
