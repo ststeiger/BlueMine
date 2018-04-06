@@ -89,6 +89,9 @@ function DataView(options)
     let onRowsChanged = new Slick.Event();
     let onPagingInfoChanged = new Slick.Event();
 
+    // jQuery.extend( [deep ], target, object1 [, objectN ] )
+    // Merge the contents of two or more objects together into the first object.
+    // deep: If true, the merge becomes recursive (aka. deep copy). Passing false for this argument is not supported.
     options = $.extend(true, {}, defaults, options);
 
     function beginUpdate()
@@ -260,12 +263,16 @@ function DataView(options)
         return groupingInfos;
     }
 
+
     function setGrouping(groupingInfo)
     {
         if (!options.groupItemMetadataProvider)
         {
             // options.groupItemMetadataProvider = new Data.GroupItemMetadataProvider();
-            options.groupItemMetadataProvider = GroupMetaDataProvider(null);
+            // options.groupItemMetadataProvider = new GroupMetaDataProvider(null); // can only be void
+            // options.groupItemMetadataProvider = new Data.GroupMetaDataProvider(null);
+            // options.groupItemMetadataProvider = GroupMetaDataProvider(null);
+            options.groupItemMetadataProvider = Data.GroupMetaDataProvider();
         }
 
         groups = [];

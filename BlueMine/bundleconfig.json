@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "wwwroot/Scripts/flatpickrCDN/flatpickr.min.css",
+    "inputFiles": [
+      "wwwroot/Scripts/flatpickrCDN/flatpickr.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/Scripts/flatpickrCDN/flatpickr.ie.min.css",
+    "inputFiles": [
+      "wwwroot/Scripts/flatpickrCDN/flatpickr.ie.css"
+    ]
+  }
+]

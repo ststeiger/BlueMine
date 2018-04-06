@@ -17,6 +17,7 @@
       "es2015.promise"
     ],
 
+    "allowJs": true,
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": true,

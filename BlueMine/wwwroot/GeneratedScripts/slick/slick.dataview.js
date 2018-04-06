@@ -180,7 +180,7 @@ function DataView(options) {
     }
     function setGrouping(groupingInfo) {
         if (!options.groupItemMetadataProvider) {
-            options.groupItemMetadataProvider = GroupMetaDataProvider(null);
+            options.groupItemMetadataProvider = Data.GroupMetaDataProvider();
         }
         groups = [];
         toggledGroupsByLevel = [];
