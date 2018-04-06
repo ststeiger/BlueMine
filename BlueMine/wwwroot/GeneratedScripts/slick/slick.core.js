@@ -1,3 +1,33 @@
+var Range = (function () {
+    function Range(fromRow, fromCell, toRow, toCell) {
+        if (toRow === undefined && toCell === undefined) {
+            toRow = fromRow;
+            toCell = fromCell;
+        }
+        this.fromRow = Math.min(fromRow, toRow);
+        this.fromCell = Math.min(fromCell, toCell);
+        this.toRow = Math.max(fromRow, toRow);
+        this.toCell = Math.max(fromCell, toCell);
+    }
+    Range.prototype.isSingleRow = function () {
+        return this.fromRow == this.toRow;
+    };
+    Range.prototype.isSingleCell = function () {
+        return this.fromRow == this.toRow && this.fromCell == this.toCell;
+    };
+    Range.prototype.contains = function (row, cell) {
+        return row >= this.fromRow && row <= this.toRow && cell >= this.fromCell && cell <= this.toCell;
+    };
+    Range.prototype.toString = function () {
+        if (this.isSingleCell()) {
+            return "(" + this.fromRow + ":" + this.fromCell + ")";
+        }
+        else {
+            return "(" + this.fromRow + ":" + this.fromCell + " - " + this.toRow + ":" + this.toCell + ")";
+        }
+    };
+    return Range;
+}());
 var Slick = {
     Event: Event,
     EventData: EventData,
@@ -96,7 +126,7 @@ function EventHandler() {
         return this;
     };
 }
-function Range(fromRow, fromCell, toRow, toCell) {
+function Range111(fromRow, fromCell, toRow, toCell) {
     if (toRow === undefined && toCell === undefined) {
         toRow = fromRow;
         toCell = fromCell;

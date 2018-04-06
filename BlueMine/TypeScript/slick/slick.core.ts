@@ -1,3 +1,67 @@
+
+/***
+ * A structure containing a range of cells.
+ * @class Range
+ * @constructor
+ * @param fromRow {Integer} Starting row.
+ * @param fromCell {Integer} Starting cell.
+ * @param toRow {Integer} Optional. Ending row. Defaults to <code>fromRow</code>.
+ * @param toCell {Integer} Optional. Ending cell. Defaults to <code>fromCell</code>.
+ */
+class Range
+{
+    public fromRow;
+    public toRow;
+    public fromCell;
+    public toCell;
+
+
+    constructor(fromRow, fromCell, toRow?, toCell?)
+    {
+        if (toRow === undefined && toCell === undefined)
+        {
+            toRow = fromRow;
+            toCell = fromCell;
+        }
+
+        this.fromRow = Math.min(fromRow, toRow);
+        this.fromCell = Math.min(fromCell, toCell);
+        this.toRow = Math.max(fromRow, toRow);
+        this.toCell = Math.max(fromCell, toCell);
+    }
+
+
+    public isSingleRow()
+    {
+        return this.fromRow == this.toRow;
+    }
+
+    public isSingleCell()
+    {
+        return this.fromRow == this.toRow && this.fromCell == this.toCell;
+    }
+
+
+    public contains(row, cell)
+    {
+        return row >= this.fromRow && row <= this.toRow && cell >= this.fromCell && cell <= this.toCell;
+    }
+
+
+    public toString()
+    {
+        if (this.isSingleCell())
+        {
+            return "(" + this.fromRow + ":" + this.fromCell + ")";
+        } else
+        {
+            return "(" + this.fromRow + ":" + this.fromCell + " - " + this.toRow + ":" + this.toCell + ")";
+        }
+    }
+}
+
+
+
 /** *
  * Contains core SlickGrid classes.
  * @module Core
@@ -210,7 +274,9 @@ function EventHandler()
  * @param toRow {Integer} Optional. Ending row. Defaults to <code>fromRow</code>.
  * @param toCell {Integer} Optional. Ending cell. Defaults to <code>fromCell</code>.
  */
-function Range(fromRow, fromCell, toRow, toCell)
+
+// TODO: Delete no longer required Range111 
+function Range111(fromRow, fromCell, toRow, toCell)
 {
     if (toRow === undefined && toCell === undefined)
     {

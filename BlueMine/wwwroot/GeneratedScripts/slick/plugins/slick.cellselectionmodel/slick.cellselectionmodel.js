@@ -66,6 +66,7 @@ function CellSelectionModel(options) {
     }
     function handleActiveCellChange(e, args) {
         if (_options.selectActiveCell && args.row != null && args.cell != null) {
+            setSelectedRanges([new Slick.Range(args.row, args.cell)]);
         }
     }
     function handleKeyDown(e) {
@@ -75,9 +76,11 @@ function CellSelectionModel(options) {
             (e.which == 37 || e.which == 39 || e.which == 38 || e.which == 40)) {
             ranges = getSelectedRanges();
             if (!ranges.length) {
+                ranges.push(new Slick.Range(active.row, active.cell));
             }
             last = ranges.pop();
             if (!last.contains(active.row, active.cell)) {
+                last = new Slick.Range(active.row, active.cell);
             }
             var dRow = last.toRow - last.fromRow, dCell = last.toCell - last.fromCell, dirRow = active.row == last.fromRow ? 1 : -1, dirCell = active.cell == last.fromCell ? 1 : -1;
             if (e.which == 37) {

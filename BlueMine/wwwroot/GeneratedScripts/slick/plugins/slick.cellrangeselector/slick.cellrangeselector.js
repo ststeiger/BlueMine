@@ -45,6 +45,7 @@ function CellRangeSelector(options) {
             start: start,
             end: {}
         };
+        return _decorator.show(new Slick.Range(start.row, start.cell));
     }
     function handleDrag(e, interactEvent) {
         if (!_dragging) {
