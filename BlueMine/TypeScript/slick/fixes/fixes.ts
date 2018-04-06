@@ -1,4 +1,27 @@
 
+// https://stackoverflow.com/questions/38077164/es6-export-from-import
+
+
+// plugins\slick.cellrangeselector\slick.cellrangeselector.ts
+//return _decorator.show(new Slick.Range(start.row, start.cell));
+
+// plugins\slick.cellselectionmodel\slick.cellselectionmodel.ts
+// TODO:
+
+//_range.end = end;
+//_decorator.show(new Slick.Range(_range.start.row, _range.start.cell, end.row, end.cell));
+
+
+
+// fix for plugins\slick.cellrangeselector\slick.cellrangeselector.ts
+interface IRange
+{
+    start: any;
+    end: any;
+}
+
+
+
 // fix jquery.d.ts
 // css(elem: Element, unknown: any, x?:boolean): any;
 
