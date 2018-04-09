@@ -1,45 +1,5 @@
 
-
-// this.autoBind(this);
-export function autoBind(self: any)
-{
-    for (const key of Object.getOwnPropertyNames(self.constructor.prototype))
-    {
-        const val = self[key];
-
-        if (key !== 'constructor' && typeof val === 'function')
-        {
-            // console.log(key);
-            self[key] = val.bind(self);
-        } // End if (key !== 'constructor' && typeof val === 'function') 
-
-    } // Next key 
-
-    return self;
-} // End Function autoBind
-
-
 // https://stackoverflow.com/questions/38077164/es6-export-from-import
-
-
-// plugins\slick.cellrangeselector\slick.cellrangeselector.ts
-//return _decorator.show(new Slick.Range(start.row, start.cell));
-
-// plugins\slick.cellselectionmodel\slick.cellselectionmodel.ts
-// TODO:
-
-//_range.end = end;
-//_decorator.show(new Slick.Range(_range.start.row, _range.start.cell, end.row, end.cell));
-
-
-
-// fix for plugins\slick.cellrangeselector\slick.cellrangeselector.ts
-interface IRange
-{
-    start: any;
-    end: any;
-}
-
 
 
 // fix jquery.d.ts
@@ -115,6 +75,7 @@ interface Frozen
     FrozenGrid: any;
 }
 
+
 // fix slick-frozen.grid.ts
 interface IColumnDefaults
 {
@@ -181,6 +142,16 @@ interface FunctionStatics
     DefaultDecimalPlaces: number;
 }
 
+
+//_range.end = end;
+//_decorator.show(new Slick.Range(_range.start.row, _range.start.cell, end.row, end.cell));
+
+// fix for plugins\slick.cellrangeselector\slick.cellrangeselector.ts
+interface IRange
+{
+    start: any;
+    end: any;
+}
 
 
 

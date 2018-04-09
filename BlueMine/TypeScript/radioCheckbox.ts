@@ -5,35 +5,37 @@ function subscribeEvent(parentSelector, eventName, childSelector, eventCallback)
 {
     if (parentSelector == null)
         throw new ReferenceError("Parameter parentSelector is NULL");
+    
     if (childSelector == null)
         throw new ReferenceError("Parameter childSelector is NULL");
+    
     // nodeToObserve: the node that will be observed for mutations
     let nodeToObserve = parentSelector;
     if (typeof (parentSelector) === 'string')
         nodeToObserve = document.querySelector(parentSelector);
-
+    
     let eligibleChildren = nodeToObserve.querySelectorAll(childSelector);
     for (let i = 0; i < eligibleChildren.length; ++i)
     {
         eligibleChildren[i].addEventListener(eventName, eventCallback, false);
-    } // Next i 
-
+    } // Next i
+    
     // https://stackoverflow.com/questions/2712136/how-do-i-make-this-loop-all-children-recursively
     function allDescendants(node)
     {
         if (node == null)
             return;
-
+        
         for (let i = 0; i < node.childNodes.length; i++)
         {
             let child = node.childNodes[i];
             allDescendants(child);
-        } // Next i 
-
+        } // Next i
+        
         // IE 11 Polyfill 
         if (!Element.prototype.matches)
             Element.prototype.matches = Element.prototype.msMatchesSelector;
-
+        
         if (node.matches)
         {
             if (node.matches(childSelector))
@@ -42,9 +44,9 @@ function subscribeEvent(parentSelector, eventName, childSelector, eventCallback)
                 node.addEventListener(eventName, eventCallback, false);
             } // End if ((<Element>node).matches(childSelector))
             // else console.log("no match");
-
-        } // End if ((<Element>node).matches) 
-
+            
+        } // End if ((<Element>node).matches)
+        
         // else console.log("no matchfunction");
     } // End Function allDescendants 
 
@@ -94,15 +96,17 @@ function radioCheckbox_onClick()
         let pos = name.lastIndexOf("_");
         if (pos !== -1)
             name = name.substr(0, pos);
+        
         let group = 'input[type="checkbox"][name^="' + name + '"]';
         // console.log(group);
-
+        
         let eles: NodeListOf<HTMLInputElement> = <NodeListOf<HTMLInputElement>>document.querySelectorAll(group);
         // console.log(eles);
         for (let j = 0; j < eles.length; ++j)
         {
             eles[j].checked = false;
         }
+        
         box.checked = true;
     }
     else
@@ -120,6 +124,7 @@ function radioCheckbox()
         // console.log(elements[i]);
         elements[i].addEventListener("click", radioCheckbox_onClick, false);
     } // Next i 
+    
 } // End Function radioCheckbox 
 
 
