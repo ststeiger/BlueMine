@@ -353,7 +353,7 @@ function SlickGrid(container, data, columns, options)
                 $footerRowScroller
                     .bind('scroll', handleFooterRowScroll);
             }
-
+            
             $focusSink.add($focusSink2)
                 .bind('keydown', handleKeyDown);
             $canvas
