@@ -1,5 +1,5 @@
 import Slick from './slick.core.js';
-import GroupMetaDataProvider from './slick.groupmetadataprovider.js';
+import GroupItemMetadataProvider from './slick.groupmetadataprovider.js';
 var Aggregators = {
     Avg: AvgAggregator,
     Min: MinAggregator,
@@ -8,7 +8,7 @@ var Aggregators = {
 };
 var Data = {
     DataView: DataView,
-    GroupMetaDataProvider: GroupMetaDataProvider,
+    GroupItemMetadataProvider: GroupItemMetadataProvider,
     Aggregators: Aggregators
 };
 export default Data;
@@ -180,7 +180,7 @@ function DataView(options) {
     }
     function setGrouping(groupingInfo) {
         if (!options.groupItemMetadataProvider) {
-            options.groupItemMetadataProvider = Data.GroupMetaDataProvider();
+            options.groupItemMetadataProvider = Data.GroupItemMetadataProvider();
         }
         groups = [];
         toggledGroupsByLevel = [];
