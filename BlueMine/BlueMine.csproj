@@ -13,7 +13,7 @@
     <Compile Remove="Code\yuckie.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="TypeScript\definitions\jquery_mousewhell.d.ts" />
+    <None Remove="TypeScript\definitions\jquery_mousewheel.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code\Trash\" />
@@ -42,7 +42,7 @@
     <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="TypeScript\definitions\jquery_mousewhell.d.ts" />
+    <TypeScriptCompile Include="TypeScript\definitions\jquery_mousewheel.d.ts" />
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
   <Import Project="..\BlueMine.Data\BlueMine.Data.projitems" Label="Shared" />

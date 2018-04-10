@@ -2,7 +2,8 @@
 // import $ from 'jquery.js';
 
 import Slick from './slick.core.js';
-import GroupMetaDataProvider from './slick.groupmetadataprovider.js';
+import GroupItemMetadataProvider from './slick.groupmetadataprovider.js';
+
 
 const Aggregators = {
     Avg: AvgAggregator,
@@ -13,7 +14,7 @@ const Aggregators = {
 
 const Data = {
     DataView,
-    GroupMetaDataProvider,
+    GroupItemMetadataProvider,
     Aggregators
 };
 
@@ -272,7 +273,7 @@ function DataView(options)
             // options.groupItemMetadataProvider = new GroupMetaDataProvider(null); // can only be void
             // options.groupItemMetadataProvider = new Data.GroupMetaDataProvider(null);
             // options.groupItemMetadataProvider = GroupMetaDataProvider(null);
-            options.groupItemMetadataProvider = Data.GroupMetaDataProvider();
+            options.groupItemMetadataProvider = Data.GroupItemMetadataProvider();
         }
 
         groups = [];
