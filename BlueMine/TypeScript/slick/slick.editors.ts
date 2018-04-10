@@ -1,5 +1,9 @@
 
 import Slick from './slick.core.js';
+import flatpickr from '../flatpickr/index.js'
+
+// declare var flatpickr: any;
+
 // import flatpickr from 'flatpickr';
 // import 'flatpickr/dist/flatpickr.min.css';
 // import $ from 'jquery';
@@ -11,11 +15,6 @@ const { keyCode } = Slick;
  * @module Editors
  * @namespace Slick
  */
-
-declare var flatpickr: any;
-
-
-
 const Editors = {
     Text: TextEditor,
     Integer: IntegerEditor,

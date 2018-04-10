@@ -6,5 +6,45 @@
   {
     "outputFile": "TypeScript/styles/slick-default-theme.css",
     "inputFile": "TypeScript/styles/slick-default-theme.less"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/flatpickr.css",
+    "inputFile": "TypeScript/flatpickr/style/flatpickr.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/ie.css",
+    "inputFile": "TypeScript/flatpickr/style/ie.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/airbnb.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/airbnb.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/confetti.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/confetti.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/dark.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/dark.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/light.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/light.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/material_blue.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/material_blue.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/material_green.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/material_green.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/material_orange.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/material_orange.styl"
+  },
+  {
+    "outputFile": "TypeScript/flatpickr/style/themes/material_red.css",
+    "inputFile": "TypeScript/flatpickr/style/themes/material_red.styl"
   }
 ]

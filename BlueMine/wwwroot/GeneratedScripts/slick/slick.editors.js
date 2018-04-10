@@ -1,4 +1,5 @@
 import Slick from './slick.core.js';
+import flatpickr from '../flatpickr/index.js';
 var keyCode = Slick.keyCode;
 var Editors = {
     Text: TextEditor,

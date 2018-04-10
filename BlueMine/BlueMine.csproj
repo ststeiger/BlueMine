@@ -17,7 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code\Trash\" />
-    <Folder Include="TypeScript\flatpickr\" />
     <Folder Include="Views\Project\DisplayTemplates\" />
     <Folder Include="Views\Project\EditorTemplates\" />
   </ItemGroup>
