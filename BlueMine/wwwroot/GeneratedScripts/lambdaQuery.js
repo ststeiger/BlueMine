@@ -29,6 +29,8 @@ var lambdaQuery = (function () {
     lambdaQuery.prototype.css = function (propertyName, value, priority) {
         this.element.style.setProperty(propertyName, value, priority);
     };
+    lambdaQuery.prototype.delegate = function (selector, eventType, handler) {
+    };
     lambdaQuery.prototype.hide = function () {
     };
     lambdaQuery.prototype.add = function (html) {
