@@ -1,5 +1,5 @@
 
-export class foo
+export class lambdaQuery
 {
     
     public element: HTMLElement;
