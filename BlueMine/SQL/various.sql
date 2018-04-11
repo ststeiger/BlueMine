@@ -1,4 +1,7 @@
 ﻿
+-- https://stackoverflow.blog/2009/04/06/a-day-in-the-penalty-box/
+
+
 SELECT 
 	 id
 	,name
