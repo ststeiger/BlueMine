@@ -12,8 +12,8 @@
         {
             this.element = <HTMLElement>document.querySelector(arg);
         }
-
-        this.element = arg;
+        else
+            this.element = arg;
     }
 
 
@@ -103,7 +103,7 @@
 
     // parseFloat($.css($container[0], "paddingTop", true)) 
     // css(elem: Element, unknown: any, x?:boolean): any;
-    public css(propertyName: string, value: string, priority?: string)
+    public css(propertyName: string, value: string, priority?: string) : any
     {
         this.element.style.setProperty(propertyName, value, priority);
         //return this.element.style[propertyName]
@@ -319,12 +319,27 @@
 
         return newArray
     }
-
-
+    
+    
 }
+
 
 function λ(selector: string)
 {
     return new lambdaQuery(selector);
 }
-λ("body");
+
+/*
+// λ("body");
+// λ("body").css("background-color", "red", "important");
+
+λ(".blog-article.section")
+    .css("background-color", "red", "important")
+   // .css("background-color", "green", "important");
+;
+λ(".blog-article.section").bind("click", function (){
+   console.log("click"); 
+});
+*/
+
+// λ("body").each(["a","b","c"], function(i,obj){ console.log(this, i, obj); return true;});

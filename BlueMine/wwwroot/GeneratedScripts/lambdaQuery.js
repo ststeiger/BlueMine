@@ -3,7 +3,8 @@ var lambdaQuery = (function () {
         if (typeof (arg) === 'string') {
             this.element = document.querySelector(arg);
         }
-        this.element = arg;
+        else
+            this.element = arg;
     }
     lambdaQuery.prototype.is = function (selector) {
         return this.element.matches(selector);
@@ -133,4 +134,3 @@ var lambdaQuery = (function () {
 function λ(selector) {
     return new lambdaQuery(selector);
 }
-λ("body");
