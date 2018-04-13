@@ -20,14 +20,14 @@ namespace BlueMine.Controllers
 {
 
     /*
--- Constraint "is integer"
-SUBSTRING(id,1,1) = 'a' 
-AND ISNUMERIC(SUBSTRING(id, 2, 20)) -- '-1.0e+5'
-AND id not like '%-%'
-AND id not like '%+%'
-AND id not like '%.%' 
-AND id not like '%,%'
-AND id not like '%e%' 
+    -- Constraint "is integer"
+    SUBSTRING(id,1,1) = 'a' 
+    AND ISNUMERIC(SUBSTRING(id, 2, 20)) -- '-1.0e+5'
+    AND id not like '%-%'
+    AND id not like '%+%'
+    AND id not like '%.%' 
+    AND id not like '%,%'
+    AND id not like '%e%' 
     */
     
     
