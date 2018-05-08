@@ -89,6 +89,11 @@ namespace BlueMine
 
             // OfficeOpenXml.OpenDocumentSpreadsheet.OdsReaderWriter.Test();
 
+            // string cb = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
+            // string loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            // System.Console.WriteLine(loc);
+            // System.Console.WriteLine(cb);
+            
             BuildWebHost(args).Run();
         } // End Sub Main 
 
