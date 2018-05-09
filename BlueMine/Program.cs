@@ -89,13 +89,43 @@ namespace BlueMine
 
             // OfficeOpenXml.OpenDocumentSpreadsheet.OdsReaderWriter.Test();
 
+            RestrictProgramToSingleInstance();
+            
+            BuildWebHost(args).Run();
+        } // End Sub Main 
+
+
+        public static void RestrictProgramToSingleInstance()
+        {            
             // string cb = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             // string loc = System.Reflection.Assembly.GetExecutingAssembly().Location;
             // System.Console.WriteLine(loc);
             // System.Console.WriteLine(cb);
+
+            // string fn = System.Reflection.Assembly.GetExecutingAssembly().FullName;
+            string asmName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
             
-            BuildWebHost(args).Run();
-        } // End Sub Main 
+            // A Mutex is like a C# lock, but it can work across multiple processes. 
+            // In other words, Mutex can be computer-wide as well as application-wide.
+            
+            // Be sure that your mutex name begins with "Global\".
+            // On a server that is running Terminal Services, 
+            // a named system mutex can have two levels of visibility. 
+            // If its name begins with the prefix "Global\", " +
+            // "the mutex is visible in all terminal server sessions. " +
+            // "If its name begins with the prefix "Local\", " +
+            // "the mutex is visible only in the terminal server session where it was created. 
+            string mutexName = $@"Global\{asmName}";
+            System.Threading.Mutex mutex = 
+                new System.Threading.Mutex(true, mutexName, out bool createdNew);
+            
+            if (!createdNew)
+            {
+                Console.WriteLine(mutexName + " is already running! Exiting the application.");
+                return;
+            }
+        }
+
 
 
         public static IWebHost BuildWebHost(string[] args)
@@ -104,9 +134,9 @@ namespace BlueMine
                 .UseStartup<Startup>()
                 .Build();
         } // End Sub Main(string[] args) 
-
-
+        
+        
     } // End Class Program 
-
-
+    
+    
 } // End Namespace BlueMine 
