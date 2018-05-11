@@ -54,6 +54,8 @@ namespace BlueMine
         
         public static void Main(string[] args)
         {
+            BlueMine.OSM.API.Polygon.Test();
+
             // CoreyM.Collections.AATree<IpRange, Country> mytree = new CoreyM.Collections.AATree<IpRange, Country>();
 
 
