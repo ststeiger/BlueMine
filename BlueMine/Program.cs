@@ -1,10 +1,7 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using BlueMine.Controllers;
+using System.Collections.Generic;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -54,7 +51,7 @@ namespace BlueMine
         
         public static void Main(string[] args)
         {
-            BlueMine.OSM.API.Polygon.Test();
+            // BlueMine.OSM.API.Polygon.Test();
 
             // CoreyM.Collections.AATree<IpRange, Country> mytree = new CoreyM.Collections.AATree<IpRange, Country>();
 
@@ -123,7 +120,7 @@ namespace BlueMine
             
             if (!createdNew)
             {
-                Console.WriteLine(mutexName + " is already running! Exiting the application.");
+                System.Console.WriteLine(mutexName + " is already running! Exiting the application.");
                 return;
             }
         }

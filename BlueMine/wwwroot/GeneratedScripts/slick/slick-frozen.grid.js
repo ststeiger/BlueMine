@@ -2111,7 +2111,7 @@ function SlickGrid(container, data, columns, options) {
             cellsAdded = 0;
             var metadata = data.getItemMetadata && data.getItemMetadata(row);
             metadata = metadata && metadata.columns;
-            var d = getDataItem(row);
+            var d_1 = getDataItem(row);
             for (var i = 0, ii = columns.length; i < ii; i++) {
                 if (columnPosLeft[i] > range.rightPx) {
                     break;
@@ -2129,7 +2129,7 @@ function SlickGrid(container, data, columns, options) {
                     }
                 }
                 if (columnPosRight[Math.min(ii - 1, i + colspan - 1)] > range.leftPx) {
-                    appendCellHtml(stringArray, row, i, colspan, d);
+                    appendCellHtml(stringArray, row, i, colspan, d_1);
                     cellsAdded++;
                 }
                 i += (colspan > 1 ? colspan - 1 : 0);
@@ -2894,11 +2894,11 @@ function SlickGrid(container, data, columns, options) {
         currentEditor.destroy();
         currentEditor = null;
         if (activeCellNode) {
-            var d = getDataItem(activeRow);
+            var d_2 = getDataItem(activeRow);
             $(activeCellNode).removeClass("editable invalid");
-            if (d) {
+            if (d_2) {
                 var column = columns[activeCell];
-                activeCellNode[0].innerHTML = callFormatter(activeRow, activeCell, getDataItemValueForColumn(d, column), column, d);
+                activeCellNode[0].innerHTML = callFormatter(activeRow, activeCell, getDataItemValueForColumn(d_2, column), column, d_2);
                 invalidatePostProcessingResults(activeRow);
             }
         }

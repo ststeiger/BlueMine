@@ -483,9 +483,9 @@ function FlatpickrInstance(element, instanceConfig) {
             clearNode(self.weekNumbers);
         var frag = document.createDocumentFragment();
         for (var i = 0; i < self.config.showMonths; i++) {
-            var d = new Date(self.currentYear, self.currentMonth, 1);
-            d.setMonth(self.currentMonth + i);
-            frag.appendChild(buildMonthDays(d.getFullYear(), d.getMonth()));
+            var d_1 = new Date(self.currentYear, self.currentMonth, 1);
+            d_1.setMonth(self.currentMonth + i);
+            frag.appendChild(buildMonthDays(d_1.getFullYear(), d_1.getMonth()));
         }
         self.daysContainer.appendChild(frag);
         self.days = self.daysContainer.firstChild;
@@ -815,27 +815,27 @@ function FlatpickrInstance(element, instanceConfig) {
         if (dateToCheck === undefined)
             return false;
         var bool = self.config.enable.length > 0, array = bool ? self.config.enable : self.config.disable;
-        for (var i = 0, d = void 0; i < array.length; i++) {
-            d = array[i];
-            if (typeof d === "function" &&
-                d(dateToCheck))
+        for (var i = 0, d_2; i < array.length; i++) {
+            d_2 = array[i];
+            if (typeof d_2 === "function" &&
+                d_2(dateToCheck))
                 return bool;
-            else if (d instanceof Date &&
+            else if (d_2 instanceof Date &&
                 dateToCheck !== undefined &&
-                d.getTime() === dateToCheck.getTime())
+                d_2.getTime() === dateToCheck.getTime())
                 return bool;
-            else if (typeof d === "string" && dateToCheck !== undefined) {
-                var parsed = self.parseDate(d, undefined, true);
+            else if (typeof d_2 === "string" && dateToCheck !== undefined) {
+                var parsed = self.parseDate(d_2, undefined, true);
                 return parsed && parsed.getTime() === dateToCheck.getTime()
                     ? bool
                     : !bool;
             }
-            else if (typeof d === "object" &&
+            else if (typeof d_2 === "object" &&
                 dateToCheck !== undefined &&
-                d.from &&
-                d.to &&
-                dateToCheck.getTime() >= d.from.getTime() &&
-                dateToCheck.getTime() <= d.to.getTime())
+                d_2.from &&
+                d_2.to &&
+                dateToCheck.getTime() >= d_2.from.getTime() &&
+                dateToCheck.getTime() <= d_2.to.getTime())
                 return bool;
         }
         return !bool;
