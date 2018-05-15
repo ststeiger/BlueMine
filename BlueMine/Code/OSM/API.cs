@@ -1,5 +1,5 @@
 ﻿
-namespace BlueMine.OSM.API 
+namespace OSM.API.v0_6 
 {
 
 
@@ -51,14 +51,14 @@ namespace BlueMine.OSM.API
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
             // https://www.openstreetmap.org/api/0.6/way/73685445
-            Xml2CSharp.OSM.Way.OsmWayXml osm = Xml2CSharp.OSM.Way.OsmWayXml.FromUrl("https://www.openstreetmap.org/api/0.6/way/73685445");
+            OSM.API.v0_6.XML.OsmWayXml osm = OSM.API.v0_6.XML.OsmWayXml.FromUrl("https://www.openstreetmap.org/api/0.6/way/73685445");
 
-            foreach (Xml2CSharp.OSM.Way.Nd node in osm.Way.Nd)
+            foreach (OSM.API.v0_6.XML.Nd node in osm.Way.Nd)
             {
                 string @ref = node.Ref;
 
                 // https://www.openstreetmap.org/api/0.6/node/872697431
-                Xml2CSharp.OSM.Node.OsmNodeXml nodeOSM = Xml2CSharp.OSM.Node.OsmNodeXml.FromUrl($"https://www.openstreetmap.org/api/0.6/node/{@ref}");
+                OSM.API.v0_6.XML.OsmNodeXml nodeOSM = OSM.API.v0_6.XML.OsmNodeXml.FromUrl($"https://www.openstreetmap.org/api/0.6/node/{@ref}");
                 System.Threading.Thread.Sleep(5000);
                 decimal lat = nodeOSM.Node.Lat;
                 decimal lon = nodeOSM.Node.Lon;

@@ -2,9 +2,10 @@
 // Licensed under the Apache License, Version 2.0 
 // http://www.apache.org/licenses/LICENSE-2.0 
 
-namespace Xml2CSharp.OSM.Node 
+namespace OSM.API.v0_6.XML
 { 
-
+    
+    
     // https://www.openstreetmap.org/api/0.6/node/872697431
 
     // <? xml version="1.0" encoding="UTF-8"?>

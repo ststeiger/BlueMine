@@ -44,33 +44,15 @@
 //     <nd ref="872699725"/>
 //     <nd ref="872700284"/>
 //     <tag k="historic" v="castle"/>
-//     <tag k="source" v="cadastre-dgi-fr source : Direction Générale des Impôts - Cadastre. Mise à jour : 2010"/>
+//     <tag k="source" v="cadastre-dgi-fr source : Direction Gï¿½nï¿½rale des Impï¿½ts - Cadastre. Mise ï¿½ jour : 2010"/>
 //   </way>
 // </osm>
 
-namespace Xml2CSharp.OSM.Way
+
+namespace OSM.API.v0_6.XML
 {
-
-
-    [System.Xml.Serialization.XmlRoot(ElementName = "nd")]
-    public class Nd
-    {
-        [System.Xml.Serialization.XmlAttribute(AttributeName = "ref")]
-        public string Ref { get; set; }
-    } // End Class Nd 
-
-
-    [System.Xml.Serialization.XmlRoot(ElementName = "tag")]
-    public class Tag
-    {
-        [System.Xml.Serialization.XmlAttribute(AttributeName = "k")]
-        public string K { get; set; }
-
-        [System.Xml.Serialization.XmlAttribute(AttributeName = "v")]
-        public string V { get; set; }
-    } // End Class Tag 
-
-
+    
+    
     [System.Xml.Serialization.XmlRoot(ElementName = "way")]
     public class Way
     {
