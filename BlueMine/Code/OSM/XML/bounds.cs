@@ -62,6 +62,12 @@ namespace OSM.API.v0_6.XML
 
         [XmlAttribute(AttributeName = "license")]
         public string License { get; set; }
+
+
+        public static OsmBoundingBoxXml FromUrl(string url)
+        {
+            return Tools.XML.Serialization.DeserializeXmlFromUrl<OsmBoundingBoxXml>(url);
+        }
     }
     
 }

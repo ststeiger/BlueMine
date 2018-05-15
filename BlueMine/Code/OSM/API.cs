@@ -1,5 +1,5 @@
 ﻿
-namespace OSM.API.v0_6 
+namespace OSM.API.v0_6
 {
 
 
@@ -46,12 +46,14 @@ namespace OSM.API.v0_6
         // 44.1682537, 4.4461225
         // 44.1683810, 4.4460592
 
-        public static void Test()
+
+        public static string GetPoints(string wayId)
         {
+            string polygonPoints = null;
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
             // https://www.openstreetmap.org/api/0.6/way/73685445
-            OSM.API.v0_6.XML.OsmWayXml osm = OSM.API.v0_6.XML.OsmWayXml.FromUrl("https://www.openstreetmap.org/api/0.6/way/73685445");
+            OSM.API.v0_6.XML.OsmWayXml osm = OSM.API.v0_6.XML.OsmWayXml.FromUrl($"https://www.openstreetmap.org/api/0.6/way/{wayId}");
 
             foreach (OSM.API.v0_6.XML.Nd node in osm.Way.Nd)
             {
@@ -69,14 +71,128 @@ namespace OSM.API.v0_6
                 sb.AppendLine();
             } // Next node 
 
-            string str = sb.ToString();
+            polygonPoints = sb.ToString();
             sb.Clear();
             sb = null;
-            System.Console.WriteLine(str);
+
+            return polygonPoints;
         } // End Sub Test 
 
 
-    } // End Class API 
+    } // End Class Polygon 
+
+
+
+    public class GeoPoint
+    {
+        public decimal Latitude;
+        public decimal Longitude;
+
+
+        public GeoPoint()
+        { } // End Constructor 
+
+
+        public GeoPoint(decimal latitude, decimal longitude)
+        {
+            this.Latitude = latitude;
+            this.Longitude = longitude;
+        } // End Constructor 
+
+    } // End Class GeoPoint 
+
+
+    public class GeoBoundingBox
+    {
+        public GeoPoint TopLeft;
+        public GeoPoint BottomRight;
+
+
+        public GeoBoundingBox()
+        { } // End Constructor GeoBoundingBox
+
+
+        public GeoBoundingBox(GeoPoint topLeft, GeoPoint bottomRight)
+        {
+            this.TopLeft = topLeft;
+            this.BottomRight = bottomRight;
+        } // End Constructor GeoBoundingBox
+
+
+        public GeoBoundingBox(decimal lat1, decimal lon1, decimal lat2, decimal lon2)
+        {
+            this.TopLeft = new GeoPoint(lat1, lon1);
+            this.BottomRight = new GeoPoint(lat2, lon2);
+        } // End Constructor GeoBoundingBox
+
+
+        // left is the longitude of the left (westernmost) side of the bounding box.
+        public decimal Left
+        {
+            get { return this.TopLeft.Longitude; }
+        } // End Property Left 
+
+
+        // bottom is the latitude of the bottom (southernmost) side of the bounding box.
+        public decimal Bottom
+        {
+            get { return this.BottomRight.Latitude; }
+        } // End Property Bottom 
+
+
+        // right is the longitude of the right (easternmost) side of the bounding box.
+        public decimal Right
+        {
+            get { return this.BottomRight.Longitude; }
+        } // End Property Right 
+
+        // top is the latitude of the top (northernmost) side of the bounding box.
+        public decimal Top
+        {
+            get { return this.TopLeft.Latitude; }
+        } // End Property Top 
+
+
+        public string Url
+        {
+            get
+            {
+                return $"https://www.openstreetmap.org/api/0.6/map?bbox={Left},{Bottom},{Right},{Top}";
+            }
+        } // End Property Url 
+
+
+        // https://wiki.openstreetmap.org/wiki/API_v0.6#Retrieving_map_data_by_bounding_box:_GET_.2Fapi.2F0.6.2Fmap
+        // https://stackoverflow.com/questions/1689096/calculating-bounding-box-a-certain-distance-away-from-a-lat-long-coordinate-in-j
+        public static GeoBoundingBox FromDistance(decimal lat, decimal lon, decimal distanceInMeters)
+        {
+
+            double ToRadians(decimal val)
+            {
+                return (double)(val / 180.0M * (decimal)System.Math.PI);
+            }
+
+            decimal ToDegrees(decimal val)
+            {
+                return val / (decimal)System.Math.PI * 180.0M;
+            }
+
+            // https://en.wikipedia.org/wiki/Earth_radius
+            // For Earth, the mean radius is 6,371.0088 km
+            decimal R = 6371.0088M;  // earth radius in km
+            decimal radius = distanceInMeters * 0.001M; // km
+
+            decimal lon1 = lon - ToDegrees(radius / R / (decimal)System.Math.Cos(ToRadians(lat)));
+            decimal lon2 = lon + ToDegrees(radius / R / (decimal)System.Math.Cos(ToRadians(lat)));
+
+            decimal lat1 = lat + ToDegrees(radius / R);
+            decimal lat2 = lat - ToDegrees(radius / R);
+
+            return new GeoBoundingBox(lat1, lon1, lat2, lon2);
+        } // End Function FromDistance 
+
+
+    } // End Class GeoBoundingBox 
 
 
 } // End Namespace BlueMine.OSM.Polygon 
