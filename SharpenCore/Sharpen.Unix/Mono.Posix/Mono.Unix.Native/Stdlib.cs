@@ -367,9 +367,9 @@ namespace Mono.Unix.Native {
 	//
 	public class Stdlib
 	{
-		// internal const string LIBC = "msvcrt";
-		internal const string LIBC = "c";
-		internal const string MPH  = "MonoPosixHelper";
+        // internal const string LIBC = "msvcrt";
+        internal const string LIBC = "c";
+        internal const string MPH  = "MonoPosixHelper";
 
 		internal Stdlib () {}
 
