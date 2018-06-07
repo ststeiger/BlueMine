@@ -114,7 +114,15 @@ namespace BlueMine
             }
 
             app.UseMvc();
-
+            
+            app.UseDefaultFiles( new DefaultFilesOptions()
+            {
+                DefaultFileNames   = new List<string>()
+                {
+                    "index.htm", "index.html", "slick.htm"
+                }
+            });
+            
             app.UseStaticFiles();
             
             /*
