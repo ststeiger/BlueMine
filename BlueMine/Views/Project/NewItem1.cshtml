@@ -23,6 +23,14 @@
     <title>New Item</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00"/>
 
+
+
+    <!--
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/css/responsive.css")">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/css/application.css")">
+    -->
+
+
     <!--
     <link rel="stylesheet" type="text/css" href="ruler.min.css">
 
@@ -30,7 +38,9 @@
     -->
 
     <style type="text/css">
-        html, body {
+
+        html, body 
+        {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -60,60 +70,63 @@
 
 
     <p id="issue_is_private_wrap">
-        <input type="checkbox" asp-for="Issue.is_private" name="issue[is_private]" id="issue_is_private">
-        <label class="inline" for="issue_is_private" id="issue_is_private_label">Privat</label>
+        <input id="issue_is_private" name="issue[is_private]" type="checkbox" asp-for="Issue.is_private" >
+        <label id="issue_is_private_label" class="inline" for="issue_is_private" >Privat</label>
     </p>
 
 
     <input type="text" asp-for="Issue.id" />
 
     <label for="issue_tracker_id">Tracker<span class="required"> *</span></label>
-    <select id="issue_tracker_id" asp-for="Issue.tracker_id" asp-items="Model.Trackers" name="issue[tracker_id]" onchange="console.log('used to updateIssueFrom')">
+    <select id="issue_tracker_id" name="issue[tracker_id]" asp-for="Issue.tracker_id" asp-items="Model.Trackers" 
+            onchange="console.log('used to updateIssueFrom')">
         <option>--- Please select ---</option>
     </select>
 
 
     <label for="issue_subject">Thema<span class="required"> *</span></label>
-    <input asp-for="Issue.subject" size="80" maxlength="255" id="issue_subject" name="issue[subject]" type="text" />
+    <input id="issue_subject" name="issue[subject]" asp-for="Issue.subject" size="80" maxlength="255" type="text" />
 
     <label for="issue_description">Beschreibung</label>
-<textarea asp-for="Issue.description" id="issue_description" name="issue[description]" cols="60" rows="10" accesskey="e" class="wiki-edit"></textarea>
+    <textarea id="issue_description" name="issue[description]" asp-for="Issue.description" 
+              cols="60" rows="10" accesskey="e" class="wiki-edit"></textarea>
 
     <label for="issue_status_id">Status<span class="required"> *</span></label>
-    <select id="issue_status_id" asp-for="Issue.status_id"
-            asp-items="Model.Stati" name="issue[status_id]" onchange="console.log('used to updateIssueFrom')">
+    <select id="issue_status_id" name="issue[status_id]" asp-for="Issue.status_id" asp-items="Model.Stati" 
+            onchange="console.log('used to updateIssueFrom')">
         <option>--- Please select ---</option>
     </select>
 
     <label for="issue_priority_id">Priorität<span class="required"> *</span></label>
-    <select id="issue_priority_id"
+    <select id="issue_priority_id" name="issue[priority_id]" 
             asp-for="Issue.priority_id"
-            asp-items="Model.Priorities" name="issue[priority_id]"></select>
+            asp-items="Model.Priorities" ></select>
 
 
     <label for="issue_assigned_to_id">Zugewiesen an</label>
-    <select id="issue_assigned_to_id"
+    <select id="issue_assigned_to_id" name="issue[assigned_to_id]" 
             asp-for="Issue.assigned_to_id"
-            asp-items="Model.AssignedTo" name="issue[assigned_to_id]">
+            asp-items="Model.AssignedTo" >
         <option value="">&nbsp;</option>
         <option value="5">&lt;&lt; ich &gt;&gt;</option>
     </select>
 
 
     <label for="issue_parent_issue_id">Übergeordnete Aufgabe</label>
-    <input asp-for="Issue.parent_id" id="issue_parent_issue_id" name="issue[parent_issue_id]" size="10" type="text" class="ui-autocomplete-input autocomplete" autocomplete="off">
+    <input id="issue_parent_issue_id" name="issue[parent_issue_id]" asp-for="Issue.parent_id" 
+           size="10" type="text" class="ui-autocomplete-input autocomplete" autocomplete="off">
 
     <label for="issue_start_date">Beginn</label>
-    <input asp-for="Issue.start_date" size="10" type="text" name="issue[start_date]" id="issue_start_date" class="date hasDatepicker">
+    <input id="issue_start_date" name="issue[start_date]" asp-for="Issue.start_date" size="10" type="text" class="date hasDatepicker">
 
     <label for="issue_due_date">Abgabedatum</label>
-    <input asp-for="Issue.due_date" size="10" type="text" name="issue[due_date]" id="issue_due_date" class="date hasDatepicker">
+    <input id="issue_due_date" name="issue[due_date]" asp-for="Issue.due_date" size="10" type="text" class="date hasDatepicker">
 
     <label for="issue_estimated_hours">Geschätzter Aufwand</label>
-    <input asp-for="Issue.estimated_hours" size="3" type="text" name="issue[estimated_hours]" id="issue_estimated_hours">
+    <input id="issue_estimated_hours" name="issue[estimated_hours]" asp-for="Issue.estimated_hours" size="3" type="text" >
 
     <label for="issue_done_ratio">% erledigt</label>
-    <select id="issue_done_ratio" asp-for="Issue.done_ratio" asp-items="Model.PercentComplete" name="issue[done_ratio]"></select>
+    <select id="issue_done_ratio" name="issue[done_ratio]" asp-for="Issue.done_ratio" asp-items="Model.PercentComplete" ></select>
 
     <p>
         <label for="issue_custom_field_values_3">
@@ -132,15 +145,15 @@
     <label for="issue_custom_field_values_1">
         <span>gemeldet von</span>
     </label>
-    <input type="text" asp-for="CustomValues[1].value" id="issue_custom_field_values_1" name="issue[custom_field_values][1]" class="string_cf">
+    <input id="issue_custom_field_values_1" name="issue[custom_field_values][1]" type="text" asp-for="CustomValues[1].value" class="string_cf">
 
     <label for="issue_custom_field_values_2">
         <span title="Kundenname oder Intern" class="field-description">Kundenname</span> <span class="required">*</span>
     </label>
-    <select name="issue[custom_field_values][2]"
+    <select id="issue_custom_field_values_2" name="issue[custom_field_values][2]"
             asp-items="Model.CustomFields[2]"
             asp-for="CustomValues[2].value"
-            id="issue_custom_field_values_2" class="list_cf">
+            class="list_cf">
         <option value="">--- Bitte auswählen ---</option>
     </select>
 
@@ -150,10 +163,10 @@
                 Kunden informieren
             </span>
         </label>
-        <select name="issue[custom_field_values][5]"
+        <select id="issue_custom_field_values_5" name="issue[custom_field_values][5]"
                 asp-items="Model.CustomFields[5]"
                 asp-for="CustomValues[5].value"
-                id="issue_custom_field_values_5" class="list_cf">
+                class="list_cf">
             <!--
             <option value="">&nbsp;</option>
             <option selected="selected" value="--- Bitte auswählen ---">--- Bitte auswählen ---</option>

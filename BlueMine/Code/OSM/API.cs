@@ -55,6 +55,29 @@ namespace OSM.API.v0_6
             // https://www.openstreetmap.org/api/0.6/way/73685445
             OSM.API.v0_6.XML.OsmWayXml osm = OSM.API.v0_6.XML.OsmWayXml.FromUrl($"https://www.openstreetmap.org/api/0.6/way/{wayId}");
 
+            foreach (GeoPoint geopoint in GetPointList(wayId))
+            {
+                sb.Append(geopoint.Latitude);
+                sb.Append(", ");
+                sb.Append(geopoint.Longitude);
+                sb.AppendLine();
+            } // Next geopoint 
+
+            polygonPoints = sb.ToString();
+            sb.Clear();
+            sb = null;
+
+            return polygonPoints;
+        } // End Function GetPoints 
+
+
+        public static System.Collections.Generic.List<GeoPoint> GetPointList(string wayId)
+        {
+            System.Collections.Generic.List<GeoPoint> ls = new System.Collections.Generic.List<GeoPoint>();
+
+            // https://www.openstreetmap.org/api/0.6/way/73685445
+            OSM.API.v0_6.XML.OsmWayXml osm = OSM.API.v0_6.XML.OsmWayXml.FromUrl($"https://www.openstreetmap.org/api/0.6/way/{wayId}");
+
             foreach (OSM.API.v0_6.XML.Nd node in osm.Way.Nd)
             {
                 string @ref = node.Ref;
@@ -65,18 +88,63 @@ namespace OSM.API.v0_6
                 decimal lat = nodeOSM.Node.Lat;
                 decimal lon = nodeOSM.Node.Lon;
 
-                sb.Append(lat);
-                sb.Append(", ");
-                sb.Append(lon);
-                sb.AppendLine();
+                ls.Add(new GeoPoint(lat, lon));
             } // Next node 
 
-            polygonPoints = sb.ToString();
+            return ls;
+        } // End Function GetPointList 
+
+
+        // string sql_insert = OSM.API.v0_6.Polygon.GetPointsInsert("66824085", "42A88938-AF0A-401A-8645-C16911B07CD1"); 
+        // System.Console.WriteLine(sql_insert);
+        public static string GetPointsInsert(string wayId, string gb_uid)
+        {
+            string insert = null;
+            gb_uid = gb_uid.Replace("'", "''");
+
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine(@"DELETE FROM T_ZO_Objekt_Wgs84Polygon WHERE ZO_OBJ_WGS84_GB_UID = '"+ gb_uid + "'; ");
+            sb.AppendLine();
+            sb.AppendLine();
+
+
+            System.Collections.Generic.List<GeoPoint> ls = new System.Collections.Generic.List<GeoPoint>();
+            ls.Add(new GeoPoint(47.3965285M, 8.5977877M));
+            ls.Add(new GeoPoint(57.3965285M, 18.5977877M));
+            ls.Add(new GeoPoint(67.3965285M, 28.5977877M));
+
+            foreach (GeoPoint geopoint in ls) // GetPointList(wayId))
+            {
+                sb.AppendLine(@"INSERT INTO T_ZO_Objekt_Wgs84Polygon 
+( 
+     ZO_OBJ_WGS84_UID, ZO_OBJ_WGS84_GB_UID, ZO_OBJ_WGS84_SO_UID 
+    ,ZO_OBJ_WGS84_Sort ,ZO_OBJ_WGS84_GM_Lat, ZO_OBJ_WGS84_GM_Lng 
+) 
+VALUES 
+( ");
+
+                sb.Append("      '");
+                sb.Append(System.Guid.NewGuid().ToString());
+                sb.Append("', '");
+                sb.Append(gb_uid);
+                sb.AppendLine("', NULL, 1 ");
+                sb.Append("    , CAST(");
+                sb.Append(geopoint.Latitude);
+                sb.Append(@" AS decimal(23,20) ), ");
+                sb.Append("CAST(");
+                sb.Append(geopoint.Latitude);
+                sb.AppendLine(@" AS decimal(23,20) ) ");
+                sb.AppendLine("); ");
+                sb.AppendLine(System.Environment.NewLine);
+            } // Next geopoint 
+
+            insert = sb.ToString();
             sb.Clear();
             sb = null;
 
-            return polygonPoints;
-        } // End Sub Test 
+            return insert;
+        } // End Function GetPointsInsert 
 
 
     } // End Class Polygon 

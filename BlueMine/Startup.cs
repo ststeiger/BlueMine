@@ -48,6 +48,7 @@ namespace BlueMine
             services
                 .AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor,
                     Microsoft.AspNetCore.Http.HttpContextAccessor>();
+
             services
                 .AddSingleton<Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor,
                     Microsoft.AspNetCore.Mvc.Infrastructure.ActionContextAccessor>();
