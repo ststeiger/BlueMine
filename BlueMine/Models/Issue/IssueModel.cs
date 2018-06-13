@@ -1,6 +1,4 @@
 ﻿
-using System;
-using System.Linq;
 using BlueMine.Db;
 
 // using Microsoft.AspNetCore.Mvc.Rendering;
