@@ -16,21 +16,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.00, minimum-scale=1.00, maximum-scale=1.00" />
 
     <style type="text/css">
-        *
-        {
+        * {
             cursor: default !important;
         }
 
-        html, body
-        {
+        html, body {
             margin: 0px;
             padding: 0px;
             width: 100%;
             height: 100%;
         }
 
-        #swissMap
-        {
+        #swissMap {
             position: absolute;
             top: 55px;
             left: 0px;
@@ -39,8 +36,7 @@
         }
 
 
-        #zoom-level
-        {
+        #zoom-level {
             display: none;
             position: absolute;
             margin: 0px;
@@ -54,13 +50,11 @@
         }
 
 
-        .leaflet-tooltip-top
-        {
+        .leaflet-tooltip-top {
             margin-top: -19px !important;
         }
 
-        .leaflet-control-attribution
-        {
+        .leaflet-control-attribution {
             display: none;
             #transform: scale(0.9, 0.9) translate(5%, 10%);
             transform: scale(0.5, 0.5) translate(50%, 50%);
@@ -69,21 +63,18 @@
             bottom: 0px;
         }
 
-        .leaflet-interactive
-        {
+        .leaflet-interactive {
             cursor: pointer !important;
         }
 
-        .leg
-        {
+        .leg {
             width: 0.5cm;
             height: 0.5cm;
             opacity: 1;
             border: 1px solid #E0E0E0;
         }
 
-        .legende
-        {
+        .legende {
             position: absolute;
             display: block;
             top: 85px;
@@ -96,14 +87,12 @@
             border-radius: 3mm;
         }
 
-        .cont
-        {
+        .cont {
             padding-left: 0.25cm;
             font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
         }
 
-        .zoomControl
-        {
+        .zoomControl {
             position: absolute;
             display: block;
             top: 85px;
@@ -121,8 +110,7 @@
             user-select: none;
         }
 
-            .zoomControl .mp
-            {
+            .zoomControl .mp {
                 display: table-cell;
                 width: 1cm;
                 height: 1cm;
@@ -134,8 +122,7 @@
                 color: gray;
             }
 
-                .zoomControl .mp:hover
-                {
+                .zoomControl .mp:hover {
                     background-color: #F0F0F0;
                 }
     </style>
@@ -147,11 +134,10 @@
         -->
     <link href="../images/leaflet.css" rel="stylesheet" type="text/css" />
 
-    <!-- -->
-    <script type="text/javascript" src="Script.ashx?Single=Scripts/Portal.Globals.js" charset="utf-8"></script>
-    
-    <script type="text/javascript" src="Script.ashx?Single=Scripts/leaflet.EasyAjax.js" charset="utf-8"></script>
-    <script type="text/javascript" src="Script.ashx?Single=Scripts/leaflet.leaflet.js" charset="utf-8"></script>
+
+    <script type="text/javascript" src="Script.ashx?Single=Portal.Globals.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Script.ashx?Single=leaflet.EasyAjax.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Script.ashx?Single=leaflet.leaflet.js" charset="utf-8"></script>
 
 </head>
 <body>
@@ -164,7 +150,7 @@
         <div class="mp" style="border-bottom-left-radius: 5mm; border-bottom-right-radius: 5mm;" onclick="map.zoomOut()">-</div><div style="clear: both;"></div>
     </div>
 
-        <div class="legende">
+    <div class="legende">
         <table id="gk_legend">
             <tr>
                 <td class="leg" style="background-color: #FF0000;"></td>
@@ -202,7 +188,7 @@
 
         var debug_ipad = false;
         if (debug_ipad)
-        { 
+        {
             window.onerror = function (messageOrEvent, source, lineno, colno, error)
             {
                 alert(messageOrEvent);
@@ -242,7 +228,6 @@
         }
 
 
-
         function spreadMessage(object)
         {
             var inFrame = (function ()
@@ -260,11 +245,80 @@
             if (inFrame)
                 Portal.Global.spreadMessage(object);
             else
-            { 
+            {
                 //window.postMessage(JSON.stringify({ "msg": "Hello world" }), '*');
                 window.postMessage(JSON.stringify(object), '*');
             }
         }
+
+
+        function testNaviSO()
+        {
+            var msg =
+                {
+                    "Action": "VWS.Tree.onAfterSelectionChange"
+                    , "Param": {
+                        "Action": ""
+                        , "Data": {
+                            "Type": "SO"
+                            , "Value": "c38860a1-1c61-4590-9410-9fa1ab8586b1"
+                            , "Text": "0006 Althardstrasse"
+                            , "Parent": "31bfa452-e97d-475a-ac65-cf4d885fcd5c"
+                            , "ApertureObjID": "0000000002GQ0000C2"
+                            , "_hasPRT": 1
+                            , "_hasInsert": 1
+                            , "_hasDelete": 1
+                        }
+                    }
+                };
+
+            spreadMessage(msg);
+        }
+
+
+        function testNaviGB()
+        {
+            var msg =
+                {
+                    "Action": "VWS.Tree.onAfterSelectionChange",
+                    "Param": {
+                        "Action": "",
+                        "Data": {
+                            "Type": "GB",
+                            "Value": "e79223ff-02a8-4a7a-b148-e1fbafa8d934",
+                            "Text": "GB01 Althardstrasse 10",
+                            "Background": "#00FF00",
+                            "Parent": "c38860a1-1c61-4590-9410-9fa1ab8586b1",
+                            "ApertureObjID": "0000000002GQ0000FQ",
+                            "_hasPRT": 1,
+                            "_hasInsert": 1,
+                            "_hasDelete": 1
+                        }
+                    }
+                }
+                ;
+
+            spreadMessage(msg);
+        }
+
+
+        function testFilterChange()
+        {
+            var msg =
+                {
+                    "Action": "VWS.Tree.onAfterFilterChange",
+                    "Param": {
+                        "Datum": "",
+                        "LD": "",
+                        "RG": "",
+                        "ORT": ""
+                    }
+                }
+                ;
+
+            spreadMessage(msg);
+        }
+
 
 
         function navigateTo(uuid)
@@ -278,8 +332,8 @@
                 }
             );
         }
-        
-        
+
+
         // https://gis.stackexchange.com/a/816/3997
         // https://jsfiddle.net/xwaocc00/
         function polygonArea(poly2)
@@ -381,8 +435,10 @@
         {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
         }
-        
-        
+
+
+
+
         function loadMarkers()
         {
             var markerUrl = "../ajax/AnySelect.ashx?sql=Maps.Marker_GB.sql&BE_ID={@BE_Hash}";
@@ -548,7 +604,7 @@
                             {
                                 // console.clear();
                                 // console.log("navto: ", uuid)
-                                ingoreThisNavigation = true;
+                                ignoreThisNavigation = true;
                                 navigateTo(uuid);
                             }
 
@@ -633,30 +689,17 @@
         } // End Function bracketDevicePixelRatio
 
 
-        var ingoreThisNavigation = false;
+        var ignoreThisNavigation = false;
 
-        function onBaumClick(a)
+        // target: typ (ld, ort, so, gb)
+        function onBaumClick(uid, typ)
         {
-			//document.location.href = 'map.htm';
+            typ = (typ || "").toLowerCase();
 
-            //console.log("onBaumClick");
-            var uid = a.parentElement.id.substr(1);
-            var classes = " " + a.parentElement.className.toLowerCase() + " ";
-            var target = "";
-
-            if (classes.indexOf(" ld ") != -1) target = "ld";
-            if (classes.indexOf(" ort ") != -1) target = "ort";
-            if (classes.indexOf(" so ") != -1) target = "so";
-            if (classes.indexOf(" gb ") != -1) target = "gb";
-
-            // console.log(classes);
-            // console.log(target);
-            // console.log(uid);
-
-            if (ingoreThisNavigation)
+            if (ignoreThisNavigation)
             {
-                if (target == "so")
-                    ingoreThisNavigation = false;
+                if (typ == "so")
+                    ignoreThisNavigation = false;
 
                 return;
             }
@@ -718,7 +761,7 @@
             } // End Function ZoomIn
 
 
-            switch (target)
+            switch (typ)
             {
                 case "ld":
                 case "ort":
@@ -736,9 +779,9 @@
                     break;
                 default:
                     console.log("Objekt nicht definiert.");
-            } // End Switch 
+            } // End Switch
 
-        } // End Function onBaumClick 
+        } // End Function onBaumClick
 
 
         // https://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically
@@ -806,7 +849,7 @@
             {
                 return ' data-position="' + latlng.lat + ' ' + latlng.lng + '" ';
             }
-            
+
 
             // alert(e.latlng);
             var contextMenu = '';
@@ -942,10 +985,10 @@
         function deleteWerbetafel(uuid)
         {
             // console.log("delete Werbetafel " + uuid);
-            
+
             var url = "../ajax/Data.ashx?sql=Maps.DeleteWerbetafel.sql&BE_ID={@BE_Hash}&obj_uid=" + uuid;
             url = SetDefaultVariables(url);
-            
+
             new Http.Json(url, null)
                 .success(
                 function (result)
@@ -1051,7 +1094,7 @@
                 // Attach the mutation observer to blocker, and only when attribute values change
                 observer.observe(blocker, { attributes: true });
             }
-            catch (crapPad){ }
+            catch (crapPad) { }
         }
 
 
@@ -1105,23 +1148,6 @@
             // Add a km/miles scale
             L.control.scale({ metric: true, imperial: false, maxWidth: 150 }).addTo(map);
 
-            
-            
-            // var x: object[] 
-            
-            var vals = [
-                ["Row 1 val1", "Row 1 val2", "Row 1 val3"],
-                ["Row 2 val1", "Row 2 val2", "Row 2 val3"],
-                ["Row 3 val1", "Row 3 val2", "Row 3 val3"]
-            ];
-            
-            var x = [
-                {"col1": "Row 1 val1", "col2": "Row 1 val2", "colN": "Row 1 valN" },
-                {"col1": "Row 2 val1", "Row 2 col2": "val2", "colN": "Row 2 valN" },
-                {"col1": "Row 3 val1", "col2": "Row 3 val2", "colN": "Row 3 valN" }
-            ];
-            
-            
 
 
             // Update the zoom level label
@@ -1174,7 +1200,7 @@
             map.on("contextmenu", function (e)
             {
                 // console.log("map contextmenu", e)
-                
+
                 function addPosition(latlng)
                 {
                     return ' data-position="' + latlng.lat + ' ' + latlng.lng + '" ';
@@ -1206,7 +1232,7 @@
             //{
             //    console.log("doubleClicked");
             //});
-            
+
 
             /*
             // Add current location to URL hash
@@ -1254,12 +1280,12 @@
                     // var index_sort = table.columns["OBJ_Sort"].index;
 
 
-                    // Empty legends 
+                    // Empty legends
                     var gk_legend = document.getElementById("gk_legend");
                     while (gk_legend.hasChildNodes())
                     {
                         gk_legend.removeChild(gk_legend.lastChild);
-                    } // Whend 
+                    } // Whend
 
                     function addRow(color, text)
                     {
@@ -1276,7 +1302,7 @@
                         tr.appendChild(tdText);
 
                         return tr;
-                    } // End Function addRow 
+                    } // End Function addRow
 
 
                     for (var i = 0; i < table.rows.length; ++i)
@@ -1293,33 +1319,35 @@
 
                 }).send();
         }
-        
+
         loadLegend();
-        
-        
+
+
+
+
         function loadApertureColors()
         {
             var url = "../ajax/AnySelect.ashx?sql=Maps.ApertureColors.sql&BE_ID={@BE_Hash}";
             url = SetDefaultVariables(url);
-            
-            
+
+
             new Http.Json(url, null)
                 .success(
                 function (result)
                 {
                     // console.log("onSuccess");
-                    
+
                     var table = result.tables[0];
                     var index_uid = table.columns["COL_Aperture"].index;
                     var index_color = table.columns["COL_Hex"].index;
-                    
-                    // Empty legends 
+
+                    // Empty legends
                     var gk_legend = document.getElementById("gk_legend");
                     while (gk_legend.hasChildNodes())
                     {
                         gk_legend.removeChild(gk_legend.lastChild);
                     } // Whend
-                    
+
                     function addRow(color, text)
                     {
                         var tr = document.createElement("tr");
@@ -1328,14 +1356,15 @@
                         tdSquare.className = "leg";
                         tdSquare.style["background-color"] = color;
                         tdText.className = "cont";
-                        
+
                         tdText.appendChild(document.createTextNode(text));
                         tr.appendChild(tdSquare);
                         tr.appendChild(tdText);
-                        
+
                         return tr;
-                    } // End Function addRow 
-                    
+                    } // End Function addRow
+
+
                     for (var i = 0; i < table.rows.length; ++i)
                     {
                         var uid = table.rows[i][index_uid];
@@ -1344,13 +1373,13 @@
 
                         gk_legend.appendChild(addRow(color, uid));
                     }
-                    
+
                 }).send();
         }
-        
+
         // loadApertureColors();
-        
-        
+
+
         function receiveMessage(event)
         {
             console.log("receiveMessage");
@@ -1360,7 +1389,7 @@
                 return;
             }
 
-            
+
 
             var message;
 
@@ -1395,17 +1424,20 @@
             switch (tAction)
             {
                 case 'vws.tree.onafterselectionchange':
-                    console.log(tData.Param.Data.Type)
-                    console.log(tData.Param.Data.Value)
-                    console.log(tData.Param.Data.Text)
-                    console.log(tData.Param.Data.Parent)
-                    console.log(tData.Param.Data.ApertureObjID)
-                    console.log(tData.Param.Data._hasPRT);
-                    console.log(tData.Param.Data._hasInsert);
-                    console.log(tData.Param.Data._hasDelete);
-                    break;
+                    //console.log("type", tData.Param.Data.Type)
+                    //console.log("value", tData.Param.Data.Value)
+                    //console.log("text", tData.Param.Data.Text)
+                    //console.log("parent", tData.Param.Data.Parent)
+                    //console.log("ap", tData.Param.Data.ApertureObjID)
+                    //console.log("_hasPRT", tData.Param.Data._hasPRT);
+                    //console.log("_hasInsert", tData.Param.Data._hasInsert);
+                    //console.log("_hasDelete", tData.Param.Data._hasDelete);
 
+                    // target: typ (ld, ort, so, gb)
+                    onBaumClick(tData.Param.Data.Value, tData.Param.Data.Type);
+                    break;
                 case 'vws.tree.navigateto':
+                    // This is the event I need to CALL !
                     /*
                     VWS.Tree.navigateTo(
                         tData.Param.navigateTo,
@@ -1415,13 +1447,21 @@
                     break
                 default:
                     console.log("unhandled event", event);
+                    var tData = (typeof event.data === 'string') ? JSON.parse(event.data) : event.data
+                    console.log(JSON.stringify(tData, null, 2));
                     break;
             }
 
             // event.source.postMessage("thanks, got it ;)", event.origin);
         } // End Function ReceiveMessage
-        
-        
+
+
+        if (window.removeEventListener)
+            window.removeEventListener("message", receiveMessage, false);
+        else
+            window.detachEvent("onmessage", receiveMessage);
+
+
         if (!window['postMessage'])
             alert("oh crap");
         else
@@ -1440,7 +1480,7 @@
                 window.attachEvent("onmessage", receiveMessage);
             }
         }
-        
+
     </script>
 
 </body>

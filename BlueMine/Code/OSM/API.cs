@@ -109,12 +109,14 @@ namespace OSM.API.v0_6
             sb.AppendLine();
 
 
-            System.Collections.Generic.List<GeoPoint> ls = new System.Collections.Generic.List<GeoPoint>();
-            ls.Add(new GeoPoint(47.3965285M, 8.5977877M));
-            ls.Add(new GeoPoint(57.3965285M, 18.5977877M));
-            ls.Add(new GeoPoint(67.3965285M, 28.5977877M));
+            // System.Collections.Generic.List<GeoPoint> ls = new System.Collections.Generic.List<GeoPoint>();
+            // ls.Add(new GeoPoint(47.3965285M, 8.5977877M));
+            // ls.Add(new GeoPoint(57.3965285M, 18.5977877M));
+            // ls.Add(new GeoPoint(67.3965285M, 28.5977877M));
 
-            foreach (GeoPoint geopoint in ls) // GetPointList(wayId))
+            // foreach (GeoPoint geopoint in ls)
+            int i = 0;
+            foreach (GeoPoint geopoint in GetPointList(wayId))
             {
                 sb.AppendLine(@"INSERT INTO T_ZO_Objekt_Wgs84Polygon 
 ( 
@@ -128,15 +130,18 @@ VALUES
                 sb.Append(System.Guid.NewGuid().ToString());
                 sb.Append("', '");
                 sb.Append(gb_uid);
-                sb.AppendLine("', NULL, 1 ");
+                sb.Append("', NULL, ");
+                sb.Append(i);
+                sb.AppendLine(" ");
                 sb.Append("    , CAST(");
                 sb.Append(geopoint.Latitude);
                 sb.Append(@" AS decimal(23,20) ), ");
                 sb.Append("CAST(");
-                sb.Append(geopoint.Latitude);
+                sb.Append(geopoint.Longitude);
                 sb.AppendLine(@" AS decimal(23,20) ) ");
                 sb.AppendLine("); ");
                 sb.AppendLine(System.Environment.NewLine);
+                i++;
             } // Next geopoint 
 
             insert = sb.ToString();
