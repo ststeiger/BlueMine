@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -113,7 +114,68 @@ namespace BlueMine
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            // https://stackoverflow.com/questions/47997120/difference-between-map-and-mapwhen-branch-in-asp-net-core-middleware
+            app.Map("/script.ashx", (appBuilder) =>
+            {
+                appBuilder.Run(async (context) =>
+                {
+                    context.Response.StatusCode = 200;
+                    context.Response.Headers["Content-Type"] = "application/javascript; charset=utf-8";
+                    string a = context.Request.Query["Single"];
+                    a = System.IO.Path.Combine(env.WebRootPath, a);
+                    
+                    string text = "";
+                    if(System.IO.File.Exists(a))
+                        text = System.IO.File.ReadAllText(a, System.Text.Encoding.UTF8);
+                    await context.Response.WriteAsync(text);
+                });
+            });
+            
+            
+            /*
+            // https://stackoverflow.com/questions/47997120/difference-between-map-and-mapwhen-branch-in-asp-net-core-middleware
+            app.Map("SomePathMatch", (appBuilder) =>
+                {
+                    appBuilder.Run(async (context) => {
 
+                        await context.Response.WriteAsync("");
+                    });
+                });
+            // is equivalent to the following MapWhen call:
+
+            app.MapWhen(context => context.Request.Path.StartsWithSegments("SomePathMatch"), (appBuilder) =>
+            {
+                appBuilder.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("");
+                });
+            });
+            */
+            
+            /*
+            app.MapWhen(context =>
+            {
+                var path = context.Request.Path.Value;
+                return path.StartsWith("/assets", StringComparison.OrdinalIgnoreCase) ||
+                       path.StartsWith("/lib", StringComparison.OrdinalIgnoreCase) ||
+                       path.StartsWith("/app", StringComparison.OrdinalIgnoreCase);
+            }, config => config.UseStaticFiles());
+            */
+            
+            
+            /*
+            app.MapWhen(context => context.Request.Query.ContainsKey(""), (appBuilder) =>
+            {
+                appBuilder.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("hello world");
+                });
+                
+            });
+            */
+            
+            
             app.UseMvc();
             
             app.UseDefaultFiles( new DefaultFilesOptions()

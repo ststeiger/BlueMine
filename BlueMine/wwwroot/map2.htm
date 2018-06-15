@@ -148,10 +148,10 @@
     <link href="../images/leaflet.css" rel="stylesheet" type="text/css" />
 
     <!-- -->
-    <script type="text/javascript" src="Script.ashx?Single=Portal.Globals.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Script.ashx?Single=Scripts/Portal.Globals.js" charset="utf-8"></script>
     
-    <script type="text/javascript" src="Script.ashx?Single=leaflet.EasyAjax.js" charset="utf-8"></script>
-    <script type="text/javascript" src="Script.ashx?Single=leaflet.leaflet.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Script.ashx?Single=Scripts/leaflet.EasyAjax.js" charset="utf-8"></script>
+    <script type="text/javascript" src="Script.ashx?Single=Scripts/leaflet.leaflet.js" charset="utf-8"></script>
 
 </head>
 <body>
@@ -278,8 +278,8 @@
                 }
             );
         }
-
-
+        
+        
         // https://gis.stackexchange.com/a/816/3997
         // https://jsfiddle.net/xwaocc00/
         function polygonArea(poly2)
@@ -381,10 +381,8 @@
         {
             return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
         }
-
-
-
-
+        
+        
         function loadMarkers()
         {
             var markerUrl = "../ajax/AnySelect.ashx?sql=Maps.Marker_GB.sql&BE_ID={@BE_Hash}";
@@ -1107,6 +1105,23 @@
             // Add a km/miles scale
             L.control.scale({ metric: true, imperial: false, maxWidth: 150 }).addTo(map);
 
+            
+            
+            // var x: object[] 
+            
+            var vals = [
+                ["Row 1 val1", "Row 1 val2", "Row 1 val3"],
+                ["Row 2 val1", "Row 2 val2", "Row 2 val3"],
+                ["Row 3 val1", "Row 3 val2", "Row 3 val3"]
+            ];
+            
+            var x = [
+                {"col1": "Row 1 val1", "col2": "Row 1 val2", "colN": "Row 1 valN" },
+                {"col1": "Row 2 val1", "Row 2 col2": "val2", "colN": "Row 2 valN" },
+                {"col1": "Row 3 val1", "col2": "Row 3 val2", "colN": "Row 3 valN" }
+            ];
+            
+            
 
 
             // Update the zoom level label
@@ -1278,24 +1293,22 @@
 
                 }).send();
         }
-
+        
         loadLegend();
-
-
-
-
+        
+        
         function loadApertureColors()
         {
             var url = "../ajax/AnySelect.ashx?sql=Maps.ApertureColors.sql&BE_ID={@BE_Hash}";
             url = SetDefaultVariables(url);
-
-
+            
+            
             new Http.Json(url, null)
                 .success(
                 function (result)
                 {
                     // console.log("onSuccess");
-
+                    
                     var table = result.tables[0];
                     var index_uid = table.columns["COL_Aperture"].index;
                     var index_color = table.columns["COL_Hex"].index;
@@ -1305,8 +1318,8 @@
                     while (gk_legend.hasChildNodes())
                     {
                         gk_legend.removeChild(gk_legend.lastChild);
-                    } // Whend 
-
+                    } // Whend
+                    
                     function addRow(color, text)
                     {
                         var tr = document.createElement("tr");
@@ -1315,15 +1328,14 @@
                         tdSquare.className = "leg";
                         tdSquare.style["background-color"] = color;
                         tdText.className = "cont";
-
+                        
                         tdText.appendChild(document.createTextNode(text));
                         tr.appendChild(tdSquare);
                         tr.appendChild(tdText);
-
+                        
                         return tr;
                     } // End Function addRow 
-
-
+                    
                     for (var i = 0; i < table.rows.length; ++i)
                     {
                         var uid = table.rows[i][index_uid];
@@ -1332,12 +1344,12 @@
 
                         gk_legend.appendChild(addRow(color, uid));
                     }
-
+                    
                 }).send();
         }
-
+        
         // loadApertureColors();
-
+        
         
         function receiveMessage(event)
         {
@@ -1408,8 +1420,8 @@
 
             // event.source.postMessage("thanks, got it ;)", event.origin);
         } // End Function ReceiveMessage
-
-
+        
+        
         if (!window['postMessage'])
             alert("oh crap");
         else
