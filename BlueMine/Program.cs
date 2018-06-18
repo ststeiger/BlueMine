@@ -118,7 +118,7 @@ namespace BlueMine
 
         public static void Main(string[] args)
         {
-            GetInsertPoints();
+            // GetInsertPoints();
 
             // OSM.API.v0_6.Tests.TestBoundingBox();
             // OSM.API.v0_6.Tests.TestPolygonPoints();

@@ -122,12 +122,12 @@ namespace BlueMine
                 {
                     context.Response.StatusCode = 200;
                     context.Response.Headers["Content-Type"] = "application/javascript; charset=utf-8";
-                    string a = context.Request.Query["Single"];
-                    a = System.IO.Path.Combine(env.WebRootPath, a);
+                    string fileName = context.Request.Query["Single"];
+                    fileName = System.IO.Path.Combine(env.WebRootPath, "Scripts", fileName);
                     
                     string text = "";
-                    if(System.IO.File.Exists(a))
-                        text = System.IO.File.ReadAllText(a, System.Text.Encoding.UTF8);
+                    if(System.IO.File.Exists(fileName))
+                        text = System.IO.File.ReadAllText(fileName, System.Text.Encoding.UTF8);
                     await context.Response.WriteAsync(text);
                 });
             });
