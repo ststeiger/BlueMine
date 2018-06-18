@@ -650,7 +650,12 @@
                         {
                             var t = "{@basic}gebaeude.aspx?uid={@obj}&muid=@GB&env=ov&ro=false&proc={@BE_Hash}";
                             t = SetDefaultVariables(t);
-                            // navigateTo(uuid);
+
+                            //navigateTo(uuid);
+                            var ml = window.parent.document.querySelector('#frameDWGForm');
+                            if (ml) ml.src = t.replace("{@obj}", uuid);
+
+                            observeIframe();
                         }.bind(this, uid));
                         polygons[uid] = marker;
 
@@ -1073,6 +1078,9 @@
                             window.clearTimeout(timoutHandle);
                             timoutHandle = window.setTimeout(function ()
                             {
+                                observer.disconnect();
+                                window.top.Portal.Frameset.focusFrameByWindow(window);
+
                                 // console.log("form-frame again is invisible NOW.");
                                 onWerbetafelChange();
                             }, 400);
@@ -1104,8 +1112,6 @@
         function initMap()
         {
             // console.log("init");
-
-            observeIframe();
             var ml = window.parent.document.querySelector('#iMenuLeft');
 
             // Create a map
@@ -1140,9 +1146,9 @@
                     , scalex: scalex
                 }
             ).addTo(map);
+
             loadMarkers();
             loadWerbetafeln();
-
 
 
             // Add a km/miles scale
@@ -1239,16 +1245,16 @@
             // var hash = new L.Hash(map);
             var marker = L.marker([47.552096, 9.226189]).addTo(map);
             marker
-                .bindTooltip("COR Managementsysteme GmbH",
-                {
-                    permanent: true,
-                    direction: 'top'
-                    //direction: 'right'
-                }
-                )
-                .bindPopup("<b>COR Managementsysteme GmbH</b><br />Fabrikstrasse 1<br />8586 Erlen/TG<br />+41 (0)71 649 22 46")
-                // .openPopup()
-                ;
+            .bindTooltip("COR Managementsysteme GmbH",
+            {
+            permanent: true,
+            direction: 'top'
+            //direction: 'right'
+            }
+            )
+            .bindPopup("<b>COR Managementsysteme GmbH</b><br />Fabrikstrasse 1<br />8586 Erlen/TG<br />+41 (0)71 649 22 46")
+            // .openPopup()
+            ;
             */
         }
 
@@ -1424,6 +1430,7 @@
             switch (tAction)
             {
                 case 'vws.tree.onafterselectionchange':
+                    window.top.Portal.Frameset.focusFrameByWindow(window);
                     //console.log("type", tData.Param.Data.Type)
                     //console.log("value", tData.Param.Data.Value)
                     //console.log("text", tData.Param.Data.Text)
@@ -1440,8 +1447,8 @@
                     // This is the event I need to CALL !
                     /*
                     VWS.Tree.navigateTo(
-                        tData.Param.navigateTo,
-                        tData.Param.navigateToAction
+                    tData.Param.navigateTo,
+                    tData.Param.navigateToAction
                     );
                     */
                     break
