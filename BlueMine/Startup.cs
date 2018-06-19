@@ -87,8 +87,8 @@ namespace BlueMine
             );
             
         } // End Sub ConfigureServices 
-
-
+        
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             string virtualDirectory = "/Virt_DIR";
