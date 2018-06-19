@@ -1,213 +1,7 @@
 
 declare global
 {
-/*
-https://maps.wikimedia.org/?lang=de#7/36.333/37.018
 
-https://maps.wikimedia.org/?lang=fr#7/36.333/37.018
-
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=de
-
-
-L.tileLayer( style + '/{z}/{x}/{y}' + scalex + '.png' + query, layerSettings ).addTo( map );
-
-https://wiki.openstreetmap.org/wiki/Tile_servers
-
-
-
-
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=de
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=fr
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=it
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=en
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=es
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ar
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=zh
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ja
-
-Greek:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=el
-
-Swedish
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sv
-
-Danish
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=da
-
-Polish:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=pl
-
-
-Estonian:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=et
-
-Latvian:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=lv
-
-Lithuanian:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=lt
-
-
-Slovak
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sk
-
-Czech
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=cs
-
-Catalan
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ca
-
-Basque
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=eu
-
-Corsican
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=co
-
-Occitanian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=oc
-
-Sardinian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sc
-
-
-Kalaallisut; Greenlandic
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=kl
-
-Kurdish
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ku
-
-
-
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=be
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=uk
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ru
-Makedonian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=mk
-Serbian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sr
-Tatar
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=tt
-Ossetic:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=os
-Avaric:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=av
-Mongolian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=mn
-Tadjik
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=tg
-
-Farsi/Iranic
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=fa
-
-Pashto
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ps
-
-Wolof
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=wo
-
-Yorubian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=yo
-
-Armenian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=hy
-
-Georgian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ka
-
-
-Swahili
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sw
-
-
-
-Thai ? 
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ta
-
-
-Khmer
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=km
-
-Laotian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=lo
-
-Hindi
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=hi
-
-Gujarati
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=gu
-
-Tibetian:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=bo
-
-Telugu
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=te
-
-Nepali:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ne
-
-
-
-Hungarian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=hu
-
-Icelandic
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=is
-
-Latvian
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=lv
-
-Malayalam
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=ml
-
-
-Tagalog:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=tl
-
-Turkmen
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=tk
-
-Turkish
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=tr
-
-Uzbek
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=uz
-
-Vietnamese
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=vi
-
-
-Zulu
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=zu
-
-
-Swahili
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sw
-
-
-Xhosa
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=xh
-
-
-Yiddish
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=yi
-
-
-Albanese:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sq
-
-Slovenian:
-https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sl
-
-
-
-
-=IMPORTHTML("https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes","table",4)
-
-
-*/
-    
-    
-    
     interface ISettings
     {
         basicLink:string;
@@ -241,14 +35,29 @@ https://maps.wikimedia.org/osm-intl/7/82/51.png?lang=sl
         trunc:(x:number) => number;
         radians:(x:number) => number;
     }
-    
+
+    // declare var Proxy: any;
+
 }
 
 
 
+interface IProxyHandler
+{
+    get(obj, prop, receiver);
+}
 
 
-declare var Portal:IPortal;
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy
+declare class Proxy
+{
+    public property: string;
+    public method(): string;
+    public constructor(obj, handler_callback: IProxyHandler);
+}
+
+
+declare var Portal: any;
 
 
 export module maps
@@ -256,7 +65,287 @@ export module maps
     let map = null;
     let polygons = [];
     let markers = [];
-    
+
+
+    interface SomeTable
+    {
+        col1: string;
+        col2: number;
+        col3: Date;
+    }
+
+    export class table<T>
+    {
+        protected i: number;
+        protected accessor: Proxy;
+
+        public obj: T[];
+        //public columns: map<string, number>;
+        public columns: { [key: string]: number };
+
+        
+        public rows: T[];
+
+        //get bar(): boolean
+        //{
+        //    return null; // this._bar;
+        //}
+        //set bar(theBar: boolean)
+        //{
+        //    //this._bar = theBar;
+        //}
+
+        protected row(index:number): T
+        {
+            this.i = index;
+            return <T><any>this.accessor;
+        }
+
+
+        constructor(rows: any[][], columnNames:string[])
+        {
+            this.obj = <any>rows;
+            this.i = 0;
+            
+            // this.columns = columnNames;
+            this.columns = {}; // "associative array" or Object
+            for (let i = 0; i < columnNames.length; ++i)
+            {
+                this.columns[columnNames[i]] = i;
+            }
+
+
+            this.row = this.row.bind(this);
+
+            let handlerPropertyAccess: IProxyHandler = {
+                get: function (obj, prop, receiver)
+                {
+                    return this.obj[this.i][this.columns[prop]];
+                }
+            };
+            handlerPropertyAccess.get = handlerPropertyAccess.get.bind(this);
+            this.accessor = new Proxy(this.obj, handlerPropertyAccess);
+
+
+            let handlerIndex: IProxyHandler = {
+                get: function (obj, prop, receiver)
+                {
+                    return this.row(prop);
+                }
+            };
+            handlerIndex.get = handlerIndex.get.bind(this);
+            this.rows = <any>new Proxy(this.obj, handlerIndex);
+        }
+
+    }
+
+
+    export function testTable()
+    {
+        let columns = ["col1", "col2", "col3"];
+        let rows = [
+            ["row 1 col 1", "row 1 col 2", "row 1 col 3"]
+            , ["row 2 col 1", "row 2 col 2", "row 2 col 3"]
+            , ["row 3 col 1", "row 3 col 2", "row 3 col 3"]
+            , ["row 4 col 1", "row 4 col 2", "row 4 col 3"]
+            , ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+
+        let x = new table<SomeTable>(rows, columns);
+
+        console.log(x.rowz(0)("col1"));
+
+        console.log(x.rows[0].col1);
+        // console.log(x.row(1).col1);
+        // console.log(x.obj[0][0]);
+    }
+
+    export function proxy()
+    {
+        let columns = ["col1", "col2", "col3"];
+        let rows = [
+              ["row 1 col 1", "row 1 col 2", "row 1 col 3"]
+            , ["row 2 col 1", "row 2 col 2", "row 2 col 3"]
+            , ["row 3 col 1", "row 3 col 2", "row 3 col 3"]
+            , ["row 4 col 1", "row 4 col 2", "row 4 col 3"]
+            , ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+
+        let cols = {}; // "associative array" or Object
+
+        for (let i = 0; i < columns.length; ++i)
+        {
+            cols[columns[i]] = i;
+        }
+
+
+        let handler2 = {
+            get: function (obj, prop, receiver)
+            {
+                return obj[cols[prop]];
+            }
+        };
+
+        // https://www.sitepoint.com/es6-proxies/
+        let handler = {
+            get: function (obj, prop, receiver)
+            {
+                console.log("obj:", obj, "prop:", prop, "receiver :", receiver);
+                //return obj[prop];
+                //return obj[cols[prop]];
+                return new Proxy(obj[prop], handler2);
+            }
+
+            , set: function (obj, key, value)
+            {
+                console.log(obj, key, value);
+            }
+
+        };
+
+        let p = new Proxy(rows, handler);
+        // p[0].col1
+        // p[0].col2
+        // p[1].col2
+    }
+
+    // https://caniuse.com/#feat=proxy
+    // Sorry, your browser is no longer supported. 
+    // If you want this program to support IE11, develop a proxy-polyfill for IE11. 
+    // Hint from Babel-docs: ES2015-Proxies requires support on the engine level; it is thus not possible to polyfill Proxy on ES5.
+    export function tableTest1()
+    {
+        let columns = ["col1", "col2", "col3"];
+        let rows = [
+              ["row 1 col 1", "row 1 col 2", "row 1 col 3"]
+            , ["row 2 col 1", "row 2 col 2", "row 2 col 3"]
+            , ["row 3 col 1", "row 3 col 2", "row 3 col 3"]
+            , ["row 4 col 1", "row 4 col 2", "row 4 col 3"]
+            , ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+
+        let cols = {}; // "associative array" or Object
+
+        for (let i = 0; i < columns.length; ++i)
+        {
+            cols[columns[i]] = i;
+        }
+
+        let index_col1 = cols["col1"];
+        let index_col2 = cols["col2"];
+        let index_col3 = cols["col3"];
+
+
+        for (var i = 0; i < rows.length; ++i)
+        {
+            console.log("col1:", rows[i][index_col1], "col2:", rows[i][index_col2], "col3:", rows[i][index_col3]);
+        }
+
+    }
+
+
+    export function tableTest()
+    {
+        let columns = ["col1", "col2", "col3"];
+
+        let data = [
+              ["row 1 col 1", "row 1 col 2", "row 1 col 3"]
+            , ["row 2 col 1", "row 2 col 2", "row 2 col 3"]
+            , ["row 3 col 1", "row 3 col 2", "row 3 col 3"]
+            , ["row 4 col 1", "row 4 col 2", "row 4 col 3"]
+            , ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+
+
+
+        let arr = [];
+
+
+        for (let j = 0; j < data.length; ++j)
+        {
+            let obj = {}; // "associative array" or Object
+
+            for (let i = 0; i < columns.length; ++i)
+            {
+                obj[columns[i]] = data[j][i];
+            }
+            arr.push(obj);
+        }
+
+
+
+        let b = [
+              { "col1": "row 1 col 1", "col2": "row 1 col 2", "col3": "row 1 col 3" }
+            , { "col1": "row 2 col 1", "col2": "row 2 col 2", "col3": "row 2 col 3" }
+            , { "col1": "row 3 col 1", "col2": "row 3 col 2", "col3": "row 3 col 3" }
+            , { "col1": "row 4 col 1", "col2": "row 4 col 2", "col3": "row 4 col 3" }
+            , { "col1": "row 5 col 1", "col2": "row 5 col 2", "col3": "row 5 col 3" }
+        ];
+
+
+
+        // JSON.stringify(data, null, 2)
+        let dataJSON = `[
+            [
+                "row 1 col 1",
+                "row 1 col 2",
+                "row 1 col 3"
+            ],
+            [
+                "row 2 col 1",
+                "row 2 col 2",
+                "row 2 col 3"
+            ],
+            [
+                "row 3 col 1",
+                "row 3 col 2",
+                "row 3 col 3"
+            ],
+            [
+                "row 4 col 1",
+                "row 4 col 2",
+                "row 4 col 3"
+            ],
+            [
+                "row 5 col 1",
+                "row 5 col 2",
+                "row 5 col 3"
+            ]
+]`;
+
+
+        // JSON.stringify(b, null, 2)
+
+        let bb = `[
+  {
+    "col1": "row 1 col 1",
+    "col2": "row 1 col 2",
+    "col3": "row 1 col 3"
+  },
+  {
+    "col1": "row 2 col 1",
+    "col2": "row 2 col 2",
+    "col3": "row 2 col 3"
+  },
+  {
+    "col1": "row 3 col 1",
+    "col2": "row 3 col 2",
+    "col3": "row 3 col 3"
+  },
+  {
+    "col1": "row 4 col 1",
+    "col2": "row 4 col 2",
+    "col3": "row 4 col 3"
+  },
+  {
+    "col1": "row 5 col 1",
+    "col2": "row 5 col 2",
+    "col3": "row 5 col 3"
+  }
+]`;
+
+    }
+
     
     export function polyFills()
     {
@@ -465,24 +554,24 @@ export module maps
     function latLongToString(latlng)
     {
         let x = latlng.lat;
-        var y = latlng.lng;
+        let y = latlng.lng;
 
-        var prefix1 = x < 0 ? "S" : "N";
-        var prefix2 = y < 0 ? "W" : "E";
+        let prefix1 = x < 0 ? "S" : "N";
+        let prefix2 = y < 0 ? "W" : "E";
 
         x = Math.abs(x);
         y = Math.abs(y);
 
-        var grad1 = Math.trunc(x);
+        let grad1 = Math.trunc(x);
         x = (x - grad1) * 60;
-        var grad2 = Math.trunc(y);
+        let grad2 = Math.trunc(y);
         y = (y - grad2) * 60;
 
-        var min1 = Math.trunc(x);
-        var min2 = Math.trunc(y);
+        let min1:any = Math.trunc(x);
+        let min2:any = Math.trunc(y);
 
-        var sec1 = ((x - min1) * 60).toFixed(1);
-        var sec2 = ((y - min2) * 60).toFixed(1);
+        let sec1:any = ((x - min1) * 60).toFixed(1);
+        let sec2:any = ((y - min2) * 60).toFixed(1);
 
         min1 = (min1 < 10 ? "0" : "") + min1;
         min2 = (min2 < 10 ? "0" : "") + min2;
@@ -490,7 +579,7 @@ export module maps
         sec1 = (sec1 < 10 ? "0" : "") + sec1;
         sec2 = (sec2 < 10 ? "0" : "") + sec2;
 
-        var res = grad1 + "°" + min1 + "'" + sec1 + '"' + prefix1 + " " + grad2 + "°" + min2 + "'" + sec2 + '"' + prefix2;
+        let res = grad1 + "°" + min1 + "'" + sec1 + '"' + prefix1 + " " + grad2 + "°" + min2 + "'" + sec2 + '"' + prefix2;
         return res;
     }
 

@@ -3,6 +3,135 @@ export var maps;
     var map = null;
     var polygons = [];
     var markers = [];
+    var table = (function () {
+        function table(rows, columnNames) {
+            this.obj = rows;
+            this.i = 0;
+            this.columns = {};
+            for (var i = 0; i < columnNames.length; ++i) {
+                this.columns[columnNames[i]] = i;
+            }
+            this.row = this.row.bind(this);
+            var handlerPropertyAccess = {
+                get: function (obj, prop, receiver) {
+                    return this.obj[this.i][this.columns[prop]];
+                }
+            };
+            handlerPropertyAccess.get = handlerPropertyAccess.get.bind(this);
+            this.accessor = new Proxy(this.obj, handlerPropertyAccess);
+            var handlerIndex = {
+                get: function (obj, prop, receiver) {
+                    return this.row(prop);
+                }
+            };
+            handlerIndex.get = handlerIndex.get.bind(this);
+            this.rows = new Proxy(this.obj, handlerIndex);
+        }
+        table.prototype.row = function (index) {
+            this.i = index;
+            return this.accessor;
+        };
+        table.prototype.rowz = function (index) {
+            this.i = index;
+            return function (colName) {
+                this.obj[index][this.columns[colName]];
+            };
+        };
+        return table;
+    }());
+    maps.table = table;
+    function testTable() {
+        var columns = ["col1", "col2", "col3"];
+        var rows = [
+            ["row 1 col 1", "row 1 col 2", "row 1 col 3"],
+            ["row 2 col 1", "row 2 col 2", "row 2 col 3"],
+            ["row 3 col 1", "row 3 col 2", "row 3 col 3"],
+            ["row 4 col 1", "row 4 col 2", "row 4 col 3"],
+            ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+        var x = new table(rows, columns);
+        console.log(x.rows[0].col1);
+    }
+    maps.testTable = testTable;
+    function proxy() {
+        var columns = ["col1", "col2", "col3"];
+        var rows = [
+            ["row 1 col 1", "row 1 col 2", "row 1 col 3"],
+            ["row 2 col 1", "row 2 col 2", "row 2 col 3"],
+            ["row 3 col 1", "row 3 col 2", "row 3 col 3"],
+            ["row 4 col 1", "row 4 col 2", "row 4 col 3"],
+            ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+        var cols = {};
+        for (var i = 0; i < columns.length; ++i) {
+            cols[columns[i]] = i;
+        }
+        var handler2 = {
+            get: function (obj, prop, receiver) {
+                return obj[cols[prop]];
+            }
+        };
+        var handler = {
+            get: function (obj, prop, receiver) {
+                console.log("obj:", obj, "prop:", prop, "receiver :", receiver);
+                return new Proxy(obj[prop], handler2);
+            },
+            set: function (obj, key, value) {
+                console.log(obj, key, value);
+            }
+        };
+        var p = new Proxy(rows, handler);
+    }
+    maps.proxy = proxy;
+    function tableTest1() {
+        var columns = ["col1", "col2", "col3"];
+        var rows = [
+            ["row 1 col 1", "row 1 col 2", "row 1 col 3"],
+            ["row 2 col 1", "row 2 col 2", "row 2 col 3"],
+            ["row 3 col 1", "row 3 col 2", "row 3 col 3"],
+            ["row 4 col 1", "row 4 col 2", "row 4 col 3"],
+            ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+        var cols = {};
+        for (var i_1 = 0; i_1 < columns.length; ++i_1) {
+            cols[columns[i_1]] = i_1;
+        }
+        var index_col1 = cols["col1"];
+        var index_col2 = cols["col2"];
+        var index_col3 = cols["col3"];
+        for (var i = 0; i < rows.length; ++i) {
+            console.log("col1:", rows[i][index_col1], "col2:", rows[i][index_col2], "col3:", rows[i][index_col3]);
+        }
+    }
+    maps.tableTest1 = tableTest1;
+    function tableTest() {
+        var columns = ["col1", "col2", "col3"];
+        var data = [
+            ["row 1 col 1", "row 1 col 2", "row 1 col 3"],
+            ["row 2 col 1", "row 2 col 2", "row 2 col 3"],
+            ["row 3 col 1", "row 3 col 2", "row 3 col 3"],
+            ["row 4 col 1", "row 4 col 2", "row 4 col 3"],
+            ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
+        ];
+        var arr = [];
+        for (var j = 0; j < data.length; ++j) {
+            var obj = {};
+            for (var i = 0; i < columns.length; ++i) {
+                obj[columns[i]] = data[j][i];
+            }
+            arr.push(obj);
+        }
+        var b = [
+            { "col1": "row 1 col 1", "col2": "row 1 col 2", "col3": "row 1 col 3" },
+            { "col1": "row 2 col 1", "col2": "row 2 col 2", "col3": "row 2 col 3" },
+            { "col1": "row 3 col 1", "col2": "row 3 col 2", "col3": "row 3 col 3" },
+            { "col1": "row 4 col 1", "col2": "row 4 col 2", "col3": "row 4 col 3" },
+            { "col1": "row 5 col 1", "col2": "row 5 col 2", "col3": "row 5 col 3" }
+        ];
+        var dataJSON = "[\n            [\n                \"row 1 col 1\",\n                \"row 1 col 2\",\n                \"row 1 col 3\"\n            ],\n            [\n                \"row 2 col 1\",\n                \"row 2 col 2\",\n                \"row 2 col 3\"\n            ],\n            [\n                \"row 3 col 1\",\n                \"row 3 col 2\",\n                \"row 3 col 3\"\n            ],\n            [\n                \"row 4 col 1\",\n                \"row 4 col 2\",\n                \"row 4 col 3\"\n            ],\n            [\n                \"row 5 col 1\",\n                \"row 5 col 2\",\n                \"row 5 col 3\"\n            ]\n]";
+        var bb = "[\n  {\n    \"col1\": \"row 1 col 1\",\n    \"col2\": \"row 1 col 2\",\n    \"col3\": \"row 1 col 3\"\n  },\n  {\n    \"col1\": \"row 2 col 1\",\n    \"col2\": \"row 2 col 2\",\n    \"col3\": \"row 2 col 3\"\n  },\n  {\n    \"col1\": \"row 3 col 1\",\n    \"col2\": \"row 3 col 2\",\n    \"col3\": \"row 3 col 3\"\n  },\n  {\n    \"col1\": \"row 4 col 1\",\n    \"col2\": \"row 4 col 2\",\n    \"col3\": \"row 4 col 3\"\n  },\n  {\n    \"col1\": \"row 5 col 1\",\n    \"col2\": \"row 5 col 2\",\n    \"col3\": \"row 5 col 3\"\n  }\n]";
+    }
+    maps.tableTest = tableTest;
     function polyFills() {
         Math.trunc = Math.trunc || function (x) {
             var n = x - x % 1;
@@ -98,5 +227,57 @@ export var maps;
                 navigateTo: uuid
             }
         });
+    }
+    function polygonArea(poly2) {
+        var poly = JSON.parse(JSON.stringify(poly2));
+        var p1, p2, i;
+        var area = 0.0;
+        var len = poly.length;
+        if (len > 2) {
+            for (i = 0; i < len; i++) {
+                poly[i] = poly[i].map(Math.radians);
+            }
+            for (i = 0; i < len - 1; i++) {
+                p1 = poly[i];
+                p2 = poly[i + 1];
+                area += (p2[0] - p1[0]) *
+                    (2
+                        + Math.sin(p1[1])
+                        + Math.sin(p2[1]));
+            }
+            var equatorial_radius = 6378137;
+            var polar_radius = 6356752.3142;
+            var mean_radius = 6371008.8;
+            var authalic_radius = 6371007.2;
+            var volumetric_radius = 6371000.8;
+            var radius = mean_radius;
+            area = area * radius * radius / 2.0;
+        }
+        return Math.abs(area).toFixed(0);
+    }
+    function latLongToString(latlng) {
+        var x = latlng.lat;
+        var y = latlng.lng;
+        var prefix1 = x < 0 ? "S" : "N";
+        var prefix2 = y < 0 ? "W" : "E";
+        x = Math.abs(x);
+        y = Math.abs(y);
+        var grad1 = Math.trunc(x);
+        x = (x - grad1) * 60;
+        var grad2 = Math.trunc(y);
+        y = (y - grad2) * 60;
+        var min1 = Math.trunc(x);
+        var min2 = Math.trunc(y);
+        var sec1 = ((x - min1) * 60).toFixed(1);
+        var sec2 = ((y - min2) * 60).toFixed(1);
+        min1 = (min1 < 10 ? "0" : "") + min1;
+        min2 = (min2 < 10 ? "0" : "") + min2;
+        sec1 = (sec1 < 10 ? "0" : "") + sec1;
+        sec2 = (sec2 < 10 ? "0" : "") + sec2;
+        var res = grad1 + "°" + min1 + "'" + sec1 + '"' + prefix1 + " " + grad2 + "°" + min2 + "'" + sec2 + '"' + prefix2;
+        return res;
+    }
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
     }
 })(maps || (maps = {}));
