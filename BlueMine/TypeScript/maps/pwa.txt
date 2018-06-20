@@ -1,107 +1,106 @@
-
-https://developers.google.com/web/progressive-web-apps/
-https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/
-https://developers.google.com/web/progressive-web-apps/checklist
-https://developers.google.com/web/tools/lighthouse/
-
-
-
-PWA:
-Simple installation. PWAs don�t distribute via app stores, 
-can be shared using a link and installed directly from a mobile website.
-Even for those who develop only for iOS and Android, 
-this means a huge savings in app development time and effort. 
-PWAs offer the promise of being able to develop a single app 
-and have it work perfectly across all your platforms and devices.
-
-
-
-Progressive. 
+﻿
+Progressive-web-apps (PWA):
+By definition, a PWA is a PROGRESSIVE web application. 
 By definition, a progressive web app must work on any device and enhance progressively, 
-taking advantage of any features available on the user�s device and browser.
+taking advantage of any features available on the user’s device and browser. 
 
 
-* Progressive
-* Discoverable
+That means in particular:
+* Progressive — Works for every user, regardless of browser choice because it’s built with progressive enhancement as a core tenet.
+* Responsive — Fits any form factor: desktop, mobile, tablet, or whatever is next.
+* Connectivity independent/offline-access — Enhanced with service workers to work offline or on low-quality networks.
+  synchronize data in the background, even if connection is lost
+* Discoverable/Web App Manifest - makes a web app installable on a device and adds it in the apps-menu of the OS.
 * Linkable ( use the URI to indicate the current state of application )
+* Device features - Leverage device features like the camera and geolocation in your web apps
 * Safe
-* Fast
+* Fast - in 2017, 53% of users abandon your site if it takes over 3 seconds to load. 
+* Push notifications - Use web push notifications to increase user engagement with your web apps
+* Simple install/No install - PWAs don’t distribute via app stores
+  PWAs can be shared using a link and installed directly from a mobile website.
+* HTTP/2 connection - transfers data in chunks and is faster than HTTP/1;
+* WebShare - allows you easily trigger the native Android share dialog, 
+  passing either a URL or text to share. 
+  This is an important API as it gives your end-users user control of how and where the data is shared.
 
-What is different:
-developing a PWA takes significantly less time and money: 
-you can spend 10�15% more front-end coding resources 
-on your web app and have a mobile PWA to go along with it
-you only need JavaScript developers to create a PWA 
-as opposed to Swift/Java for native mobile apps
-a PWA can access as many features of your device as your browser, 
-which may be less than a native app.
+
+Native features Supported by Progressive Web Apps
+* Adding an icon to the home screen
+* Appearing in the apps list. 
+  This can be done using WebAPKs – Progressive Web Apps can now be packaged into actual installable Android packages!
+* Launch in full-screen
+* Clipboard access
+* Hardware-accelerated 2D/3D graphics via HTML5 Canvas or WebGL
+* Accessing the filesystem (Chrome and Opera) and reading user-selected files in any browser
+* Slick, smooth UIs with 60fps animations
+* Web Virtual Reality (WebVR) - experience VR in your browser
+
+
+
+
+What is different compared to apps:
+Developing a PWA takes significantly less time and money: 
+You can spend 10–15% more front-end coding resources 
+on your web app and have a mobile PWA to go along with it. 
+You only need JavaScript developers to create a PWA 
+as opposed to Swift/Java for native mobile apps 
+A PWA can access as many features of your device as your browser, 
+which may be less than a native app. 
 https://medium.com/awebdeveloper/pwa-is-future-of-mobile-how-to-tame-it-855dd42df0ec
 
 
--responsiv
--offline access
--push notifications
--simple install
-- HTTP/2 connection - transfers data in chunks and is faster than HTTP/1;
-- Service Workers - cache data and allow browsing a web app in poor network conditions or offline;
-- Web App Manifest - makes a web app installable on a device 
-  and adds it in the Apps menu of the OS.
-
-* Build web apps that look and feel like native mobile apps for iOS and Android
-* web apps that work without internet connection (offline-first)
-* Leverage device features like the camera and geolocation in your web apps
-* Use web push notifications to increase user engagement with your web apps
-* A refresher on Promises and the Fetch API as both concepts are heavily used in PWAs 
-* A way to synchronize data in the background, even if connection is lost
-* How to access native device features like the camera or geolocation
-* Using Workbox to make service worker management easier
-
-
-2- Build a service worker and load it with a javascript. This will decide the implementation of your PWA. You can build your service worker for only offline, or only app icon, or push notification, or their combinations.
-3- Build a Manifest file. This will include all the app details like app logo, app name, splash screen, theme color, etc.
-4- Deploy your PWA now.
-
-Automatic PWA converter:
-https://www.escalatingweb.com/
-- offline availability
-- add install
-- push notifications
-- webshare
-- web virtual reality (WebVR)
-- awesome support ? 
-
-
-WebAPK:
-chrome://flags/#enable-improved-a2hs
-https://www.youtube.com/watch?v=hnMyszjVqWU
-
-Of course, since the flag to enable WebAPK installations 
-only exists in the Dev and Canary channels on Chrome for Android, 
-we are assuming that this feature is a WIP (work in progress) 
-and thus not everything will work at this time. 
 
 
 
-WebShare:
-https://developers.google.com/web/updates/2016/09/navigator-share
-This method, part of the simple Web Share API�written by Matt Giuca 
-on the Chrome team�allows you easily trigger the native Android share dialog, 
-passing either a URL or text to share. 
-This is an important API as it gives your end-users user control 
-of how and where the data is shared.
-
-examples:
-airhorner.com
-voice-memos.appspot.com
-smaller-pictures.appspot.com
+PWAs have limited capabilities when it comes to offering integration 
+with a smartphone or tablet’s hardware features 
+such as NFC and Bluetooth functionality as well as the device’s sensor package 
+(accelerometer, fingerprint sensor, etc.). 
+This prevents PWAs from being developed for use with mobile accessories 
+and “wearables” like smart watches, fitness trackers and wireless earphones.
+https://www.quora.com/What-are-Progressive-Web-Apps?share=1
 
 
-https://www.xda-developers.com/deeply-integrated-progressive-web-apps-are-already-live-for-chrome-on-android/
+
+
+
+Native Android features not Supported by Progressive Web Apps
+
+Although Progressive web app can do most of the functionalities required by most apps, 
+there are still some features that are not supported. They are
+
+* Progressive web app cannot intercept SMSes or calls, 
+* send SMS/MMS, 
+* get the user’s phone number, 
+* read voice mail, 
+* make phone calls without the Dialer dialog.
+* Access to contacts, calendar, and browser
+* Access to alarms
+* Access to low-level hardware features and sensors like the flashlight, atmospheric pressure sensor. 
+  Sensors like Bluetooth via Web Bluetooth API, NFC, Ambient light sensor, proximity sensor, accelerometer, 
+  magnetometer, and gyroscope are already supported.
+* Access to task management
+* Modify system settings and logs
+
+As you can see the gap between a Native/Hybrid App and Progressive web app is closing, 
+In future, you could see more companies opting for a Progressive web app to a Native/Hybrid App. 
 https://www.quora.com/Whats-the-difference-between-Progressive-web-apps-and-regular-web-apps?share=1
 
 
-WebWorkers:
-https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
+
+
+
+
+
+An important part is the app manifest, a simple JSON file. 
+It helps the device to recognize the PWA and defines 
+how it will be displayed on the screen.
+It defines the icon as well as the window-mode 
+in which your app will be displayed on the screen. 
+
+  
+https://developer.mozilla.org/en-US/docs/Web/Manifest
+
 
 
 <link rel="manifest" href="manifest.json" />
@@ -109,9 +108,6 @@ https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_worke
 <link rel="icon" href="imgs/icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="application-name" content="SVGOMG" />
-
-
-https://developer.mozilla.org/en-US/docs/Web/Manifest
 
 manifest.json:
 {
@@ -127,25 +123,186 @@ manifest.json:
   "theme_color": "#303F9F"
 }
 
-
-
-PWAs have limited capabilities when it comes to offering integration 
-with a smartphone or tablet�s hardware features such as NFC and Bluetooth 
-functionality as well as the device�s sensor package (accelerometer, 
-fingerprint sensor, etc.). 
-This prevents PWAs from being developed for use with mobile accessories 
-and �wearables� like smart watches, fitness trackers and wireless earphones.
+https://www.xda-developers.com/deeply-integrated-progressive-web-apps-are-already-live-for-chrome-on-android/
 
 
 
+WebAPK:
+chrome://flags/#enable-improved-a2hs
+https://www.youtube.com/watch?v=hnMyszjVqWU
 
-he service worker is a JavaScript file that operates in the background. 
-It is responsible for the offline functionality of the progressive 
-web app through timely content caching.
-Also, important is the app manifest, a simple JSON file. 
-It helps the device to recognize the PWA and defines 
-how it will be displayed on the screen.
+Of course, since the flag to enable WebAPK installations 
+only exists in the Dev and Canary channels on Chrome for Android, 
+we are assuming that this feature is a WIP (work in progress) 
+and thus not everything will work at this time. 
 
-Fast: Reports show that 53% of users abandon your site 
-if it takes over 3 seconds to load. And obviously you won�t want 
-the users to go back. Hence, your app should be fast.
+
+https://caniuse.com/#feat=web-app-manifest
+IE11: Not supported
+Edge: 17+
+Firefox: Not supported
+Chrome: 49+, Chrome on Android: 66+
+Safari: Not supported, iOS-Safari: 11.3+
+
+
+A PWA consists of 
+- The app shell is the HTML, CSS and JavaScript code which build the interface of the app. 
+- The interface is the static part of the app, it can dynamically display the content. 
+- The app shell is cached on the device of the user and can be loaded immediately.
+  The content is the dynamic part, it changes and is refreshed every time connection with the internet is established. 
+
+
+There is one more technology, that allows us to define a PWA as a PWA. 
+Its name is the service worker.
+The service worker is a JavaScript file that operates in the background. 
+It is responsible for the offline functionality of the progressive web app 
+through timely content caching.
+
+Service Workers are meant to replace the (oft maligned) HTML5 Application Cache. 
+Unlike AppCache, Service Workers are comprised of scriptable primitives 
+that make it possible for application developers to build URL-friendly, 
+always-available applications in a sane and layered way.
+https://www.quora.com/Whats-the-difference-between-service-workers-and-web-workers-in-JavaScript?share=1
+https://itnext.io/service-workers-your-first-step-towards-progressive-web-apps-pwa-e4e11d1a2e85
+
+
+https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API
+
+Use Workbox to make service worker management easier
+https://developers.google.com/web/tools/workbox/
+
+
+
+WebWorkers:
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
+
+
+Difference between ServiceWorkers and WebWorkers
+A web worker is a JavaScript script executed from an HTML page that runs in the background, 
+independently of other user-interface scripts that may also have been executed from the same HTML page.
+
+Service workers extends web workers. Basically, service worker is a web worker and more. 
+Service workers are just like web workers but they can be accessed by many main threads
+(running in different browser tabs)  at the same time.
+Service Workers are a new browser feature that provide event-driven scripts that run independently of web pages. 
+Unlike other workers Service Workers can be shut down at the end of events, 
+note the lack of retained references from documents, 
+and they have access to domain-wide events such as network fetches. 
+ServiceWorkers also have scriptable caches. 
+Along with the ability to respond to network requests from certain web pages via script, 
+this provides a way for applications to "go offline".
+
+Service workers have access to 
+* Cache API and 
+* Fetch API
+  Service workers are used widely also to store data in IndexedDB for offline data persistence.
+* Background sync is a new web API supported by service workers that lets you defer actions 
+  until the user has stable internet connectivity. 
+  This is useful for ensuring that whatever the user wants to send, is actually sent.
+
+https://caniuse.com/#feat=serviceworkers
+Service Worker support 
+IE11: Not supported
+Edge: 17+
+Firefox: 59+
+Chrome: 49+, Chrome on Android 66+
+Safari: 11.1+, mobile 11.3+
+
+
+https://caniuse.com/#feat=webworkers
+Web Worker support:
+IE: 11
+Edge: 16+
+Firefox: 59+
+Chrome: 49+, Chrome on Android 66+
+Safari: 11.1+, iOS Safari 11.3+
+
+
+
+
+Fetch API
+A refresher on Promises and the Fetch API as both concepts are heavily used in PWAs 
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+
+https://caniuse.com/#search=fetch
+Fech API Support
+IE11: Not supported
+Edge: 16+
+Firefox: 59+
+Chrome: 49+, Chrome on Android 66+
+Safari: 11.1+, iOS 10.3+
+
+
+WebShare:
+https://developers.google.com/web/updates/2016/09/navigator-share
+https://wicg.github.io/web-share/
+https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
+
+https://caniuse.com/#feat=web-share
+Chrome on Android: 66+
+All others: not supported
+
+
+
+
+
+https://developers.google.com/web/progressive-web-apps/
+https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/
+https://developers.google.com/web/progressive-web-apps/checklist
+https://developers.google.com/web/tools/lighthouse/
+
+
+
+
+1 - Build a service worker and load it with a javascript. 
+    This will decide the implementation of your PWA. 
+    You can build your service worker for only offline, 
+    or only app icon, or push notification, or their combinations.
+2 - Build a Manifest file. 
+    This will include all the app details like app logo, app name, splash screen, theme color, etc.
+3 - Deploy your PWA.
+
+
+
+Automatic PWA converter:
+https://www.escalatingweb.com/
+
+
+
+
+
+
+
+
+
+
+
+
+
+Examples:
+airhorner.com
+voice-memos.appspot.com
+smaller-pictures.appspot.com
+- Flipkart Lite
+  https://medium.com/progressive-web-apps/building-flipkart-lite-a-progressive-web-app-2c211e641883
+  https://developers.google.com/web/showcase/2016/flipkart 
+  Users time on site with Flipkart lite vs. previous mobile experience: 
+  3.5 minutes vs 70 seconds.
+  3x more time spent on site
+  40% higher re-engagement rate
+  70% greater conversion rate among those arriving via Add to Homescreen
+  3x lower data usage
+
+- AliExpress
+  https://developers.google.com/web/showcase/2016/aliexpress
+  104% for new users across all browsers; 
+  82% increase in iOS conversion rate
+  2X more pages visited per session per user across all browsers
+  74% increase in time spent per session across all browsers 
+
+- The Washington Post 
+  https://www.washingtonpost.com/pr/wp/2016/05/19/the-washington-post-introduces-new-progressive-web-app-experience/?noredirect=on&utm_term=.f9edaea72862
+  https://www.washingtonpost.com/pwa/?tid=a_mcntx
