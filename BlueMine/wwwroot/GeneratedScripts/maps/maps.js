@@ -31,12 +31,6 @@ export var maps;
             this.i = index;
             return this.accessor;
         };
-        table.prototype.rowz = function (index) {
-            this.i = index;
-            return function (colName) {
-                this.obj[index][this.columns[colName]];
-            };
-        };
         return table;
     }());
     maps.table = table;

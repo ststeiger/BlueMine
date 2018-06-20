@@ -74,15 +74,14 @@ export module maps
         col3: Date;
     }
 
-    export class table<T>
+    export class Table<T>
     {
-        protected i: number;
-        protected accessor: Proxy;
+        protected m_i: number;
+        protected m_accessor: Proxy;
 
-        public obj: T[];
+        public data: T[];
         //public columns: map<string, number>;
         public columns: { [key: string]: number };
-
         
         public rows: T[];
 
@@ -97,15 +96,15 @@ export module maps
 
         protected row(index:number): T
         {
-            this.i = index;
-            return <T><any>this.accessor;
+            this.m_i = index;
+            return <T><any>this.m_accessor;
         }
 
 
         constructor(rows: any[][], columnNames:string[])
         {
-            this.obj = <any>rows;
-            this.i = 0;
+            this.data = <any>rows;
+            this.m_i = 0;
             
             // this.columns = columnNames;
             this.columns = {}; // "associative array" or Object
@@ -124,7 +123,7 @@ export module maps
                 }
             };
             handlerPropertyAccess.get = handlerPropertyAccess.get.bind(this);
-            this.accessor = new Proxy(this.obj, handlerPropertyAccess);
+            this.m_accessor = new Proxy(this.data, handlerPropertyAccess);
 
 
             let handlerIndex: IProxyHandler = {
@@ -134,7 +133,7 @@ export module maps
                 }
             };
             handlerIndex.get = handlerIndex.get.bind(this);
-            this.rows = <any>new Proxy(this.obj, handlerIndex);
+            this.rows = <any>new Proxy(this.data, handlerIndex);
         }
 
     }
@@ -152,12 +151,10 @@ export module maps
         ];
 
         let x = new table<SomeTable>(rows, columns);
-
-        console.log(x.rowz(0)("col1"));
-
+        
         console.log(x.rows[0].col1);
         // console.log(x.row(1).col1);
-        // console.log(x.obj[0][0]);
+        //console.log(x.obj[0][0]);
     }
 
     export function proxy()
