@@ -3,10 +3,10 @@ export var maps;
     var map = null;
     var polygons = [];
     var markers = [];
-    var table = (function () {
-        function table(rows, columnNames) {
-            this.obj = rows;
-            this.i = 0;
+    var Table = (function () {
+        function Table(rows, columnNames) {
+            this.data = rows;
+            this.m_i = 0;
             this.columns = {};
             for (var i = 0; i < columnNames.length; ++i) {
                 this.columns[columnNames[i]] = i;
@@ -18,22 +18,22 @@ export var maps;
                 }
             };
             handlerPropertyAccess.get = handlerPropertyAccess.get.bind(this);
-            this.accessor = new Proxy(this.obj, handlerPropertyAccess);
+            this.m_accessor = new Proxy(this.data, handlerPropertyAccess);
             var handlerIndex = {
                 get: function (obj, prop, receiver) {
                     return this.row(prop);
                 }
             };
             handlerIndex.get = handlerIndex.get.bind(this);
-            this.rows = new Proxy(this.obj, handlerIndex);
+            this.rows = new Proxy(this.data, handlerIndex);
         }
-        table.prototype.row = function (index) {
-            this.i = index;
-            return this.accessor;
+        Table.prototype.row = function (index) {
+            this.m_i = index;
+            return this.m_accessor;
         };
-        return table;
+        return Table;
     }());
-    maps.table = table;
+    maps.Table = Table;
     function testTable() {
         var columns = ["col1", "col2", "col3"];
         var rows = [
@@ -43,7 +43,7 @@ export var maps;
             ["row 4 col 1", "row 4 col 2", "row 4 col 3"],
             ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
         ];
-        var x = new table(rows, columns);
+        var x = new Table(rows, columns);
         console.log(x.rows[0].col1);
     }
     maps.testTable = testTable;

@@ -106,15 +106,7 @@ namespace BlueMine
             string insert = string.Join(System.Environment.NewLine + System.Environment.NewLine, inserts);
             System.Console.WriteLine(insert);
         }
-
-
-
-
-
-
-
-
-
+        
 
         public static void Main(string[] args)
         {

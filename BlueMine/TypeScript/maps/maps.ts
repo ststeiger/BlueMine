@@ -150,7 +150,7 @@ export module maps
             , ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
         ];
 
-        let x = new table<SomeTable>(rows, columns);
+        let x = new Table<SomeTable>(rows, columns);
         
         console.log(x.rows[0].col1);
         // console.log(x.row(1).col1);

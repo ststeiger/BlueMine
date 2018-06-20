@@ -306,3 +306,30 @@ smaller-pictures.appspot.com
 - The Washington Post 
   https://www.washingtonpost.com/pr/wp/2016/05/19/the-washington-post-introduces-new-progressive-web-app-experience/?noredirect=on&utm_term=.f9edaea72862
   https://www.washingtonpost.com/pwa/?tid=a_mcntx
+
+
+
+Tutorial:
+https://medium.freecodecamp.org/how-you-can-make-a-progressive-web-app-in-an-hour-7e36d560610e
+https://blog.logrocket.com/using-webworkers-for-safe-concurrent-javascript-3f33da4eb0b2
+
+
+BS:
+https://en.wikipedia.org/wiki/Progressive_Web_Apps
+
+
+Other links:
+https://blogs.msdn.microsoft.com/dotnet/2016/11/09/net-core-data-access/
+https://exceptionnotfound.net/attribute-routing-vs-convention-routing/
+https://www.linuxbabe.com/linux-server/openstreetmap-tile-server-ubuntu-16-04
+https://css-tricks.com/snippets/javascript/get-url-and-url-parts-in-javascript/
+https://mathematica.stackexchange.com/questions/28162/alternatives-to-mathematica?newreg=c2b7d3e3d8cb466dbc02ee6a9ce0b484
+https://www.sagemath.org/library.html
+http://www.evanmiller.org/why-im-betting-on-julia.html
+https://discourse.julialang.org/t/implement-a-rest-server-in-julia/9117
+https://caniuse.com/#search=webrtc
+
+https://db-engines.com/en/ranking
+https://forums.theregister.co.uk/forum/1/2017/09/27/sql_server_2017_whats_new_and_on_linux_whats_missing/
+https://blogs.msdn.microsoft.com/sqlrsteamblog/2017/10/02/sql-server-2017-reporting-services-now-generally-available/
+

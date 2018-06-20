@@ -8,10 +8,10 @@
         
         class BoundingBox 
         {
-            double North;
-            double South;
-            double East;
-            double West;   
+            public double North;
+            public double South;
+            public double East;
+            public double West;   
         }
         
         
@@ -58,7 +58,7 @@
             decimal lat_rad = DegreesToRadians(lat_deg);
             int n = (int) System.Math.Pow( 2.0 , zoom);
             int xtile = (int)((lon_deg + 180.0M) / 360.0M * n);
-            int ytile = (int)((1.0 - System.Math.Log(System.Math.Tan((double)lat_rad) + (1 / System.Math.Cos((double)lat_rad))) / Math.PI) / 2.0 * n);
+            int ytile = (int)((1.0 - System.Math.Log(System.Math.Tan((double)lat_rad) + (1 / System.Math.Cos((double)lat_rad))) / System.Math.PI) / 2.0 * n);
             return (xtile, ytile);
         }
         
