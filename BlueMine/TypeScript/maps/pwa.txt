@@ -6,11 +6,14 @@ taking advantage of any features available on the user’s device and browser.
 
 
 That means in particular:
-* Progressive — Works for every user, regardless of browser choice because it’s built with progressive enhancement as a core tenet.
+* Progressive — Works for every user, regardless of browser choice 
+  because it’s built with progressive enhancement as a core tenet.
 * Responsive — Fits any form factor: desktop, mobile, tablet, or whatever is next.
-* Connectivity independent/offline-access — Enhanced with service workers to work offline or on low-quality networks.
+* Connectivity independent/offline-access — Enhanced with service workers 
+  to work offline or on low-quality networks.
   synchronize data in the background, even if connection is lost
-* Discoverable/Web App Manifest - makes a web app installable on a device and adds it in the apps-menu of the OS.
+* Discoverable/Web App Manifest - makes a web app installable on a device 
+  and adds it in the apps-menu of the OS.
 * Linkable ( use the URI to indicate the current state of application )
 * Device features - Leverage device features like the camera and geolocation in your web apps
 * Safe
@@ -21,13 +24,15 @@ That means in particular:
 * HTTP/2 connection - transfers data in chunks and is faster than HTTP/1;
 * WebShare - allows you easily trigger the native Android share dialog, 
   passing either a URL or text to share. 
-  This is an important API as it gives your end-users user control of how and where the data is shared.
+  This is an important API as it gives your end-users user control 
+  of how and where the data is shared.
 
 
 Native features Supported by Progressive Web Apps
 * Adding an icon to the home screen
 * Appearing in the apps list. 
-  This can be done using WebAPKs – Progressive Web Apps can now be packaged into actual installable Android packages!
+  This can be done using WebAPKs – Progressive Web Apps can now be packaged 
+  into actual installable Android packages!
 * Launch in full-screen
 * Clipboard access
 * Hardware-accelerated 2D/3D graphics via HTML5 Canvas or WebGL
@@ -77,8 +82,8 @@ there are still some features that are not supported. They are
 * Access to contacts, calendar, and browser
 * Access to alarms
 * Access to low-level hardware features and sensors like the flashlight, atmospheric pressure sensor. 
-  Sensors like Bluetooth via Web Bluetooth API, NFC, Ambient light sensor, proximity sensor, accelerometer, 
-  magnetometer, and gyroscope are already supported.
+  Sensors like Bluetooth via Web Bluetooth API, NFC, Ambient light sensor, 
+  proximity sensor, accelerometer, magnetometer, and gyroscope are already supported.
 * Access to task management
 * Modify system settings and logs
 
