@@ -83,7 +83,7 @@ export module maps
     }
 
 
-    function SetDefaultVariables(url)
+    function SetDefaultVariables(url:string)
     {
         if (window.parent.Settings)
         {
@@ -101,7 +101,7 @@ export module maps
     }
 
 
-    function spreadMessage(object)
+    function spreadMessage(object: any)
     {
         var inFrame = (function ()
         {
@@ -194,7 +194,7 @@ export module maps
     }
     
     
-    function navigateTo(uuid)
+    function navigateTo(uuid:string)
     {
         spreadMessage(
             {
@@ -209,7 +209,7 @@ export module maps
 
     // https://gis.stackexchange.com/a/816/3997
     // https://jsfiddle.net/xwaocc00/
-    function polygonArea(poly2)
+    function polygonArea(poly2: Number[])
     {
         let poly = JSON.parse(JSON.stringify(poly2));
         let p1, p2, i;
@@ -271,7 +271,13 @@ export module maps
     }
 
 
-    function latLongToString(latlng)
+    interface IGeoPoint
+    {
+        lat: number;
+        lng: number;
+    }
+
+    function latLongToString(latlng: IGeoPoint)
     {
         let x = latlng.lat;
         let y = latlng.lng;
@@ -304,7 +310,7 @@ export module maps
     }
 
 
-    function numberWithCommas(x)
+    function numberWithCommas(x:number)
     {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
     }
