@@ -24,6 +24,40 @@
 
 'use strict';
 
+
+
+
+interface IConfig 
+{
+    w: number; // 300
+    h: number; // 300
+    itemHeight: number; // 31
+    totalRows: number; // 10000
+    items?: any[];
+    generatorFn: (row: any) => Element;
+}
+
+
+
+let aaa: IConfig = 
+    {
+        w: 300,
+        h: 300,
+        itemHeight: 31,
+        totalRows: 10000,
+        generatorFn: function (row)
+        {
+            var el = document.createElement("div");
+            el.innerHTML = "ITEM " + row;
+            el.style.borderBottom = "1px solid red";
+            el.style.position = "absolute"
+            return el;
+        }
+    };
+
+
+
+
 // https://github.com/sergi/virtual-list
 export class VirtualList
 {
@@ -37,14 +71,14 @@ export class VirtualList
     
     protected rmNodeInterval;// setInterval
     
-    
+
     
     /**
      * Creates a virtually-rendered scrollable list.
      * @param {object} config
      * @constructor
      */
-    constructor(config)
+    constructor(config:IConfig)
     {
         let width = (config && config.w + 'px') || '100%';
         let height = (config && config.h + 'px') || '100%';

@@ -100,7 +100,7 @@ export module table_wrapper
             , ["row 5 col 1", "row 5 col 2", "row 5 col 3"]
         ];
 
-        let x: TableWrapper = new TableWrapper<SomeTable>(rows, columns);
+        let x: TableWrapper<SomeTable> = new TableWrapper<SomeTable>(rows, columns);
         
         console.log(x.rows[0].col1);
         // console.log(x.row(1).col1);

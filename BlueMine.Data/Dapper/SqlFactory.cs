@@ -5,14 +5,14 @@ namespace BlueMine.Data
     
     public class SqlFactory
     {
-        private static string s_cs;
-        private static System.Data.Common.DbProviderFactory s_fac;
+        private static string s_ConnectionString;
+        private static System.Data.Common.DbProviderFactory s_Factory;
         
         
         static SqlFactory()
         {
-            s_cs = GetConnectionString();
-            s_fac = BlueMine.Data.DbProviderFactories.GetFactory(
+            s_ConnectionString = GetConnectionString();
+            s_Factory = BlueMine.Data.DbProviderFactories.GetFactory(
                 typeof(System.Data.SqlClient.SqlClientFactory)
             );
         }
@@ -20,19 +20,22 @@ namespace BlueMine.Data
         
         public static System.Data.Common.DbConnection GetConnection()
         {
-            System.Data.Common.DbConnection con = s_fac.CreateConnection();
-            con.ConnectionString = s_cs;
-            
+            System.Data.Common.DbConnection con = s_Factory.CreateConnection();
+            con.ConnectionString = s_ConnectionString;
+
+            if (con.State != System.Data.ConnectionState.Open)
+                con.Open();
+
             return con;
         }
-        
-        
-        public static string ConnectionString
+
+
+        public static string Connection_String
         {
             get { return GetConnectionString(); }
         }
-        
-        
+
+
         private static string GetConnectionString()
         {
             System.Data.SqlClient.SqlConnectionStringBuilder csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
@@ -55,8 +58,48 @@ namespace BlueMine.Data
             
             return csb.ConnectionString;
         }
-        
-        
+
+
+        public string ConnectionString
+        {
+            get
+            {
+                return s_ConnectionString;
+            }
+        }
+
+
+        public System.Data.Common.DbProviderFactory Factory
+        {
+            get
+            {
+                return s_Factory;
+            }
+        }
+
+
+        public System.Data.Common.DbConnection Connection
+        {
+            get
+            {
+                System.Data.Common.DbConnection con = s_Factory.CreateConnection();
+                con.ConnectionString = s_ConnectionString;
+
+                if (con.State != System.Data.ConnectionState.Open)
+                    con.Open();
+
+
+                return con;
+            }
+        }
+
+
+        public SqlFactory()
+        { }
+
+
+
+
     }
     
     

@@ -63,7 +63,7 @@ namespace BlueMine
                     // options.UseNpgsql("");
                     // options.UseSqlite("");
 
-                    options.UseSqlServer(BlueMine.Data.SqlFactory.ConnectionString);
+                    options.UseSqlServer(BlueMine.Data.SqlFactory.Connection_String);
                 }
             );
 

@@ -1,4 +1,17 @@
 'use strict';
+var aaa = {
+    w: 300,
+    h: 300,
+    itemHeight: 31,
+    totalRows: 10000,
+    generatorFn: function (row) {
+        var el = document.createElement("div");
+        el.innerHTML = "ITEM " + row;
+        el.style.borderBottom = "1px solid red";
+        el.style.position = "absolute";
+        return el;
+    }
+};
 var VirtualList = (function () {
     function VirtualList(config) {
         var width = (config && config.w + 'px') || '100%';
