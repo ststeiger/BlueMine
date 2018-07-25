@@ -14,7 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="TypeScript\definitions\jquery_mousewheel.d.ts" />
-    <None Remove="TypeScript\hyperlist.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Code\Trash\" />
@@ -43,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="TypeScript\definitions\jquery_mousewheel.d.ts" />
-    <TypeScriptCompile Include="TypeScript\hyperlist.ts" />
   </ItemGroup>
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
   <Import Project="..\BlueMine.Data\BlueMine.Data.projitems" Label="Shared" />
