@@ -337,4 +337,3 @@ https://caniuse.com/#search=webrtc
 https://db-engines.com/en/ranking
 https://forums.theregister.co.uk/forum/1/2017/09/27/sql_server_2017_whats_new_and_on_linux_whats_missing/
 https://blogs.msdn.microsoft.com/sqlrsteamblog/2017/10/02/sql-server-2017-reporting-services-now-generally-available/
-
