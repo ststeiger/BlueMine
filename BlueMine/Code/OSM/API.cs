@@ -265,6 +265,74 @@ VALUES
         } // End Function FromDistance 
 
 
+        public static GeoBoundingBox CorrectBoundingBoxFromDistance(decimal a, decimal b, decimal r)
+        {
+
+            // degrees to radians
+            decimal deg2rad(decimal degrees)
+            {
+                return System.DecimalMath.PI * degrees / 180.0M;
+            };
+
+            // radians to degrees
+            decimal rad2deg(decimal radians)
+            {
+                return 180.0M * radians / System.DecimalMath.PI;
+            }
+
+
+            // Earth radius at a given latitude, according to the WGS- 84 ellipsoid [m]
+            decimal WGS84EarthRadius(decimal lat)
+            {
+                // Semi - axes of WGS- 84 geoidal reference
+                const decimal WGS84_a = 6378137.0M;  // Major semiaxis [m]
+                const decimal WGS84_b = 6356752.3M;  // Minor semiaxis [m]
+
+                // http://en.wikipedia.org/wiki/Earth_radius
+                // decimal An = WGS84_a * WGS84_a * ((decimal)System.Math.Cos((double)lat));
+                // decimal Bn = WGS84_b * WGS84_b * ((decimal)System.Math.Sin((double)lat));
+                // decimal Ad = WGS84_a * (decimal)System.Math.Cos((double)lat);
+                // decimal Bd = WGS84_b * (decimal)System.Math.Sin((double)lat);
+
+                decimal An = WGS84_a * WGS84_a * System.DecimalMath.Cos(lat);
+                decimal Bn = WGS84_b * WGS84_b * System.DecimalMath.Sin(lat);
+                decimal Ad = WGS84_a * System.DecimalMath.Cos(lat);
+                decimal Bd = WGS84_b * System.DecimalMath.Sin(lat);
+
+                //return (decimal) System.Math.Sqrt( (double)( (An * An + Bn * Bn) / (Ad * Ad + Bd * Bd) ) );
+                return System.DecimalMath.Sqrt((An * An + Bn * Bn) / (Ad * Ad + Bd * Bd));
+            }
+
+            // Bounding box surrounding the point at given coordinates,
+            // assuming local approximation of Earth surface as a sphere
+            // of radius given by WGS84
+            // https://stackoverflow.com/questions/238260/how-to-calculate-the-bounding-box-for-a-given-lat-lng-location
+            (decimal, decimal, decimal, decimal) boundingBox(decimal latitudeInDegrees, decimal longitudeInDegrees, decimal halfSideInKm)
+            {
+                decimal lat = deg2rad(latitudeInDegrees);
+                decimal lon = deg2rad(longitudeInDegrees);
+                decimal halfSide = 1000.0M * halfSideInKm;
+
+                // Radius of Earth at given latitude
+                decimal radius = WGS84EarthRadius(lat);
+                // Radius of the parallel at given latitude
+                //decimal pradius = radius * (decimal)System.Math.Cos((double)lat);
+                decimal pradius = radius * System.DecimalMath.Cos(lat);
+
+                decimal latMin = lat - halfSide / radius;
+                decimal latMax = lat + halfSide / radius;
+                decimal lonMin = lon - halfSide / pradius;
+                decimal lonMax = lon + halfSide / pradius;
+
+                // GeoBoundingBox xa = new GeoBoundingBox(rad2deg(latMin), rad2deg(lonMin), rad2deg(latMax), rad2deg(lonMax));
+                return (rad2deg(latMin), rad2deg(lonMin), rad2deg(latMax), rad2deg(lonMax));
+            }
+
+            (decimal, decimal, decimal, decimal) xxx = boundingBox(a, b, r/1000.0M);
+            return new GeoBoundingBox(xxx.Item1, xxx.Item2, xxx.Item3, xxx.Item4);
+        }
+
+
     } // End Class GeoBoundingBox 
 
 
