@@ -58,6 +58,22 @@ namespace BlueMine.Data
         } // End Constructor 
 
 
+        public UInt128(byte[] bytes)
+        {
+            if (bytes.Length != 16)
+                throw new System.ArgumentException("bytes must be 16 bytes long. Actual Length: " + bytes.Length.ToString());
+
+            byte[] upperBytes = new byte[8];
+            byte[] lowerBytes = new byte[8];
+
+            System.Array.Copy(bytes, 0, lowerBytes, 0, 8);
+            System.Array.Copy(bytes, 8, upperBytes, 0, 8);
+
+            this.Low = System.BitConverter.ToUInt64(lowerBytes,0);
+            this.High = System.BitConverter.ToUInt64(upperBytes,0);
+        } // End Constructor 
+
+
         public UInt128(UInt128 number)
             : this(number.Low, number.High)
         { } // End Constructor 
