@@ -81,9 +81,19 @@ namespace TestPlotly
             object objReturnValue = null;
             // HKEY_CURRENT_USER
 
-            //using (Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine
-            using (Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.CurrentUser
-                .OpenSubKey(key))
+            using (Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(key))
+            {
+                if (regKey != null)
+                {
+                    objReturnValue = regKey.GetValue(value);
+                } // End if (regKey != null) 
+
+            } // End Using regKey 
+
+            if (objReturnValue != null)
+                return objReturnValue;
+
+            using (Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(key))
             {
                 if (regKey != null)
                 {

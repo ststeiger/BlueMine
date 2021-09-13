@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -9,6 +9,16 @@
   <Import Project="..\BlueMine.MetaWeblog\BlueMine.MetaWeblog.projitems" Label="Shared" />
 
   <Import Project="..\Dapper\Dapper.projitems" Label="Shared" />
+
+  <ItemGroup>
+    <None Remove="SQL\projects.sql" />
+    <None Remove="SQL\various.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SQL\projects.sql" />
+    <EmbeddedResource Include="SQL\various.sql" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.9" />

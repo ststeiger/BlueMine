@@ -1,0 +1,15 @@
+﻿@model BlueMine.Db.T_projects
+
+
+<div id="edit-@Model.id" >
+    @if (true)
+    {
+        <div style="border-bottom: 1px solid #CCC;">
+            <h1 id="title-@Model.identifier" >@Model.name</h1>
+            <input name="model-@Model.id" type="text" value=""/>
+        </div>
+
+        <input name="model-someValue" type="text" value="@Model.name" />
+        <div style="clear: both;"></div>        
+    }
+</div>

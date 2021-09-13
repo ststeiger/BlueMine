@@ -36,12 +36,12 @@ namespace BlueMine.Data
         }
 
 
-        private static string GetConnectionString()
+        public static string GetConnectionString()
         {
             System.Data.SqlClient.SqlConnectionStringBuilder csb = new System.Data.SqlClient.SqlConnectionStringBuilder();
             
             csb.DataSource = TestPlotly.SecretManager.GetSecret<string>("DataSource");
-            csb.InitialCatalog = "Redmine";
+            csb.InitialCatalog = "Redmine_Mirror";
             
             csb.UserID = TestPlotly.SecretManager.GetSecret<string>("DefaultDbUser");
             csb.Password = TestPlotly.SecretManager.GetSecret<string>("DefaultDbPassword");

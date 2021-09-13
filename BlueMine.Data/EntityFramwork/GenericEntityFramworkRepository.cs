@@ -538,9 +538,8 @@ namespace BlueMine.Db
             foreach (IEntityType et in this.m_ctx.Model.GetEntityTypes())
             {
 #if NET
-
-                string schema = et.BaseType.GetSchema();
-                string table = et.BaseType.GetTableName();
+                string schema = et.GetSchema();
+                string table = et.GetTableName();
 #elif NETCOREAPP2_0
                 IRelationalEntityTypeAnnotations rel = et.Relational();
                 string schema = rel.Schema;

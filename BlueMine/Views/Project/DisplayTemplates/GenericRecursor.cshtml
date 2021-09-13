@@ -1,0 +1,24 @@
+﻿
+@model System.Collections.Generic.List<BlueMine.Data.GenericRecursor<BlueMine.Db.T_projects, long?>>
+
+
+@foreach (var treeBranch in Model)
+{
+    
+     if (treeBranch.Level < 40)
+     {
+    
+         <ul style="border-left: 3px solid #e0e0e0;">
+             <li>
+                 <label>Level </label><span>@treeBranch.Level</span>
+                 @Html.DisplayFor(tree => treeBranch.Me )
+             </li>
+             @if (true)
+             {
+                 @Html.DisplayFor(tree => treeBranch.ChildNodes, "GenericRecursor")
+             }
+    
+         </ul>
+    
+     }
+}
