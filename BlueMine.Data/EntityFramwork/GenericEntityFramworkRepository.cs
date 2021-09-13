@@ -537,12 +537,14 @@ namespace BlueMine.Db
             // string tableName = mapping.TableName;
             foreach (IEntityType et in this.m_ctx.Model.GetEntityTypes())
             {
+                /*
                 IRelationalEntityTypeAnnotations rel = et.Relational();
                 // string schema = rel.Schema;
                 string table = rel.TableName;
 
                 // System.Console.WriteLine(table, schema);
                 lsTables.Add(table);
+                */
             } // Next et 
 
             return lsTables;

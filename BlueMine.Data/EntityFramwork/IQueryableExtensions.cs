@@ -1,16 +1,46 @@
 ﻿
 using System.Linq;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
-using Remotion.Linq.Parsing.Structure;
+
 
 
 namespace Microsoft.EntityFrameworkCore 
 {
-    
+
+#if NET
+
+
+
+    public static class IQueryableExtensions
+    {
+        public static string ToSql<TEntity>(this IQueryable<TEntity> query) where TEntity : class
+        {
+            // https://stackoverflow.com/questions/37527783/get-sql-code-from-an-entity-framework-core-iqueryablet
+            return query.ToQueryString();
+        }
+
+
+        public static IQueryable<TEntity> FromSql<TEntity>(this DbSet<TEntity> source,
+            string sql,
+            params object[] parameters) where TEntity : class
+        {
+            return source.FromSqlRaw<TEntity>(sql, parameters);
+        }
+
+        
+    }
+
+
+    // https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/preprocessor-directives
+#elif NETCOREAPP2_0 
+
+    using System.Reflection;
+    using Microsoft.EntityFrameworkCore.Internal;
+    using Microsoft.EntityFrameworkCore.Query;
+    using Microsoft.EntityFrameworkCore.Query.Internal;
+    using Microsoft.EntityFrameworkCore.Storage;
+
+    using Remotion.Linq.Parsing.Structure;
+
 
     // https://stackoverflow.com/questions/1412863/how-do-i-view-the-sql-generated-by-the-entity-framework
     // http://rion.io/2016/10/19/accessing-entity-framework-core-queries-behind-the-scenes-in-asp-net-core/
@@ -107,5 +137,6 @@ namespace Microsoft.EntityFrameworkCore
 
     } // End Class IQueryableExtensions1 
 
+#endif
 
 } // End Namespace Microsoft.EntityFrameworkCore 
