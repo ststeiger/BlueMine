@@ -1,9 +1,9 @@
 
-INSERT INTO [dbo].[assignment]
+INSERT INTO dbo.assignment
 (
-	 [ass_uid],[ass_wp_uid],[ass_wr_uid]
-	,[ass_range_from],[ass_range_to]
-	,[date_from],[date_to]
+	 ass_uid, ass_wp_uid, ass_wr_uid 
+	,ass_range_from, ass_range_to 
+	,date_from, date_to 
 ) 
 SELECT 
      NEWID() AS ass_uid 
@@ -28,11 +28,11 @@ CROSS JOIN
 
 
 SELECT 
-	 [ass_uid]
-	,[ass_wp_uid]
-	,[ass_wr_uid]
-	,[ass_range_from]
-	,[ass_range_to]
-	,[date_from]
-	,[date_to]
-FROM [assignment]
+	 ass_uid 
+	,ass_wp_uid 
+	,ass_wr_uid 
+	,ass_range_from 
+	,ass_range_to 
+	,date_from 
+	,date_to 
+FROM assignment 

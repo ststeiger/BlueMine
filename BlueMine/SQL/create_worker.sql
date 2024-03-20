@@ -1,40 +1,48 @@
 
-CREATE TABLE [dbo].[worker](
-	[wr_uid] [uniqueidentifier] NULL
-) ON [PRIMARY]
-GO
-
-CREATE TABLE [dbo].[workplace](
-	[WP_UID] [uniqueidentifier] NULL
-) ON [PRIMARY]
-GO
-
-CREATE TABLE [dbo].[assignment](
-	[ass_uid] [uniqueidentifier] NOT NULL,
-	[ass_wp_uid] [uniqueidentifier] NOT NULL,
-	[ass_wr_uid] [uniqueidentifier] NOT NULL,
-	[ass_range_from] [date] NULL,
-	[ass_range_to] [date] NULL,
-	[date_from] [date] NULL,
-	[date_to] [date] NULL
-) ON [PRIMARY]
+-- ref-table 
+CREATE TABLE IF NOT EXISTS dbo.assignment_day 
+( 
+     day_id int NOT NULL 
+    ,day_name nvarchar(100) NULL 
+    ,CONSTRAINT pk_assignment_day PRIMARY KEY(day_id) 
+); 
 GO
 
 
-
-
-CREATE TABLE [dbo].[assignments_normalized](
-	[ass_uid] [uniqueidentifier] NULL,
-	[assignment_day] [int] NULL,
-	[time_from] [time](7) NULL,
-	[time_to] [time](7) NULL
-) ON [PRIMARY]
+CREATE TABLE IF NOT EXISTS dbo.worker 
+( 
+     wr_uid uniqueidentifier NOT NULL 
+    ,CONSTRAINT pk_worker PRIMARY KEY(wr_uid) 
+); 
 GO
 
 
-CREATE TABLE [dbo].[assignment_day](
-	[day_id] [int] NULL,
-	[day_name] [nvarchar](100) NULL
-) ON [PRIMARY]
+CREATE TABLE IF NOT EXISTS dbo.workplace 
+( 
+     wp_uid uniqueidentifier NOT NULL 
+    ,CONSTRAINT pk_workplace PRIMARY KEY(wp_uid) 
+); 
 GO
 
+
+CREATE TABLE IF NOT EXISTS dbo.assignment 
+( 
+     ass_uid uniqueidentifier NOT NULL 
+    ,ass_wp_uid uniqueidentifier NOT NULL 
+    ,ass_wr_uid uniqueidentifier NOT NULL 
+    ,ass_range_from date NULL 
+    ,ass_range_to date NULL 
+    ,date_from date NULL 
+    ,date_to date NULL 
+); 
+GO
+
+
+CREATE TABLE IF NOT EXISTS dbo.assignments_normalized 
+( 
+     ass_uid uniqueidentifier NOT NULL 
+    ,assignment_day int NOT NULL 
+    ,time_from time(7) NOT NULL 
+    ,time_to time(7) NOT NULL 
+); 
+GO
