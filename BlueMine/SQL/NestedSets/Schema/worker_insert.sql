@@ -8,6 +8,17 @@ INSERT INTO dbo.assignment_day (day_id, day_name) VALUES (5, N'Saturday');
 INSERT INTO dbo.assignment_day (day_id, day_name) VALUES (6, N'Sunday');
 
 
+
+-- ;WITH CTE AS ( SELECT 1 AS i UNION ALL SELECT i+1 FROM CTE WHERE i < 100 )
+-- -- SELECT * FROM CTE 
+-- INSERT INTO worker(wr_uid) SELECT NEWID() AS obj_uid FROM CTE 
+
+
+-- ;WITH CTE AS ( SELECT 1 AS i UNION ALL SELECT i+1 FROM CTE WHERE i < 100 )
+-- -- SELECT * FROM CTE 
+-- INSERT INTO workplace(wp_uid) SELECT NEWID() AS obj_uid FROM CTE 
+
+
 INSERT INTO dbo.worker (wr_uid) VALUES (N'c20a2781-fffe-47c4-aca2-83c937eaba91');
 INSERT INTO dbo.worker (wr_uid) VALUES (N'2158fe81-4811-4105-8e5d-e8453105e4c4');
 INSERT INTO dbo.worker (wr_uid) VALUES (N'2ef277e9-b6b5-4772-9291-efb622608875');
@@ -215,7 +226,42 @@ INSERT INTO dbo.workplace( WP_UID ) VALUES (N'c9844470-8ee2-4e01-afd2-8f93bdd45d
 
 
 
-INSERT INTO dbo.assignment (ass_uid, ass_wp_uid, ass_wr_uid, ass_range_from, ass_range_to, date_from, date_to) VALUES (N'f3947e09-95be-445f-853b-fd8fd78c3d78', N'e95f6e5a-5dff-43a0-abeb-626ab0feb886', N'c20a2781-fffe-47c4-aca2-83c937eaba91', CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date), CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date));
-INSERT INTO dbo.assignment (ass_uid, ass_wp_uid, ass_wr_uid, ass_range_from, ass_range_to, date_from, date_to) VALUES (N'8d44e0c9-791e-4224-a447-c439e1898307', N'e95f6e5a-5dff-43a0-abeb-626ab0feb886', N'2158fe81-4811-4105-8e5d-e8453105e4c4', CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date), CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date));
-INSERT INTO dbo.assignment (ass_uid, ass_wp_uid, ass_wr_uid, ass_range_from, ass_range_to, date_from, date_to) VALUES (N'7036ed96-9494-4a18-a0a0-4caa95bbdadb', N'e95f6e5a-5dff-43a0-abeb-626ab0feb886', N'2ef277e9-b6b5-4772-9291-efb622608875', CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date), CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date)); 
+INSERT INTO dbo.assignment_group (ass_uid, ass_wp_uid, ass_wr_uid, ass_date_from, ass_date_to) VALUES (N'f3947e09-95be-445f-853b-fd8fd78c3d78', N'e95f6e5a-5dff-43a0-abeb-626ab0feb886', N'c20a2781-fffe-47c4-aca2-83c937eaba91', CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date));
+INSERT INTO dbo.assignment_group (ass_uid, ass_wp_uid, ass_wr_uid, ass_date_from, ass_date_to) VALUES (N'8d44e0c9-791e-4224-a447-c439e1898307', N'e95f6e5a-5dff-43a0-abeb-626ab0feb886', N'2158fe81-4811-4105-8e5d-e8453105e4c4', CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date));
+INSERT INTO dbo.assignment_group (ass_uid, ass_wp_uid, ass_wr_uid, ass_date_from, ass_date_to) VALUES (N'7036ed96-9494-4a18-a0a0-4caa95bbdadb', N'e95f6e5a-5dff-43a0-abeb-626ab0feb886', N'2ef277e9-b6b5-4772-9291-efb622608875', CAST(N'2023-01-01' AS Date), CAST(N'2023-01-31' AS Date)); 
+
+
+-- DELETE FROM dbo.assignments
+
+INSERT INTO dbo.assignments (asgn_ass_uid, asgn_assignment_day, asgn_time_from, asgn_time_to)
+SELECT 
+	 'F3947E09-95BE-445F-853B-FD8FD78C3D78' AS asgn_ass_uid -- uniqueidentifier
+	,1 AS asgn_assignment_day -- int
+	,'08:11' AS asgn_time_from -- time(7)
+	,'12:47' AS asgn_time_to -- time(7)
+
+
+INSERT INTO dbo.assignments (asgn_ass_uid, asgn_assignment_day, asgn_time_from, asgn_time_to)
+SELECT 
+	 '8D44E0C9-791E-4224-A447-C439E1898307' AS asgn_ass_uid -- uniqueidentifier
+	,2 AS asgn_assignment_day -- int
+	,'08:00' AS asgn_time_from -- time(7)
+	,'12:00' AS asgn_time_to -- time(7)
+
+	
+INSERT INTO dbo.assignments (asgn_ass_uid, asgn_assignment_day, asgn_time_from, asgn_time_to)
+SELECT 
+	 '8D44E0C9-791E-4224-A447-C439E1898307' AS asgn_ass_uid -- uniqueidentifier
+	,3 AS asgn_assignment_day -- int
+	,'14:00' AS asgn_time_from -- time(7)
+	,'18:00' AS asgn_time_to -- time(7)
+
+
+
+INSERT INTO dbo.assignments (asgn_ass_uid, asgn_assignment_day, asgn_time_from, asgn_time_to)
+SELECT 
+	 '7036ED96-9494-4A18-A0A0-4CAA95BBDADB' AS asgn_ass_uid -- uniqueidentifier
+	,4 AS asgn_assignment_day -- int
+	,'00:00' AS asgn_time_from -- time(7)
+	,'08:00' AS asgn_time_to -- time(7)
 
