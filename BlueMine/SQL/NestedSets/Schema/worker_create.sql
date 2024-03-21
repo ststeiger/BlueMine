@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS dbo.assignment_day 
 ( 
      day_id int NOT NULL 
-    ,day_name nvarchar(100) NULL 
+    ,day_name nvarchar(100) NOT NULL 
     ,CONSTRAINT pk_assignment_day PRIMARY KEY(day_id) 
 ); 
 GO
@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS dbo.assignment
      ass_uid uniqueidentifier NOT NULL 
     ,ass_wp_uid uniqueidentifier NOT NULL 
     ,ass_wr_uid uniqueidentifier NOT NULL 
-    ,ass_range_from date NULL 
-    ,ass_range_to date NULL 
-    ,date_from date NULL 
-    ,date_to date NULL 
+    ,ass_range_from date NOT NULL 
+    ,ass_range_to date NOT NULL 
+    ,date_from date NOT NULL 
+    ,date_to date NOT NULL 
 ); 
 GO
 
