@@ -265,3 +265,76 @@ SELECT
 	,'00:00' AS asgn_time_from -- time(7)
 	,'08:00' AS asgn_time_to -- time(7)
 
+
+
+
+
+
+
+	
+-- ein workplace mehrere worker
+-- mehrere workplaces ein worker
+
+
+INSERT INTO dbo.assignment_group(ass_uid, ass_wp_uid, ass_wr_uid, ass_date_from, ass_date_to)
+SELECT 
+	 ass AS ass_uid 
+	,wp AS ass_wp_uid 
+	,wr AS ass_wr_uid 
+	,'17530101' AS ass_date_from 
+	,'29991231' AS ass_date_from 
+FROM 
+(
+          SELECT 'F8628C26-C75D-407F-8BCA-F4655B317425' AS wp, 0 AS i, '9D00CF33-20F4-4FAF-BD2A-721BF8861BC0' AS ass, '08:00' AS from_time, '17:00' as to_time   
+UNION ALL SELECT 'DF6CB5B7-1B34-4830-87A2-FECA398DC124', 1 AS i, 'A8E7FD38-4837-4B16-BA84-5D2811FD1A2C' AS ass, '08:00' as from_time, '12:00' as to_time 
+UNION ALL SELECT '8BD780FB-A599-427D-98E3-E6434FC35150', 2 AS i, 'E744E3EF-088A-42AE-9327-D3DAB3E4E430' AS ass, '13:00' as from_time, '14:00' as to_time 
+UNION ALL SELECT 'B3664961-4FBB-495B-B11A-076C86BE99AF', 3 AS i, '3F6A8D02-5EF0-4AFF-81FB-728BF87DF878' AS ass, '08:00' as from_time, '09:00' as to_time 
+UNION ALL SELECT 'ED607EEB-C6F0-4662-AEFF-C7DA94D6B154', 4 AS i, '16CB5D4E-EEEA-4C0F-9CF9-9D74D5B74D85' AS ass, '11:00' as from_time, '14:30' as to_time 
+) AS workplace 
+
+CROSS JOIN 
+(
+	SELECT '01C435A8-5A86-4B3B-9F96-4553BA24F9CA' AS wr 
+) AS worker
+
+LEFT JOIN assignment_day ON assignment_day.day_id = i 
+
+
+WHERE NOT EXISTS 
+(
+	SELECT 1 FROM assignment_group AS aaa WHERE aaa.ass_uid = workplace.ass 
+)
+;
+
+
+
+INSERT INTO assignments(asgn_ass_uid, asgn_assignment_day, asgn_time_from, asgn_time_to)
+SELECT 
+	 ass AS asgn_ass_uid 
+	,assignment_day.day_id AS asgn_assignment_day 
+	--,assignment_day.day_name 
+	,from_time AS asgn_time_from 
+	,to_time asgn_time_to
+FROM 
+(
+          SELECT 'F8628C26-C75D-407F-8BCA-F4655B317425' AS wp, 0 AS i, '9D00CF33-20F4-4FAF-BD2A-721BF8861BC0' AS ass, '08:00' AS from_time, '17:00' as to_time   
+UNION ALL SELECT 'DF6CB5B7-1B34-4830-87A2-FECA398DC124', 1 AS i, 'A8E7FD38-4837-4B16-BA84-5D2811FD1A2C' AS ass, '08:00' as from_time, '12:00' as to_time 
+UNION ALL SELECT '8BD780FB-A599-427D-98E3-E6434FC35150', 2 AS i, 'E744E3EF-088A-42AE-9327-D3DAB3E4E430' AS ass, '13:00' as from_time, '14:00' as to_time 
+UNION ALL SELECT 'B3664961-4FBB-495B-B11A-076C86BE99AF', 3 AS i, '3F6A8D02-5EF0-4AFF-81FB-728BF87DF878' AS ass, '08:00' as from_time, '09:00' as to_time 
+UNION ALL SELECT 'ED607EEB-C6F0-4662-AEFF-C7DA94D6B154', 4 AS i, '16CB5D4E-EEEA-4C0F-9CF9-9D74D5B74D85' AS ass, '11:00' as from_time, '14:30' as to_time 
+) AS workplace 
+
+CROSS JOIN 
+(
+	SELECT '01C435A8-5A86-4B3B-9F96-4553BA24F9CA' AS wr 
+) AS worker
+
+LEFT JOIN assignment_day ON assignment_day.day_id = i 
+
+WHERE NOT EXISTS 
+(
+	SELECT 1 FROM assignments AS aaa WHERE aaa.asgn_ass_uid = workplace.ass AND aaa.asgn_assignment_day = assignment_day.day_id 
+);
+
+
+
