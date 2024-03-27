@@ -23,6 +23,9 @@ JOIN groups_users AS gu
 	)
 
 WHERE (1=1) 
+
+AND users.status <> 3 -- Locked 
+
 AND NOT 
 (
 	users.login = 'admin' 
