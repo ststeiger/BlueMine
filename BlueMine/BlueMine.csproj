@@ -41,4 +41,8 @@
     <ProjectReference Include="..\SharpenCore\SharpenCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SQL\Trigger\" />
+  </ItemGroup>
+
 </Project>
